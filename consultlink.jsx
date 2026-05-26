@@ -19,7 +19,8 @@ import {
   Calendar, Phone, Mail, MapPin, Hash, Layers, Database, Lock,
   CreditCard, ThumbsUp, ThumbsDown, Flag, Radio, Circle
 } from "lucide-react";
-
+// Add this constant near the top of the file, after the imports
+const API_BASE = "https://script.google.com/macros/s/AKfycbwjxNTV72Ypvb8kte0BxqZPB3q50pGUVjHeLvRhZeZAVx9WhIeaB_FmeR5CVXcYdA/exec";
 // ─── DESIGN TOKENS ─────────────────────────────────────────────────────────
 const COLORS = {
   bg:       "#0a0b0e",
