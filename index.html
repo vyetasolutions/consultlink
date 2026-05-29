@@ -1,2005 +1,559 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>ConsultLink — Expert Consultations On Demand</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-<style>
-/* ═══════════════════════════════════════════════════════
-   CONSULTLINK  —  Design System & Global Styles
-   Pure HTML/CSS/JS — No frameworks — GitHub Pages ready
-═══════════════════════════════════════════════════════ */
-
-:root{
-  --bg:#09090d;
-  --s1:#10121a;           /* surface */
-  --s2:#171b27;           /* surface elevated */
-  --b1:#1c2235;           /* border */
-  --b2:#252e47;           /* border hover */
-  --ac:#4f8ef7;           /* accent blue */
-  --as:rgba(79,142,247,.13); /* accent soft */
-  --gn:#22c97b;           /* green */
-  --gd:#f5c842;           /* gold */
-  --rd:#f24e4e;           /* red */
-  --am:#f5a623;           /* amber */
-  --pu:#a78bfa;           /* purple */
-  --bl:#38bdf8;           /* sky blue */
-  --tx:#e6e9f4;           /* text primary */
-  --mt:#5c6480;           /* muted */
-  --fn:#1c2235;           /* faint bg */
-  --r:12px; --rs:8px; --rl:16px;
-}
-
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{
-  background:var(--bg);color:var(--tx);
-  font-family:'Sora','DM Sans',system-ui,sans-serif;
-  -webkit-font-smoothing:antialiased;overflow-x:hidden;
-}
-::-webkit-scrollbar{width:4px;height:4px;background:transparent}
-::-webkit-scrollbar-thumb{background:var(--b2);border-radius:4px}
-h1,h2,h3,h4{letter-spacing:-.03em;line-height:1.08}
-
-/* ── ANIMATIONS ─────────────────────────────────────── */
-@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
-@keyframes spin{to{transform:rotate(360deg)}}
-.fu{animation:fadeUp .55s ease both}
-.fu1{animation:fadeUp .55s .1s ease both}
-.fu2{animation:fadeUp .55s .22s ease both}
-.fu3{animation:fadeUp .55s .38s ease both}
-.fi{animation:fadeIn .3s ease both}
-.sd{animation:slideDown .22s ease both}
-
-/* ── INPUTS ──────────────────────────────────────────── */
-input,select,textarea{
-  background:var(--s2);border:1px solid var(--b1);
-  border-radius:var(--rs);color:var(--tx);
-  padding:10px 14px;font-size:14px;font-family:inherit;
-  outline:none;width:100%;transition:border .18s,box-shadow .18s;
-}
-input:focus,select:focus,textarea:focus{
-  border-color:var(--ac);box-shadow:0 0 0 3px rgba(79,142,247,.1);
-}
-textarea{resize:vertical;min-height:96px;line-height:1.6}
-select{cursor:pointer;appearance:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235c6480' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 12px center;padding-right:36px}
-input::placeholder,textarea::placeholder{color:var(--mt)}
-
-/* ── BUTTONS ──────────────────────────────────────────── */
-.btn{
-  display:inline-flex;align-items:center;gap:7px;
-  border:none;cursor:pointer;font-weight:600;font-family:inherit;
-  border-radius:var(--rs);padding:10px 20px;font-size:14px;
-  transition:all .18s ease;white-space:nowrap;text-decoration:none;
-}
-.btn:disabled{opacity:.45;cursor:not-allowed;pointer-events:none}
-.btn-sm{padding:6px 14px;font-size:13px;border-radius:7px}
-.btn-lg{padding:13px 28px;font-size:15px;border-radius:10px}
-.btn-xl{padding:16px 36px;font-size:16px;border-radius:12px}
-.btn-pri{background:var(--ac);color:#fff}
-.btn-pri:hover{background:#6aa3ff;box-shadow:0 0 22px rgba(79,142,247,.38)}
-.btn-sec{background:transparent;color:var(--tx);border:1px solid var(--b1)}
-.btn-sec:hover{background:var(--s2);border-color:var(--b2)}
-.btn-suc{background:var(--gn);color:#fff}
-.btn-suc:hover{background:#2de08a}
-.btn-dan{background:var(--rd);color:#fff}
-.btn-dan:hover{background:#ff6666}
-.btn-gho{background:transparent;color:var(--mt)}
-.btn-gho:hover{color:var(--tx)}
-.btn-war{background:var(--am);color:#fff}
-.btn-war:hover{background:#ffc04d}
-
-/* ── BADGE ────────────────────────────────────────────── */
-.badge{
-  display:inline-flex;align-items:center;gap:5px;
-  padding:2px 10px;border-radius:99px;font-size:11px;
-  font-weight:700;letter-spacing:.04em;text-transform:uppercase;
-  border:1px solid transparent;white-space:nowrap;
-}
-.badge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
-.bpend{background:rgba(245,166,35,.13);color:var(--am);border-color:rgba(245,166,35,.22)}
-.bmatc,.bacc{background:var(--as);color:var(--ac);border-color:rgba(79,142,247,.22)}
-.bawai{background:rgba(245,200,66,.13);color:var(--gd);border-color:rgba(245,200,66,.22)}
-.bsche{background:rgba(167,139,250,.13);color:var(--pu);border-color:rgba(167,139,250,.22)}
-.bprog{background:rgba(56,189,248,.13);color:var(--bl);border-color:rgba(56,189,248,.22)}
-.bcomp{background:rgba(34,201,123,.13);color:var(--gn);border-color:rgba(34,201,123,.22)}
-.bcanc,.bdisp,.bsus{background:rgba(242,78,78,.13);color:var(--rd);border-color:rgba(242,78,78,.22)}
-.bavai,.bappr{background:rgba(34,201,123,.13);color:var(--gn);border-color:rgba(34,201,123,.22)}
-.bbusy,.bpendv{background:rgba(245,166,35,.13);color:var(--am);border-color:rgba(245,166,35,.22)}
-.boffl,.bstan,.bmutu{background:rgba(92,100,128,.13);color:var(--mt);border-color:rgba(92,100,128,.22)}
-.burg{background:rgba(245,166,35,.13);color:var(--am);border-color:rgba(245,166,35,.22)}
-.bemer{background:rgba(242,78,78,.13);color:var(--rd);border-color:rgba(242,78,78,.22)}
-.bclie{background:var(--as);color:var(--ac);border-color:rgba(79,142,247,.22)}
-.bcons{background:rgba(34,201,123,.13);color:var(--gn);border-color:rgba(34,201,123,.22)}
-.bescr{background:rgba(167,139,250,.13);color:var(--pu);border-color:rgba(167,139,250,.22)}
-.bnew{background:rgba(245,166,35,.13);color:var(--am);border-color:rgba(245,166,35,.22)}
-
-/* ── CARDS ────────────────────────────────────────────── */
-.card{
-  background:var(--s1);border:1px solid var(--b1);
-  border-radius:var(--rl);padding:24px;
-  transition:border-color .2s,box-shadow .2s;
-}
-.card-hov:hover,.card-clk{cursor:pointer}
-.card-hov:hover,.card-clk:hover{border-color:var(--b2);box-shadow:0 8px 32px rgba(0,0,0,.3)}
-
-/* ── STAT CARD ────────────────────────────────────────── */
-.sc{background:var(--s1);border:1px solid var(--b1);border-radius:var(--rl);padding:22px 24px}
-.sc-lbl{font-size:11px;font-weight:700;color:var(--mt);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
-.sc-val{font-size:27px;font-weight:800;font-family:'DM Mono',monospace;color:var(--tx);line-height:1}
-.sc-dlt{font-size:12px;color:var(--gn);margin-top:6px}
-.sc-ico{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-
-/* ── TABLES ───────────────────────────────────────────── */
-.tw{overflow-x:auto;border-radius:var(--rl)}
-table{width:100%;border-collapse:collapse;font-size:14px}
-th{padding:12px 16px;text-align:left;font-size:11px;font-weight:700;color:var(--mt);
-   text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--b1);white-space:nowrap}
-td{padding:14px 16px;border-bottom:1px solid var(--b1);vertical-align:middle}
-tr:last-child td{border-bottom:none}
-tbody tr{transition:background .13s}
-tbody tr:hover td{background:var(--s2)}
-.mono{font-family:'DM Mono',monospace;font-size:12px}
-
-/* ── FORM LABELS ──────────────────────────────────────── */
-.lbl{display:block;font-size:13px;font-weight:600;color:var(--tx);margin-bottom:6px}
-.req{color:var(--rd)}
-.fg{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
-
-/* ── UPLOAD ZONE ──────────────────────────────────────── */
-.uz{
-  border:2px dashed var(--b1);border-radius:var(--r);
-  padding:28px;text-align:center;cursor:pointer;
-  transition:border-color .2s,background .2s;
-}
-.uz:hover{border-color:var(--ac);background:var(--as)}
-
-/* ── GRIDS ────────────────────────────────────────────── */
-.g2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
-.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.ga{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
-.gal{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
-
-/* ── AVATAR ───────────────────────────────────────────── */
-.av{border-radius:50%;display:flex;align-items:center;justify-content:center;
-    font-weight:700;font-family:'DM Mono',monospace;flex-shrink:0}
-
-/* ── PROGRESS ─────────────────────────────────────────── */
-.pt{height:6px;background:var(--fn);border-radius:99px;overflow:hidden;margin-top:6px}
-.pf{height:100%;border-radius:99px;transition:width .5s ease}
-
-/* ── SECTION EYEBROW ──────────────────────────────────── */
-.ey{font-size:11px;font-weight:700;color:var(--ac);letter-spacing:.12em;
-    text-transform:uppercase;margin-bottom:12px}
-
-/* ═══════════════════════════════════════════════════════
-   LANDING PAGE
-═══════════════════════════════════════════════════════ */
-
-/* Navbar */
-.nav{
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  height:66px;display:flex;align-items:center;
-  justify-content:space-between;padding:0 5vw;
-  transition:background .3s,border-bottom .3s;
-}
-.nav.stuck{
-  background:rgba(9,9,13,.96);backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--b1);
-}
-.logo{display:flex;align-items:center;gap:10px;cursor:pointer}
-.lm{width:32px;height:32px;border-radius:8px;
-    background:linear-gradient(135deg,var(--ac),#7c5ef7);
-    display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.lt{font-weight:800;font-size:18px;letter-spacing:-.04em}
-.nl{display:flex;gap:28px}
-.nl a{color:var(--mt);font-size:14px;font-weight:500;text-decoration:none;transition:color .2s}
-.nl a:hover{color:var(--tx)}
-.na{display:flex;gap:10px;align-items:center}
-
-/* Hero */
-.hero{
-  min-height:100vh;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  text-align:center;padding:130px 5vw 80px;
-  position:relative;overflow:hidden;
-}
-.hgrid{
-  position:absolute;inset:0;
-  background-image:linear-gradient(var(--b1) 1px,transparent 1px),
-                   linear-gradient(90deg,var(--b1) 1px,transparent 1px);
-  background-size:64px 64px;opacity:.25;pointer-events:none;
-}
-.hglow{
-  position:absolute;top:38%;left:50%;
-  transform:translate(-50%,-50%);
-  width:800px;height:560px;
-  background:radial-gradient(ellipse,rgba(79,142,247,.11) 0%,transparent 68%);
-  pointer-events:none;
-}
-.hglow2{
-  position:absolute;bottom:-100px;right:5%;
-  width:400px;height:400px;
-  background:radial-gradient(ellipse,rgba(122,94,247,.07) 0%,transparent 65%);
-  pointer-events:none;
-}
-.pill{
-  display:inline-flex;align-items:center;gap:8px;
-  padding:6px 16px;border-radius:99px;
-  background:var(--as);border:1px solid rgba(79,142,247,.28);
-  font-size:12px;font-weight:600;color:var(--ac);
-  letter-spacing:.04em;margin-bottom:28px;position:relative;z-index:1;
-}
-.pill-dot{
-  width:7px;height:7px;border-radius:50%;
-  background:var(--gn);flex-shrink:0;
-  animation:spin 3s linear infinite;
-  box-shadow:0 0 6px var(--gn);
-}
-.hero h1{
-  font-size:clamp(36px,6.2vw,76px);font-weight:800;
-  line-height:1.04;margin-bottom:24px;max-width:900px;
-  position:relative;z-index:1;
-}
-.gt{background:linear-gradient(135deg,var(--ac),#b07ef8,var(--gn));
-    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero-sub{
-  font-size:clamp(15px,1.9vw,20px);color:var(--mt);
-  max-width:560px;line-height:1.75;margin-bottom:40px;
-  position:relative;z-index:1;
-}
-.hero-acts{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1}
-.hstats{display:flex;gap:48px;margin-top:72px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1}
-.hsv{font-size:clamp(20px,3vw,30px);font-weight:800;font-family:'DM Mono',monospace}
-.hsl{font-size:13px;color:var(--mt);margin-top:4px}
-
-/* Sections */
-.sec{padding:88px 5vw}
-.sec-in{max-width:1200px;margin:0 auto}
-.sec-hd{text-align:center;margin-bottom:56px}
-.sec-hd h2{font-size:clamp(26px,4vw,48px);font-weight:800}
-.surf{background:var(--s1);border-top:1px solid var(--b1);border-bottom:1px solid var(--b1)}
-
-/* Steps */
-.steps{display:flex;align-items:center;flex-wrap:wrap;justify-content:center}
-.step{padding:22px 14px;text-align:center;width:168px}
-.step-ico{width:52px;height:52px;border-radius:14px;
-           background:var(--as);border:1px solid rgba(79,142,247,.22);
-           display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
-.step-n{font-size:10px;font-weight:700;color:var(--ac);font-family:'DM Mono',monospace;letter-spacing:.1em}
-.step-t{font-weight:700;font-size:13px;margin:6px 0 5px}
-.step-d{font-size:12px;color:var(--mt);line-height:1.55}
-.step-c{width:28px;height:2px;background:linear-gradient(90deg,var(--ac),var(--b1));flex-shrink:0}
-
-/* Role toggle */
-.rtog{
-  display:inline-flex;gap:5px;padding:5px;
-  background:var(--s1);border:1px solid var(--b1);border-radius:12px;margin-bottom:32px;
-}
-.rtog-btn{
-  padding:8px 22px;border-radius:8px;border:none;cursor:pointer;
-  font-weight:600;font-size:14px;font-family:inherit;
-  transition:all .2s;background:transparent;color:var(--mt);
-}
-.rtog-btn.on{background:var(--ac);color:#fff;box-shadow:0 0 16px rgba(79,142,247,.35)}
-
-/* Testimonials */
-.tstars{display:flex;gap:3px;margin-bottom:14px}
-.ttxt{font-style:italic;font-size:14px;line-height:1.8;color:var(--tx);margin-bottom:18px}
-
-/* FAQ */
-.faq{cursor:pointer;padding:18px 20px;transition:background .15s}
-.faq:hover{background:var(--s2);border-radius:var(--r)}
-.faq-q{display:flex;justify-content:space-between;align-items:center;gap:12px;font-weight:600;font-size:15px}
-.faq-a{color:var(--mt);font-size:14px;line-height:1.7;margin-top:14px;
-        padding-top:14px;border-top:1px solid var(--b1)}
-
-/* Footer */
-.foot{
-  border-top:1px solid var(--b1);padding:28px 5vw;
-  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;
-}
-.foot a{color:var(--mt);font-size:13px;text-decoration:none;transition:color .2s}
-.foot a:hover{color:var(--tx)}
-
-/* ═══════════════════════════════════════════════════════
-   AUTH MODAL
-═══════════════════════════════════════════════════════ */
-.ov{
-  position:fixed;inset:0;background:rgba(0,0,0,.8);
-  backdrop-filter:blur(10px);z-index:200;
-  display:flex;align-items:center;justify-content:center;padding:20px;
-}
-.mod{
-  background:var(--s1);border:1px solid var(--b2);
-  border-radius:20px;padding:42px;width:100%;max-width:440px;
-  position:relative;box-shadow:0 28px 90px rgba(0,0,0,.7);
-  animation:fadeUp .3s ease both;
-}
-.mod-x{
-  position:absolute;top:18px;right:18px;
-  background:transparent;border:none;cursor:pointer;color:var(--mt);
-  transition:color .2s;display:flex;padding:4px;
-}
-.mod-x:hover{color:var(--tx)}
-
-/* ═══════════════════════════════════════════════════════
-   DASHBOARD SHELL
-═══════════════════════════════════════════════════════ */
-.shell{display:flex;height:100vh;overflow:hidden}
-
-/* Sidebar */
-.sb{
-  width:242px;min-width:242px;background:var(--s1);
-  border-right:1px solid var(--b1);display:flex;
-  flex-direction:column;transition:width .26s ease,min-width .26s ease;
-  overflow:hidden;position:relative;z-index:10;
-}
-.sb.col{width:64px;min-width:64px}
-.sb-top{padding:18px 14px;border-bottom:1px solid var(--b1);
-        display:flex;align-items:center;gap:10px;flex-shrink:0}
-.sb.col .sb-top{justify-content:center}
-.sb-lt{font-weight:800;font-size:15px;letter-spacing:-.04em;white-space:nowrap;overflow:hidden}
-.sb-role{padding:10px 14px;border-bottom:1px solid var(--b1);flex-shrink:0}
-.sb-rp{padding:6px 12px;border-radius:8px;font-size:11px;font-weight:700;
-        text-transform:uppercase;letter-spacing:.08em;text-align:center}
-.sb-nav{flex:1;padding:10px 7px;overflow-y:auto;display:flex;flex-direction:column;gap:2px}
-.ni{
-  display:flex;align-items:center;gap:11px;padding:10px 13px;
-  border-radius:10px;border:none;cursor:pointer;width:100%;
-  background:transparent;color:var(--mt);font-weight:500;
-  font-size:14px;font-family:inherit;transition:all .15s;text-align:left;
-}
-.ni:hover{background:var(--fn);color:var(--tx)}
-.ni.on{font-weight:700}
-.sb.col .ni{justify-content:center;padding:10px}
-.ni-lbl{overflow:hidden;flex:1;white-space:nowrap}
-.sb.col .ni-lbl,.sb.col .sb-lt,.sb.col .sb-role,.sb.col .sb-un{display:none}
-.ni-bdg{
-  background:rgba(242,78,78,.16);color:var(--rd);
-  border-radius:99px;padding:1px 7px;font-size:11px;font-weight:700;margin-left:auto;
-}
-.sb.col .ni-bdg{display:none}
-.sb-bot{border-top:1px solid var(--b1);padding:10px 7px;flex-shrink:0}
-.sb-u{display:flex;align-items:center;gap:10px;padding:8px 10px;margin-bottom:4px}
-.sb-un{overflow:hidden}
-.sb-uname{font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sb-uemail{font-size:11px;color:var(--mt)}
-
-/* Main */
-.ma{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.topbar{
-  height:64px;flex-shrink:0;background:var(--s1);
-  border-bottom:1px solid var(--b1);display:flex;
-  align-items:center;justify-content:space-between;padding:0 24px;z-index:9;
-}
-.tb-t{font-weight:700;font-size:16px}
-.tb-r{display:flex;align-items:center;gap:14px}
-.nb-wrap{position:relative}
-.nb{background:transparent;border:none;cursor:pointer;
-    position:relative;padding:8px;color:var(--mt);
-    display:flex;align-items:center;justify-content:center;transition:color .2s}
-.nb:hover{color:var(--tx)}
-.nb-dot{
-  position:absolute;top:7px;right:7px;width:8px;height:8px;
-  border-radius:50%;background:var(--rd);border:2px solid var(--s1);
-}
-.ndrop{
-  position:absolute;right:0;top:calc(100% + 8px);width:308px;
-  background:var(--s1);border:1px solid var(--b2);
-  border-radius:14px;box-shadow:0 16px 48px rgba(0,0,0,.6);
-  z-index:50;overflow:hidden;animation:slideDown .22s ease;
-}
-.ndrop-hd{padding:12px 16px;border-bottom:1px solid var(--b1);font-weight:700;font-size:13px}
-.ni-item{padding:12px 16px;border-bottom:1px solid var(--b1);
-          display:flex;gap:10px;align-items:flex-start}
-.ni-item:last-child{border-bottom:none}
-.ni-ddot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
-.ni-txt{font-size:13px;margin-bottom:3px;line-height:1.4}
-.ni-tm{font-size:11px;color:var(--mt)}
-.pc{flex:1;overflow-y:auto;padding:28px 24px;animation:fadeIn .3s ease}
-
-/* ═══════════════════════════════════════════════════════
-   CHAT
-═══════════════════════════════════════════════════════ */
-.chat{background:var(--s1);border:1px solid var(--b1);border-radius:var(--rl);overflow:hidden;max-width:740px}
-.chat-hd{padding:14px 20px;border-bottom:1px solid var(--b1);display:flex;align-items:center;gap:12px}
-.chat-msgs{padding:20px;display:flex;flex-direction:column;gap:14px;height:350px;overflow-y:auto}
-.cm{display:flex}
-.cm.me{justify-content:flex-end}
-.cbw{max-width:76%}
-.csn{font-size:11px;color:var(--mt);margin-bottom:4px}
-.cb{padding:10px 14px;font-size:14px;line-height:1.6;word-break:break-word}
-.cb.th{background:var(--s2);color:var(--tx);border-radius:16px 16px 16px 4px}
-.cb.me{background:var(--ac);color:#fff;border-radius:16px 16px 4px 16px}
-.ctm{font-size:10px;color:var(--mt);margin-top:3px}
-.ctm.me{text-align:right}
-.cin-row{padding:12px 16px;border-top:1px solid var(--b1);display:flex;gap:10px}
-.cin{flex:1;border-radius:10px!important}
-
-/* ═══════════════════════════════════════════════════════
-   NEW REQUEST FORM
-═══════════════════════════════════════════════════════ */
-.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(198px,1fr));gap:12px;margin-bottom:28px}
-.catc{
-  background:var(--s1);border:1px solid var(--b1);border-radius:var(--r);
-  padding:20px;cursor:pointer;transition:all .2s;
-}
-.catc:hover{border-color:var(--b2);background:var(--s2)}
-.catc.sel{border-color:var(--ac);background:var(--as)}
-.cico{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
-.cnm{font-weight:700;font-size:15px;margin-bottom:5px}
-.cds{font-size:12px;color:var(--mt);line-height:1.55}
-
-.step-ind{display:flex;align-items:center;gap:8px;margin-bottom:28px;flex-wrap:wrap}
-.sdot{
-  width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  font-size:12px;font-weight:700;border:2px solid var(--b1);color:var(--mt);transition:all .2s;flex-shrink:0;
-}
-.sdot.on{border-color:var(--ac);color:var(--ac);background:var(--as)}
-.sdot.dn{border-color:var(--gn);background:var(--gn);color:#fff}
-.sline{flex:1;height:1px;background:var(--b1);min-width:16px}
-.slbl{font-size:12px;color:var(--mt);white-space:nowrap}
-.slbl.on{color:var(--ac);font-weight:600}
-
-.suc-wrap{text-align:center;padding:64px 20px}
-.suc-ico{
-  width:74px;height:74px;border-radius:50%;
-  background:rgba(34,201,123,.14);display:flex;
-  align-items:center;justify-content:center;margin:0 auto 20px;
-}
-
-/* ═══════════════════════════════════════════════════════
-   ADMIN SPECIFICS
-═══════════════════════════════════════════════════════ */
-.dis-card{border:1px solid rgba(242,78,78,.28);background:rgba(242,78,78,.04);border-radius:var(--rl);padding:24px;margin-bottom:16px}
-.dis-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
-.dis-col{background:var(--s1);border-radius:var(--r);padding:14px}
-.dis-cl{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
-.dis-ct{font-size:13px;color:var(--mt);line-height:1.65}
-
-/* Toggle switch */
-.tgl{
-  width:40px;height:22px;border-radius:99px;border:none;
-  cursor:pointer;position:relative;transition:background .2s;flex-shrink:0;
-}
-.tgl-k{
-  position:absolute;top:3px;width:16px;height:16px;
-  border-radius:50%;background:#fff;
-  box-shadow:0 1px 4px rgba(0,0,0,.35);transition:left .2s;
-}
-
-/* ═══════════════════════════════════════════════════════
-   RESPONSIVE
-═══════════════════════════════════════════════════════ */
-@media(max-width:1100px){
-  .g4{grid-template-columns:repeat(2,1fr)}
-  .dis-cols{grid-template-columns:1fr}
-}
-@media(max-width:768px){
-  .nl{display:none}
-  .g2,.g3,.g4{grid-template-columns:1fr}
-  .sec{padding:52px 4vw}
-  .sb{position:fixed;left:-242px;top:0;height:100vh;transition:left .28s;z-index:100}
-  .sb.mob{left:0}
-  .pc{padding:20px 14px}
-  .steps{gap:0}
-  .step-c{display:none}
-  .hstats{gap:24px}
-  .col2r{grid-template-columns:1fr!important}
-  table{font-size:12px}
-  th,td{padding:10px 12px}
-}
-@media(max-width:480px){
-  .hero h1{font-size:30px}
-  .mod{padding:28px 20px}
-  .topbar{padding:0 14px}
-  .na .btn-sec{display:none}
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ConsultConnect - Live Sheet Platform</title>
+  <!-- Tailwind CSS CDN for complete production styling -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style>
+    [v-cloak] { display: none !important; }
+  </style>
 </head>
-<body>
-<div id="app"></div>
-<script>
-/* ═══════════════════════════════════════════════════════════════
-   CONSULTLINK  —  Vanilla JS SPA
-   Single file · No build step · GitHub Pages ready
-   Architecture: State → Render → Event delegation
-═══════════════════════════════════════════════════════════════ */
-
-/* ── CONFIG ──────────────────────────────────────────────────── */
-const API = ''; /* https://script.google.com/macros/s/AKfycbwjxNTV72Ypvb8kte0BxqZPB3q50pGUVjHeLvRhZeZAVx9WhIeaB_FmeR5CVXcYdA/exec */
-
-/* ── APP STATE ───────────────────────────────────────────────── */
-const S = {
-  view:'landing',       /* landing | client | consultant | admin */
-  auth:false,           /* show auth modal */
-  role:null,            /* pending role for auth */
-  amode:'login',        /* login | register */
-  tab:'overview',       /* active dashboard tab */
-  faq:null,             /* open faq index */
-  lrole:'client',       /* landing role toggle */
-  col:false,            /* sidebar collapsed */
-  notif:false,          /* notification dropdown */
-  fs:0,                 /* form step 0-3 */
-  fcat:'',              /* form category */
-  fd:{},                /* form data */
-  msgs:[],              /* messages array */
-  reqs:[],              /* client requests */
-  cons:[],              /* consultants */
-  inc:[],               /* incoming consultant requests */
-  cats:{},              /* category toggle states */
-};
-
-/* ── MOCK DATA ───────────────────────────────────────────────── */
-const CATS = [
-  {id:'legal',    lbl:'Legal',            ico:'scale',       clr:'#4f8ef7',  desc:'Contracts, disputes, compliance, IP',  cnt:6842},
-  {id:'medical',  lbl:'Medical',          ico:'stethoscope', clr:'#22c97b',  desc:'Health queries, second opinions, triage',cnt:3780},
-  {id:'accounting',lbl:'Accounting',      ico:'calculator',  clr:'#f5c842',  desc:'Tax, audit, financial planning',       cnt:3241},
-  {id:'hr',       lbl:'HR & People',      ico:'users',       clr:'#a78bfa',  desc:'Employment, policies, recruitment',    cnt:2104},
-  {id:'engineering',lbl:'Engineering',    ico:'cpu',         clr:'#38bdf8',  desc:'Technical reviews, architecture, QA', cnt:1180},
-  {id:'business', lbl:'Business Advisory',ico:'briefcase',   clr:'#f5a623',  desc:'Strategy, growth, market entry',       cnt:2455},
-];
-
-const FORMS = {
-  legal:[
-    {id:'matter',lbl:'Matter Type',    tp:'sel',opts:['Contract Review','Dispute Resolution','IP Protection','Compliance','Other'],req:1},
-    {id:'juri',  lbl:'Jurisdiction',   tp:'txt',ph:'e.g. Uganda, Kenya, UK',req:1},
-    {id:'urg',   lbl:'Urgency Level',  tp:'sel',opts:['Standard (5–7 days)','Urgent (24–48 hrs)','Emergency (<4 hrs)'],req:1},
-    {id:'summ',  lbl:'Brief Summary',  tp:'txta',ph:'Describe your legal matter…',req:1},
-    {id:'docs',  lbl:'Upload Documents',tp:'file',req:0},
-  ],
-  medical:[
-    {id:'spec',  lbl:'Medical Specialty',tp:'sel',opts:['General Practice','Cardiology','Dermatology','Mental Health','Nutrition','Other'],req:1},
-    {id:'symp',  lbl:'Primary Symptoms', tp:'txta',ph:'Describe symptoms, onset, severity…',req:1},
-    {id:'dur',   lbl:'Duration of Symptoms',tp:'txt',ph:'e.g. 3 days, 2 weeks',req:1},
-    {id:'age',   lbl:'Patient Age',    tp:'num',ph:'Age in years',req:1},
-    {id:'docs',  lbl:'Medical Records (optional)',tp:'file',req:0},
-  ],
-  accounting:[
-    {id:'svc',   lbl:'Service Type',   tp:'sel',opts:['Tax Filing','Audit Support','Financial Statements','Payroll','Bookkeeping','Other'],req:1},
-    {id:'ent',   lbl:'Business Entity',tp:'sel',opts:['Individual','Sole Proprietor','SME','Corporation','NGO'],req:1},
-    {id:'per',   lbl:'Fiscal Period',  tp:'txt',ph:'e.g. FY 2024–2025',req:1},
-    {id:'summ',  lbl:'Description',    tp:'txta',ph:'Describe your accounting needs…',req:1},
-    {id:'docs',  lbl:'Financial Documents',tp:'file',req:0},
-  ],
-  hr:[
-    {id:'iss',   lbl:'HR Issue',       tp:'sel',opts:['Policy Design','Recruitment','Performance Management','Dismissal','Compliance','Other'],req:1},
-    {id:'size',  lbl:'Company Size',   tp:'sel',opts:['1–10','11–50','51–200','200+'],req:1},
-    {id:'summ',  lbl:'Description',    tp:'txta',ph:'Explain the HR challenge…',req:1},
-    {id:'docs',  lbl:'HR Documents',   tp:'file',req:0},
-  ],
-  engineering:[
-    {id:'disc',  lbl:'Engineering Discipline',tp:'sel',opts:['Software','Civil','Electrical','Mechanical','Data Engineering','DevOps','Other'],req:1},
-    {id:'proj',  lbl:'Project Name',   tp:'txt',ph:'Brief project name',req:1},
-    {id:'summ',  lbl:'Technical Description',tp:'txta',ph:'Describe the technical challenge…',req:1},
-    {id:'docs',  lbl:'Technical Documents',tp:'file',req:0},
-  ],
-  business:[
-    {id:'stg',   lbl:'Business Stage', tp:'sel',opts:['Idea','Pre-revenue','Growth','Scale','Enterprise'],req:1},
-    {id:'foc',   lbl:'Advisory Focus', tp:'sel',opts:['Strategy','Market Entry','Fundraising','Operations','Pricing','Partnerships','Other'],req:1},
-    {id:'summ',  lbl:'Business Overview',tp:'txta',ph:'Describe your business and what you need…',req:1},
-    {id:'docs',  lbl:'Business Documents',tp:'file',req:0},
-  ],
-};
-
-const REQS = [
-  {id:'REQ-001',cat:'Legal',     ttl:'Contract Review for SaaS Agreement', st:'Matched',     dt:'2025-05-14',bud:'$80', con:'Amara Nwosu',    urg:'Standard'},
-  {id:'REQ-002',cat:'Medical',   ttl:'Dermatology Second Opinion',          st:'Scheduled',   dt:'2025-05-12',bud:'$60', con:'Dr. Esi Mensah', urg:'Urgent'},
-  {id:'REQ-003',cat:'Accounting',ttl:'FY2024 Tax Filing',                   st:'Completed',   dt:'2025-05-08',bud:'$120',con:'Kofi Asante',    urg:'Standard'},
-  {id:'REQ-004',cat:'HR',        ttl:'Dismissal Procedure Advice',          st:'Pending',     dt:'2025-05-17',bud:'$50', con:'—',              urg:'Standard'},
-  {id:'REQ-005',cat:'Business',  ttl:'Series A Pitch Deck Review',          st:'In Progress', dt:'2025-05-13',bud:'$200',con:'Lena Müller',    urg:'Urgent'},
-];
-
-const CONS = [
-  {id:'CON-001',nm:'Amara Nwosu',    spec:'Legal',      rtg:4.9,ses:312,st:'Available',           earn:'$18,420',jnd:'2024-01',in:'AN',clr:'#4f8ef7'},
-  {id:'CON-002',nm:'Dr. Esi Mensah', spec:'Medical',    rtg:4.8,ses:204,st:'Busy',                 earn:'$14,200',jnd:'2024-03',in:'EM',clr:'#22c97b'},
-  {id:'CON-003',nm:'Kofi Asante',    spec:'Accounting', rtg:4.7,ses:180,st:'Available',            earn:'$11,600',jnd:'2024-02',in:'KA',clr:'#f5c842'},
-  {id:'CON-004',nm:'Lena Müller',    spec:'Business',   rtg:5.0,ses:98, st:'Pending Verification', earn:'$0',     jnd:'2025-04',in:'LM',clr:'#a78bfa'},
-  {id:'CON-005',nm:'Raj Patel',      spec:'Engineering',rtg:4.6,ses:143,st:'Offline',              earn:'$9,800', jnd:'2024-05',in:'RP',clr:'#38bdf8'},
-];
-
-const INC = [
-  {id:'REQ-006',cli:'Michael Tetteh',   cat:'Legal',ttl:'Employment Contract Review',urg:'Standard',bud:'$90', desc:'Review of a new employment offer including equity and IP clause.',  dt:'2025-05-18',st:'New'},
-  {id:'REQ-007',cli:'Fatima Al-Rashid', cat:'Legal',ttl:'IP Assignment Agreement',    urg:'Urgent',  bud:'$140',desc:'Reviewing an IP assignment clause in a co-founder agreement.',       dt:'2025-05-19',st:'New'},
-];
-
-const MSGS = [
-  {id:1,fr:'Amara Nwosu',me:false,tx:"Hello! I've reviewed your SaaS contract. There are a few clauses that need attention regarding IP assignment.",tm:'10:42 AM'},
-  {id:2,fr:'You',        me:true, tx:'Thank you Amara. Specifically worried about clause 8.2 — is that standard?',tm:'10:45 AM'},
-  {id:3,fr:'Amara Nwosu',me:false,tx:"Clause 8.2 is more aggressive than industry standard. I recommend we negotiate a carve-out for pre-existing IP. I'll prepare a redline version.",tm:'10:48 AM'},
-  {id:4,fr:'You',        me:true, tx:'Perfect. When can you have that ready?',tm:'10:50 AM'},
-];
-
-const ANA = {
-  mo:['Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May'],
-  rq:[42,58,71,63,89,102,95,118,134,121,145,160],
-  rv:[3200,4100,5300,4800,6700,7400,6900,8100,9200,8600,10200,11800],
-};
-
-/* ── INIT STATE ──────────────────────────────────────────────── */
-S.msgs = [...MSGS];
-S.reqs = [...REQS];
-S.cons = [...CONS];
-S.inc  = [...INC];
-CATS.forEach(c => S.cats[c.id] = true);
-
-/* ── BADGE MAP ───────────────────────────────────────────────── */
-const BM = {
-  'Pending':'bpend','Matched':'bmatc','Accepted':'bacc',
-  'Awaiting Payment':'bawai','Scheduled':'bsche','In Progress':'bprog',
-  'Completed':'bcomp','Cancelled':'bcanc','Disputed':'bdisp',
-  'Available':'bavai','Busy':'bbusy','Offline':'boffl',
-  'Pending Verification':'bpendv','Approved':'bappr','Suspended':'bsus',
-  'Standard':'bstan','Urgent':'burg','Emergency':'bemer',
-  'Client':'bclie','Consultant':'bcons',
-  'New':'bnew','In Escrow':'bescr','Released':'bcomp',
-};
-function badge(st){return `<span class="badge ${BM[st]||'bmutu'}">${st}</span>`}
-
-/* ── UI HELPERS ──────────────────────────────────────────────── */
-function av(ini,sz=36,clr='#4f8ef7'){
-  return `<div class="av" style="width:${sz}px;height:${sz}px;font-size:${Math.round(sz*.35)}px;background:${clr}22;border:1.5px solid ${clr}44;color:${clr}">${ini}</div>`;
-}
-
-function ico(nm,sz=16,st=''){
-  return `<i data-lucide="${nm}" style="width:${sz}px;height:${sz}px;flex-shrink:0;${st}"></i>`;
-}
-
-function btn(lbl,v='pri',act='',val='',sz='',icn='',dis=false,sty=''){
-  const sc=sz?`btn-${sz}`:'', icnH=icn?`<i data-lucide="${icn}" style="width:${sz==='sm'?13:15}px;height:${sz==='sm'?13:15}px"></i>`:'';
-  return `<button class="btn btn-${v} ${sc}" data-a="${act}" data-v="${val}" ${dis?'disabled':''} style="${sty}">${icnH}${lbl}</button>`;
-}
-
-function sc_card(lbl,val,dlt,icn,clr='#4f8ef7'){
-  return `<div class="sc"><div style="display:flex;justify-content:space-between;align-items:flex-start">
-    <div><div class="sc-lbl">${lbl}</div><div class="sc-val">${val}</div>${dlt?`<div class="sc-dlt">${dlt}</div>`:''}
-    </div><div class="sc-ico" style="background:${clr}18;border:1px solid ${clr}28">${ico(icn,20,`color:${clr}`)}</div>
-  </div></div>`;
-}
-
-function lm(sz=32){
-  return `<div class="lm" style="width:${sz}px;height:${sz}px;border-radius:${Math.round(sz*.25)}px">${ico('layers',Math.round(sz*.45),'color:#fff')}</div>`;
-}
-
-function stars(n,sz=13){
-  return Array.from({length:5},(_,i)=>`<span style="font-size:${sz}px;color:#f5c842;${i>=n?'opacity:.2':''}">★</span>`).join('');
-}
-
-function lchart(data,clr='#4f8ef7',h=64){
-  const mx=Math.max(...data),mn=Math.min(...data),rng=mx-mn||1,W=400;
-  const pts=data.map((v,i)=>{const x=(i/(data.length-1))*W,y=h-((v-mn)/rng)*(h-6)-3;return `${x.toFixed(1)},${y.toFixed(1)}`;});
-  const ln=pts.join(' '),ar=`0,${h} ${ln} ${W},${h}`,gid='g'+Math.random().toString(36).substr(2,6);
-  return `<svg viewBox="0 0 ${W} ${h}" width="100%" height="${h}" preserveAspectRatio="none">
-    <defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="${clr}" stop-opacity=".22"/><stop offset="100%" stop-color="${clr}" stop-opacity="0"/>
-    </linearGradient></defs>
-    <polygon points="${ar}" fill="url(#${gid})"/>
-    <polyline points="${ln}" fill="none" stroke="${clr}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-  </svg>`;
-}
-
-function pbar(pct,clr='#4f8ef7'){return `<div class="pt"><div class="pf" style="width:${pct};background:${clr}"></div></div>`}
-
-/* ═══════════════════════════════════════════════════════════════
-   LANDING PAGE
-═══════════════════════════════════════════════════════════════ */
-function renderLanding(){
-  const lrf=[
-    {ico:'search',     ttl:'Smart Matching',         dsc:'AI-powered consultant recommendations based on your exact needs and urgency level.'},
-    {ico:'shield',     ttl:'Verified Experts Only',  dsc:'Every consultant passes credential verification, identity check and specialty assessment.'},
-    {ico:'clock',      ttl:'Fast Turnaround',        dsc:'Urgent requests matched and responded to within 20 minutes. Standard within 2 hours.'},
-    {ico:'lock',       ttl:'Escrow Protection',      dsc:'Payment held securely in escrow and released only after your approval of the deliverable.'},
-  ];
-  const crf=[
-    {ico:'trending-up',ttl:'Grow Your Practice',    dsc:'Access structured inbound requests without cold outreach or expensive marketing spend.'},
-    {ico:'bar-chart-2',ttl:'Analytics Dashboard',   dsc:'Track earnings, performance metrics, acceptance rates and client satisfaction scores.'},
-    {ico:'calendar',   ttl:'Flexible Scheduling',   dsc:'Set your own availability and accept only what suits your schedule and expertise.'},
-    {ico:'award',      ttl:'Build Your Reputation', dsc:'Verified ratings, reviews and repeat clients on your professional profile.'},
-  ];
-  const feats = S.lrole==='client' ? lrf : crf;
-  const faqs=[
-    {q:'How does ConsultLink match me with a consultant?',a:'Our smart matching engine considers your category, urgency, consultant ratings, specialty alignment, and availability to surface the best 3–5 matches in minutes.'},
-    {q:'How long before I receive a response?',a:'Standard requests are matched within 2 hours. Urgent requests are prioritised and typically matched within 20 minutes. Emergency requests are flagged immediately.'},
-    {q:'Are consultants verified?',a:'Yes — every consultant on ConsultLink undergoes a credential verification, identity check, and specialty assessment before being approved to take on clients.'},
-    {q:'What payment methods are supported?',a:'We support Airtel Money, MTN MoMo, and bank transfers. Payment is held in escrow and only released after successful session completion and your approval.'},
-    {q:'Can I get a refund if I am unsatisfied?',a:'Yes. ConsultLink has a structured dispute resolution process. Unresolved disputes are escalated to our Admin team within 24 hours for fair mediation.'},
-  ];
-  const steps=[
-    ['01','file-text','Submit Request','Fill our smart form tailored to your service category.'],
-    ['02','zap','Instant Matching','Our engine scores and ranks top consultants in real-time.'],
-    ['03','user-check','Consultant Accepts','Your matched consultant reviews and confirms engagement.'],
-    ['04','credit-card','Secure Payment','Pay via MoMo or bank. Funds held in escrow until done.'],
-    ['05','message-square','Consultation','Engage via messaging, documents or video call.'],
-    ['06','check-circle','Complete & Review','Receive deliverable, rate the experience, close out.'],
-  ];
-  const navScrolled = typeof window!=='undefined' && window.scrollY>60;
-
-  return `
-  <nav class="nav${navScrolled?' stuck':''}" id="ln">
-    <div class="logo">${lm(30)}<span class="lt">ConsultLink</span></div>
-    <div class="nl"><a href="#services">Services</a><a href="#how">How It Works</a><a href="#roles">For You</a><a href="#faq">FAQ</a></div>
-    <div class="na">${btn('Sign In','sec','open-auth','client','sm')}${btn('Get Started','pri','open-auth','client','sm','arrow-right')}</div>
-  </nav>
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hgrid"></div><div class="hglow"></div><div class="hglow2"></div>
-    <div class="pill fu1"><span class="pill-dot"></span>Now live across East Africa &amp; Europe</div>
-    <h1 class="fu2">Expert Advice,<br><span class="gt">When It Matters Most.</span></h1>
-    <p class="hero-sub fu3">ConsultLink connects you with verified lawyers, doctors, accountants and business advisors — structured, transparent, on-demand.</p>
-    <div class="hero-acts fu3">
-      ${btn('Submit a Request','pri','open-auth','client','lg','arrow-right')}
-      ${btn('Join as Consultant','sec','open-auth','consultant','lg','briefcase')}
-    </div>
-    <div class="hstats fu3">
-      ${[['1,200+','Verified Consultants'],['18K+','Requests Completed'],['4.87','Avg. Rating'],['< 2hrs','Match Time']].map(([v,l])=>`<div><div class="hsv">${v}</div><div class="hsl">${l}</div></div>`).join('')}
-    </div>
-  </section>
-
-  <!-- CATEGORIES -->
-  <section class="sec" id="services">
-    <div class="sec-in">
-      <div class="sec-hd"><div class="ey">Services</div><h2>Every Expert Category,<br>One Platform</h2></div>
-      <div class="gal">
-        ${CATS.map(c=>`
-          <div class="card card-clk" data-a="open-auth" data-v="client" style="padding:24px">
-            <div class="cico" style="background:${c.clr}18;border:1px solid ${c.clr}28">${ico(c.ico,22,`color:${c.clr}`)}</div>
-            <div style="font-weight:700;font-size:16px;margin-bottom:6px">${c.lbl}</div>
-            <div style="color:var(--mt);font-size:13px;line-height:1.6;margin-bottom:14px">${c.desc}</div>
-            <div style="display:flex;align-items:center;gap:6px;color:${c.clr};font-size:13px;font-weight:600">
-              Get Matched ${ico('chevron-right',14,`color:${c.clr}`)}
-            </div>
-          </div>`).join('')}
-      </div>
-    </div>
-  </section>
-
-  <!-- HOW IT WORKS -->
-  <section class="sec surf" id="how">
-    <div class="sec-in">
-      <div class="sec-hd"><div class="ey">Workflow</div><h2>From Request to Resolution</h2></div>
-      <div class="steps">
-        ${steps.map(([n,ic_,t,d],i,a)=>`
-          <div class="step">
-            <div class="step-ico">${ico(ic_,22,'color:var(--ac)')}</div>
-            <div class="step-n">${n}</div>
-            <div class="step-t">${t}</div>
-            <div class="step-d">${d}</div>
-          </div>${i<a.length-1?'<div class="step-c"></div>':''}`).join('')}
-      </div>
-    </div>
-  </section>
-
-  <!-- FOR EVERYONE -->
-  <section class="sec" id="roles">
-    <div class="sec-in">
-      <div style="text-align:center;margin-bottom:32px">
-        <h2 style="font-size:clamp(26px,4vw,48px);font-weight:800;margin-bottom:20px">Built for Everyone</h2>
-        <div class="rtog">
-          <button class="rtog-btn${S.lrole==='client'?' on':''}" data-a="set-lrole" data-v="client">For Clients</button>
-          <button class="rtog-btn${S.lrole==='consultant'?' on':''}" data-a="set-lrole" data-v="consultant">For Consultants</button>
-        </div>
-      </div>
-      <div class="ga">
-        ${feats.map(f=>`
-          <div class="card card-hov" style="padding:22px">
-            <div style="width:42px;height:42px;border-radius:11px;background:var(--as);display:flex;align-items:center;justify-content:center;margin-bottom:14px">
-              ${ico(f.ico,19,'color:var(--ac)')}
-            </div>
-            <div style="font-weight:700;margin-bottom:8px">${f.ttl}</div>
-            <div style="color:var(--mt);font-size:13px;line-height:1.6">${f.dsc}</div>
-          </div>`).join('')}
-      </div>
-      <div style="text-align:center;margin-top:32px">
-        ${btn(S.lrole==='client'?'Submit Your First Request':'Apply as a Consultant','pri','open-auth',S.lrole,'lg','arrow-right')}
-      </div>
-    </div>
-  </section>
-
-  <!-- TESTIMONIALS -->
-  <section class="sec surf">
-    <div class="sec-in">
-      <div class="sec-hd"><h2>Trusted by Professionals</h2></div>
-      <div class="gal">
-        ${[
-          {nm:'Sarah Owusu',  rl:'Founder, TechBridge GH',     tx:'Received expert legal advice within hours. The contract review saved us from a potentially costly clause.',in:'SO',r:5},
-          {nm:'Mark Ochieng', rl:'CFO, Savannah Logistics',     tx:'Our FY2024 tax filing was handled seamlessly. The accountant was thorough and incredibly professional.',in:'MO',r:5},
-          {nm:'Aisha Diallo', rl:'HR Lead, CloudNest Africa',   tx:'The HR consultant helped us build a compliant dismissal policy. Highly structured, fast response.',in:'AD',r:5},
-        ].map(t=>`
-          <div class="card" style="padding:26px">
-            <div class="tstars">${stars(t.r)}</div>
-            <p class="ttxt">"${t.tx}"</p>
-            <div style="display:flex;align-items:center;gap:12px">${av(t.in,36,'#4f8ef7')}
-              <div><div style="font-weight:700;font-size:14px">${t.nm}</div><div style="color:var(--mt);font-size:12px">${t.rl}</div></div>
-            </div>
-          </div>`).join('')}
-      </div>
-    </div>
-  </section>
-
-  <!-- FAQ -->
-  <section class="sec" id="faq">
-    <div style="max-width:800px;margin:0 auto">
-      <div class="sec-hd"><h2>Frequently Asked</h2></div>
-      <div class="card" style="padding:8px 4px" id="faq-list">
-        ${faqs.map((f,i)=>`
-          <div class="faq" data-a="tog-faq" data-v="${i}">
-            <div class="faq-q">
-              <span>${f.q}</span>
-              <span style="transform:${S.faq===i?'rotate(180deg)':'none'};transition:transform .2s;display:flex;flex-shrink:0">${ico('chevron-down',18,'color:var(--mt)')}</span>
-            </div>
-            ${S.faq===i?`<div class="faq-a fi">${f.a}</div>`:''}
-          </div>`).join('')}
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA -->
-  <section class="sec surf" style="text-align:center">
-    <div class="sec-in">
-      <h2 style="font-size:clamp(26px,4.5vw,52px);font-weight:800;margin-bottom:16px">Ready to Get Expert Help?</h2>
-      <p style="color:var(--mt);font-size:16px;margin-bottom:36px">Join thousands of clients and consultants already on ConsultLink.</p>
-      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-        ${btn('Start as a Client','pri','open-auth','client','lg','arrow-right')}
-        ${btn('Apply as Consultant','sec','open-auth','consultant','lg','briefcase')}
-        ${btn('Admin Portal','gho','enter','admin','','settings')}
-      </div>
-    </div>
-  </section>
-
-  <footer class="foot">
-    <div style="display:flex;align-items:center;gap:10px">${lm(24)}<span style="font-weight:700;font-size:14px">ConsultLink</span></div>
-    <div style="color:var(--mt);font-size:13px">© 2025 ConsultLink. Exclusively Owned and Developed By Vyeta Digital Solutions.</div>
-    <div style="display:flex;gap:22px"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Support</a></div>
-  </footer>
-
-  ${S.auth?renderAuth():''}`;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   AUTH MODAL
-═══════════════════════════════════════════════════════════════ */
-function renderAuth(){
-  const isL=S.amode==='login';
-  const rl=S.role?S.role.charAt(0).toUpperCase()+S.role.slice(1):'User';
-  return `
-  <div class="ov" data-a="close-auth">
-    <div class="mod" onclick="event.stopPropagation()">
-      <button class="mod-x" data-a="close-auth">${ico('x',20)}</button>
-      <div style="text-align:center;margin-bottom:28px">
-        <div style="margin:0 auto 14px;display:flex;justify-content:center">${lm(42)}</div>
-        <div class="ey" style="margin-bottom:8px">${rl} Portal</div>
-        <h2 style="font-size:22px;font-weight:800">${isL?'Welcome Back':'Create Account'}</h2>
-      </div>
-      ${!isL?`<div class="fg"><label class="lbl">Full Name</label><input type="text" placeholder="Your full name" data-f="auth_name"/></div>`:''}
-      <div class="fg"><label class="lbl">Email Address</label><input type="email" placeholder="email@example.com" data-f="auth_email"/></div>
-      <div class="fg"><label class="lbl">Password</label><input type="password" placeholder="••••••••" data-f="auth_pw"/></div>
-      <div style="margin-bottom:20px"></div>
-      ${btn(isL?'Sign In →':'Create Account →','pri','do-auth','','','','',`width:100%;justify-content:center`)}
-      <div style="text-align:center;margin-top:16px;font-size:13px;color:var(--mt)">
-        ${isL?'No account?':'Already have an account?'}&nbsp;
-        <button data-a="tog-amode" style="color:var(--ac);background:none;border:none;cursor:pointer;font-weight:700;font-size:13px;font-family:inherit">
-          ${isL?'Sign Up':'Sign In'}
-        </button>
-      </div>
-    </div>
-  </div>`;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   DASHBOARD SHELL
-═══════════════════════════════════════════════════════════════ */
-function renderShell(role,navItems,user,content){
-  const rc=role==='client'?'#4f8ef7':role==='consultant'?'#22c97b':'#a78bfa';
-  const rl=role.charAt(0).toUpperCase()+role.slice(1);
-  const curNav=navItems.find(n=>n.id===S.tab);
-
-  const navH=navItems.map(n=>`
-    <button class="ni${S.tab===n.id?' on':''}" data-a="set-tab" data-v="${n.id}"
-      style="${S.tab===n.id?`background:${rc}18;color:${rc}`:''}" title="${n.lbl}">
-      ${ico(n.ico,18)}
-      <span class="ni-lbl">${n.lbl}</span>
-      ${n.bdg?`<span class="ni-bdg">${n.bdg}</span>`:''}
-    </button>`).join('');
-
-  return `
-  <div class="shell">
-    <aside class="sb${S.col?' col':''}">
-      <div class="sb-top">${lm(30)}<span class="sb-lt">ConsultLink</span></div>
-      <div class="sb-role"><div class="sb-rp" style="background:${rc}18;color:${rc};border:1px solid ${rc}28">${rl} Portal</div></div>
-      <nav class="sb-nav">${navH}</nav>
-      <div class="sb-bot">
-        <div class="sb-u">
-          ${av(user.ini,32,rc)}
-          <div class="sb-un"><div class="sb-uname">${user.nm}</div><div class="sb-uemail">${user.em}</div></div>
-        </div>
-        <button class="ni" data-a="tog-col" title="Collapse">${ico(S.col?'chevrons-right':'chevrons-left',17)}<span class="ni-lbl">Collapse</span></button>
-        <button class="ni" data-a="logout" title="Sign out">${ico('log-out',17)}<span class="ni-lbl">Sign Out</span></button>
-      </div>
-    </aside>
-    <div class="ma">
-      <header class="topbar">
-        <div class="tb-t">${curNav?.lbl||'Dashboard'}</div>
-        <div class="tb-r">
-          <div class="nb-wrap">
-            <button class="nb" data-a="tog-notif">${ico('bell',18)}<span class="nb-dot"></span></button>
-            ${S.notif?`<div class="ndrop sd">
-              <div class="ndrop-hd">Notifications</div>
-              ${[['REQ-002 accepted by Dr. Esi Mensah','2m ago','#22c97b'],['Payment for REQ-003 confirmed','1h ago','#4f8ef7'],['New message from Amara Nwosu','3h ago','#f5c842']].map(([t,tm,d])=>`
-              <div class="ni-item"><div class="ni-ddot" style="background:${d}"></div>
-              <div><div class="ni-txt">${t}</div><div class="ni-tm">${tm}</div></div></div>`).join('')}
-            </div>`:''}
-          </div>
-          ${av(user.ini,32,rc)}
-        </div>
-      </header>
-      <main class="pc fi" id="pc">${content}</main>
-    </div>
-  </div>`;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   CLIENT DASHBOARD
-═══════════════════════════════════════════════════════════════ */
-const CN=[
-  {id:'overview',lbl:'Overview',   ico:'layout-dashboard'},
-  {id:'requests',lbl:'My Requests',ico:'file-text',      bdg:1},
-  {id:'new',     lbl:'New Request',ico:'plus'},
-  {id:'messages',lbl:'Messages',   ico:'message-square', bdg:3},
-  {id:'payments',lbl:'Payments',   ico:'credit-card'},
-  {id:'profile', lbl:'Profile',    ico:'settings'},
-];
-const CU={nm:'Sarah Owusu',em:'sarah@techbridge.gh',ini:'SO'};
-
-function renderClient(){return renderShell('client',CN,CU,clientTab())}
-function clientTab(){
-  switch(S.tab){
-    case'overview': return cOverview();
-    case'requests': return cRequests();
-    case'new':      return cNew();
-    case'messages': return cMessages();
-    case'payments': return cPayments();
-    case'profile':  return profilePage(CU);
-    default:        return cOverview();
-  }
-}
-
-function cOverview(){
-  return `
-  <div>
-    <div style="margin-bottom:24px">
-      <h1 style="font-size:24px;font-weight:800;margin-bottom:4px">Good morning, Sarah 👋</h1>
-      <p style="color:var(--mt);font-size:14px">Here's a summary of your consultation activity.</p>
-    </div>
-    <div class="g4" style="margin-bottom:24px">
-      ${sc_card('Total Requests','5','↑ 2 this month','file-text','#4f8ef7')}
-      ${sc_card('Completed','3','60% completion','check-circle','#22c97b')}
-      ${sc_card('Active','2','','clock','#f5a623')}
-      ${sc_card('Total Spent','$460','','dollar-sign','#f5c842')}
-    </div>
-    <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px" class="col2r">
-      <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-          <div style="font-weight:700;font-size:15px">Recent Requests</div>
-          ${btn('View All','gho','set-tab','requests','sm','chevron-right')}
-        </div>
-        ${S.reqs.slice(0,3).map(r=>`
-          <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--b1)">
-            <div><div style="font-weight:600;font-size:14px;margin-bottom:4px">${r.ttl}</div>
-            <div style="font-size:12px;color:var(--mt)">${r.id} · ${r.dt}</div></div>
-            ${badge(r.st)}
-          </div>`).join('')}
-      </div>
-      <div style="display:flex;flex-direction:column;gap:14px">
-        <div class="card">
-          <div style="font-weight:700;font-size:14px;margin-bottom:14px">Quick Actions</div>
-          <div style="display:flex;flex-direction:column;gap:9px">
-            ${btn('New Request','pri','set-tab','new','','plus','',`width:100%;justify-content:center`)}
-            ${btn('Open Messages','sec','set-tab','messages','','message-square','',`width:100%;justify-content:center`)}
-            ${btn('View Payments','sec','set-tab','payments','','credit-card','',`width:100%;justify-content:center`)}
-          </div>
-        </div>
-        <div class="card" style="background:rgba(34,201,123,.05);border-color:rgba(34,201,123,.2)">
-          <div style="font-size:11px;color:var(--gn);font-weight:700;margin-bottom:5px;letter-spacing:.06em">ACTIVE MATCH</div>
-          <div style="font-weight:700;font-size:14px">REQ-002 Matched</div>
-          <div style="font-size:12px;color:var(--mt);margin-top:3px">Dr. Esi Mensah · Dermatology</div>
-        </div>
-      </div>
-    </div>
-  </div>`;
-}
-
-function cRequests(){
-  return `
-  <div>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px">
-      <h2 style="font-size:22px;font-weight:800">My Requests</h2>
-      <div style="display:flex;gap:10px">
-        <div style="position:relative">${ico('search',14,'color:var(--mt);position:absolute;left:11px;top:50%;transform:translateY(-50%)')}
-        <input placeholder="Search requests…" style="padding-left:33px;width:210px"/></div>
-        ${btn('Filter','sec','','','sm','filter')}
-      </div>
-    </div>
-    <div class="card" style="padding:0;overflow:hidden">
-      <div class="tw"><table>
-        <thead><tr>${['ID','Title','Category','Date','Consultant','Budget','Status',''].map(h=>`<th>${h}</th>`).join('')}</tr></thead>
-        <tbody>
-          ${S.reqs.map(r=>`<tr>
-            <td class="mono" style="color:var(--ac)">${r.id}</td>
-            <td style="font-weight:600;max-width:180px">${r.ttl}</td>
-            <td style="color:var(--mt)">${r.cat}</td>
-            <td class="mono" style="color:var(--mt)">${r.dt}</td>
-            <td style="max-width:120px">${r.con}</td>
-            <td style="font-weight:700;color:var(--gn)">${r.bud}</td>
-            <td>${badge(r.st)}</td>
-            <td>${btn('View','gho','','','sm','eye')}</td>
-          </tr>`).join('')}
-        </tbody>
-      </table></div>
-    </div>
-  </div>`;
-}
-
-function cNew(){
-  if(S.fs===3) return `
-    <div class="suc-wrap">
-      <div class="suc-ico">${ico('check-circle',36,'color:var(--gn)')}</div>
-      <h3 style="font-size:22px;font-weight:800;margin-bottom:8px">Request Submitted!</h3>
-      <p style="color:var(--mt);font-size:14px">Our matching engine is finding your ideal consultant…</p>
-      <div style="margin-top:20px">
-        <div style="width:40px;height:4px;border-radius:99px;background:var(--as);margin:0 auto;overflow:hidden">
-          <div style="height:100%;background:var(--ac);border-radius:99px;animation:spin 1.5s linear infinite"></div>
-        </div>
-      </div>
-    </div>`;
-
-  const steps_=[['Category','Pick service category'],['Details','Fill intake form'],['Review','Confirm & submit']];
-  const si=`
-    <div class="step-ind">
-      ${steps_.map(([l],i)=>`
-        <div class="sdot${S.fs>i?' dn':S.fs===i?' on':''}">${S.fs>i?ico('check',12,'color:#fff'):(i+1)}</div>
-        <span class="slbl${S.fs===i?' on':''}">${l}</span>
-        ${i<steps_.length-1?'<div class="sline"></div>':''}`).join('')}
-    </div>`;
-
-  let body='';
-
-  if(S.fs===0){
-    body=`
-      <div style="font-weight:700;font-size:15px;margin-bottom:16px">Select Service Category</div>
-      <div class="cat-grid">
-        ${CATS.map(c=>`
-          <div class="catc${S.fcat===c.id?' sel':''}" data-a="sel-cat" data-v="${c.id}"
-            style="${S.fcat===c.id?`border-color:${c.clr};background:${c.clr}10`:''}">
-            <div class="cico" style="background:${c.clr}18;border:1px solid ${c.clr}28">${ico(c.ico,20,`color:${c.clr}`)}</div>
-            <div class="cnm">${c.lbl}</div><div class="cds">${c.desc}</div>
-          </div>`).join('')}
-      </div>
-      ${btn('Continue','pri','form-next','','','arrow-right',!S.fcat)}`;
-  }
-  else if(S.fs===1){
-    const cat=CATS.find(c=>c.id===S.fcat);
-    const fields=FORMS[S.fcat]||[];
-    body=`
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;padding:12px 16px;background:var(--as);border-radius:10px;border:1px solid rgba(79,142,247,.2)">
-        ${ico(cat.ico,18,'color:var(--ac)')}
-        <span style="font-weight:700;color:var(--ac)">${cat.lbl} Intake Form</span>
-      </div>
-      ${fields.map(f=>`
-        <div class="fg">
-          <label class="lbl">${f.lbl}${f.req?' <span class="req">*</span>':''}</label>
-          ${f.tp==='sel'
-            ?`<select data-f="${f.id}"><option value="">Select…</option>${f.opts.map(o=>`<option${S.fd[f.id]===o?' selected':''}>${o}</option>`).join('')}</select>`
-            :f.tp==='txta'
-            ?`<textarea placeholder="${f.ph||''}" data-f="${f.id}">${S.fd[f.id]||''}</textarea>`
-            :f.tp==='file'
-            ?`<div class="uz">${ico('upload',24,'color:var(--mt);display:block;margin:0 auto 8px')}<div style="font-size:13px;color:var(--mt)">Drag files here or <span style="color:var(--ac)">browse</span></div><div style="font-size:11px;color:var(--mt);margin-top:4px">PDF, DOCX, JPG up to 10MB</div></div>`
-            :`<input type="${f.tp}" placeholder="${f.ph||''}" data-f="${f.id}" value="${S.fd[f.id]||''}"/>`
-          }
-        </div>`).join('')}
-      <div class="fg">
-        <label class="lbl">Estimated Budget (USD)</label>
-        <input type="number" placeholder="e.g. 80" data-f="budget" value="${S.fd.budget||''}"/>
-      </div>
-      <div style="display:flex;gap:12px;margin-top:8px">
-        ${btn('Back','sec','form-back','')}${btn('Review Request','pri','form-next','','','arrow-right')}
-      </div>`;
-  }
-  else if(S.fs===2){
-    const pairs=Object.entries(S.fd).filter(([k])=>k!=='docs');
-    body=`
-      <div class="card" style="margin-bottom:20px">
-        <div style="font-weight:700;font-size:15px;margin-bottom:16px">Request Summary</div>
-        <div style="display:flex;justify-content:space-between;padding-bottom:10px;border-bottom:1px solid var(--b1);font-size:14px;margin-bottom:10px">
-          <span style="color:var(--mt)">Category</span>
-          <span style="font-weight:600">${CATS.find(c=>c.id===S.fcat)?.lbl}</span>
-        </div>
-        ${pairs.map(([k,v])=>`
-          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--b1);font-size:14px">
-            <span style="color:var(--mt);text-transform:capitalize;flex-shrink:0;margin-right:12px">${k.replace(/_/g,' ')}</span>
-            <span style="font-weight:600;text-align:right;word-break:break-word;max-width:280px">${v}</span>
-          </div>`).join('')}
-      </div>
-      <div class="card" style="margin-bottom:24px;background:var(--as);border-color:rgba(79,142,247,.2)">
-        <div style="display:flex;gap:12px;align-items:flex-start">
-          ${ico('zap',18,'color:var(--ac);flex-shrink:0;margin-top:2px')}
-          <div style="font-size:13px;line-height:1.65">Our matching engine will surface the top 3–5 consultants. You'll be notified within <strong>2 hours</strong> (20 min for urgent requests).</div>
-        </div>
-      </div>
-      <div style="display:flex;gap:12px">
-        ${btn('Back','sec','form-back','')}${btn('Submit Request','pri','form-sub','','','check-circle')}
-      </div>`;
-  }
-
-  return `
-    <div style="max-width:720px">
-      <h2 style="font-size:22px;font-weight:800;margin-bottom:6px">New Consultation Request</h2>
-      <p style="color:var(--mt);font-size:14px;margin-bottom:24px">Choose a category and complete the intake form. Our engine will match you within 2 hours.</p>
-      ${si}${body}
-    </div>`;
-}
-
-function cMessages(){
-  return `
-  <div style="max-width:740px">
-    <h2 style="font-size:22px;font-weight:800;margin-bottom:20px">Messages</h2>
-    <div class="chat">
-      <div class="chat-hd">
-        ${av('AN',36,'#4f8ef7')}
-        <div>
-          <div style="font-weight:700;font-size:14px">Amara Nwosu</div>
-          <div style="font-size:12px;color:var(--gn);font-weight:600">● Online · REQ-001</div>
-        </div>
-        <div style="margin-left:auto">${btn('','sec','','','sm','phone')}${btn('','sec','','','sm','video')}</div>
-      </div>
-      <div class="chat-msgs" id="cmsg">
-        ${S.msgs.map(m=>`
-          <div class="cm${m.me?' me':''}">
-            <div class="cbw">
-              ${!m.me?`<div class="csn">${m.fr}</div>`:''}
-              <div class="cb${m.me?' me':' th'}">${m.tx}</div>
-              <div class="ctm${m.me?' me':''}">${m.tm}</div>
-            </div>
-          </div>`).join('')}
-      </div>
-      <div class="cin-row">
-        ${btn('','sec','','','sm','paperclip')}
-        <input class="cin" id="minp" placeholder="Type a message…"/>
-        ${btn('Send','pri','send-msg','','sm','send')}
-      </div>
-    </div>
-  </div>`;
-}
-
-function cPayments(){
-  const txns=[
-    {id:'TXN-003',ref:'REQ-003',desc:'Accounting — Tax Filing',   amt:'$120',mth:'MTN MoMo',     st:'Completed', dt:'2025-05-08'},
-    {id:'TXN-002',ref:'REQ-002',desc:'Medical — Dermatology',     amt:'$60', mth:'Airtel Money',  st:'In Escrow', dt:'2025-05-12'},
-    {id:'TXN-001',ref:'REQ-001',desc:'Legal — Contract Review',   amt:'$80', mth:'Bank Transfer', st:'In Escrow', dt:'2025-05-14'},
-  ];
-  return `
-  <div>
-    <h2 style="font-size:22px;font-weight:800;margin-bottom:24px">Payments</h2>
-    <div class="g4" style="margin-bottom:24px">
-      ${sc_card('Total Spent','$460','','dollar-sign','#22c97b')}
-      ${sc_card('Pending','$0','','clock','#f5a623')}
-      ${sc_card('Transactions','3','','credit-card','#4f8ef7')}
-    </div>
-    <div class="card" style="padding:0;overflow:hidden">
-      <div style="padding:14px 20px;border-bottom:1px solid var(--b1);font-weight:700;font-size:14px">Transaction History</div>
-      ${txns.map(t=>`
-        <div style="padding:14px 20px;border-bottom:1px solid var(--b1);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
-          <div style="display:flex;gap:12px;align-items:center">
-            <div style="width:36px;height:36px;border-radius:10px;background:var(--as);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-              ${ico('credit-card',16,'color:var(--ac)')}
-            </div>
-            <div>
-              <div style="font-weight:600;font-size:14px">${t.desc}</div>
-              <div style="font-size:11px;color:var(--mt)">${t.id} · ${t.ref} · ${t.dt} · ${t.mth}</div>
-            </div>
-          </div>
-          <div style="text-align:right">
-            <div style="font-weight:800;font-size:16px;font-family:'DM Mono',monospace">${t.amt}</div>
-            ${badge(t.st)}
-          </div>
-        </div>`).join('')}
-    </div>
-  </div>`;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   CONSULTANT DASHBOARD
-═══════════════════════════════════════════════════════════════ */
-const XN=[
-  {id:'overview', lbl:'Overview',          ico:'layout-dashboard'},
-  {id:'requests', lbl:'Incoming Requests', ico:'file-text',       bdg:2},
-  {id:'sessions', lbl:'Sessions',          ico:'calendar'},
-  {id:'messages', lbl:'Messages',          ico:'message-square',  bdg:1},
-  {id:'earnings', lbl:'Earnings',          ico:'dollar-sign'},
-  {id:'analytics',lbl:'Analytics',         ico:'bar-chart-2'},
-  {id:'profile',  lbl:'Profile',           ico:'settings'},
-];
-const XU={nm:'Amara Nwosu',em:'amara@consultlink.io',ini:'AN'};
-
-function renderConsultant(){return renderShell('consultant',XN,XU,consultantTab())}
-function consultantTab(){
-  switch(S.tab){
-    case'overview':  return xOverview();
-    case'requests':  return xRequests();
-    case'sessions':  return xSessions();
-    case'messages':  return cMessages();
-    case'earnings':  return xEarnings();
-    case'analytics': return xAnalytics();
-    case'profile':   return profilePage(XU);
-    default:         return xOverview();
-  }
-}
-
-function xOverview(){
-  return `
-  <div>
-    <div style="margin-bottom:24px">
-      <h1 style="font-size:24px;font-weight:800;margin-bottom:4px">Welcome back, Amara 👋</h1>
-      <p style="color:var(--mt);font-size:14px">You have <strong style="color:var(--am)">2 new requests</strong> awaiting your review.</p>
-    </div>
-    <div class="g4" style="margin-bottom:24px">
-      ${sc_card('Total Earnings','$18,420','↑ 12% vs last month','dollar-sign','#22c97b')}
-      ${sc_card('Total Sessions','312','8 this week','file-text','#4f8ef7')}
-      ${sc_card('Avg. Rating','4.9 ★','','star','#f5c842')}
-      ${sc_card('Acceptance Rate','94%','','activity','#a78bfa')}
-    </div>
-    <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px" class="col2r">
-      <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-          <div style="font-weight:700;font-size:15px">Earnings Trend</div>
-          <span style="font-size:12px;color:var(--mt)">Last 12 months</span>
-        </div>
-        ${lchart(ANA.rv,'#22c97b',80)}
-        <div style="display:flex;justify-content:space-between;margin-top:12px">
-          ${ANA.mo.slice(-6).map((m,i)=>`<div style="text-align:center"><div style="font-size:10px;color:var(--mt)">${m}</div><div style="font-size:11px;font-weight:700;font-family:'DM Mono',monospace">$${(ANA.rv.slice(-6)[i]/1000).toFixed(1)}k</div></div>`).join('')}
-        </div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:14px">
-        <div class="card">
-          <div style="font-weight:700;font-size:14px;margin-bottom:12px">Availability</div>
-          ${[['Status','Available','var(--gn)'],['Capacity','4 / 6 slots','var(--tx)'],['Next free','Today 3pm','var(--tx)']].map(([k,v,c])=>`
-            <div style="display:flex;justify-content:space-between;font-size:13px;padding-bottom:9px;border-bottom:1px solid var(--b1);margin-bottom:9px">
-              <span style="color:var(--mt)">${k}</span><span style="font-weight:700;color:${c}">${v}</span>
-            </div>`).join('')}
-          <div style="display:flex;gap:8px;margin-top:4px">
-            ${btn('Available','suc','','','sm')}${btn('Go Offline','sec','','','sm')}
-          </div>
-        </div>
-        <div class="card">
-          <div style="font-weight:700;font-size:14px;margin-bottom:5px">New Requests</div>
-          <div style="font-size:30px;font-weight:800;font-family:'DM Mono',monospace;color:var(--am);margin-bottom:4px">2</div>
-          <div style="font-size:12px;color:var(--mt);margin-bottom:12px">Awaiting your acceptance</div>
-          ${btn('Review Now','pri','set-tab','requests','sm','chevron-right','',`width:100%;justify-content:center`)}
-        </div>
-      </div>
-    </div>
-  </div>`;
-}
-
-function xRequests(){
-  return `
-  <div>
-    <h2 style="font-size:22px;font-weight:800;margin-bottom:24px">Incoming Requests</h2>
-    <div style="display:flex;flex-direction:column;gap:16px">
-      ${S.inc.map(r=>`
-        <div class="card" style="padding:24px;${r.st!=='New'?`background:${r.st==='Accepted'?'rgba(34,201,123,.04)':'rgba(242,78,78,.04)'};border-color:${r.st==='Accepted'?'rgba(34,201,123,.22)':'rgba(242,78,78,.22)'}`:''}" >
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;flex-wrap:wrap;gap:10px">
-            <div>
-              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap">
-                <span class="mono" style="color:var(--ac)">${r.id}</span>
-                ${badge(r.urg)}
-                ${r.st!=='New'?badge(r.st==='Accepted'?'Accepted':'Cancelled'):''}
-              </div>
-              <div style="font-weight:800;font-size:17px;margin-bottom:4px">${r.ttl}</div>
-              <div style="font-size:13px;color:var(--mt)">Client: ${r.cli} · ${r.cat} · ${r.dt}</div>
-            </div>
-            <div style="font-size:22px;font-weight:800;font-family:'DM Mono',monospace;color:var(--gn)">${r.bud}</div>
-          </div>
-          <div style="background:var(--s2);border-radius:10px;padding:14px;font-size:13px;color:var(--mt);line-height:1.65;margin-bottom:16px">${r.desc}</div>
-          ${r.st==='New'?`
-            <div style="display:flex;gap:10px;flex-wrap:wrap">
-              ${btn('Accept Request','suc','acc-req',r.id,'','check-circle')}
-              ${btn('Decline','dan','dec-req',r.id,'','x-circle')}
-              ${btn('Ask Client','sec','','','','message-square')}
-            </div>`:`
-            <div style="padding:10px 14px;border-radius:8px;font-size:13px;font-weight:700;background:${r.st==='Accepted'?'rgba(34,201,123,.12)':'rgba(242,78,78,.12)'};color:${r.st==='Accepted'?'var(--gn)':'var(--rd)'}">
-              ${r.st==='Accepted'?'✓ Accepted — Awaiting client payment':'✗ Request Declined'}
-            </div>`}
-        </div>`).join('')}
-    </div>
-  </div>`;
-}
-
-function xSessions(){
-  const sess=[
-    {id:'REQ-003',cli:'Sarah Owusu', cat:'Accounting',dt:'2025-05-08',dur:'1.5h',earn:'$120',rtg:5,st:'Completed'},
-    {id:'REQ-001',cli:'Mark Ochieng',cat:'Legal',     dt:'2025-05-14',dur:'2h',  earn:'$80', rtg:5,st:'Completed'},
-    {id:'REQ-005',cli:'Aisha Diallo',cat:'Legal',     dt:'2025-05-15',dur:'3h',  earn:'$200',rtg:5,st:'In Progress'},
-  ];
-  return `
-  <div>
-    <h2 style="font-size:22px;font-weight:800;margin-bottom:24px">Session History</h2>
-    <div class="card" style="padding:0;overflow:hidden">
-      <div class="tw"><table>
-        <thead><tr>${['ID','Client','Category','Date','Duration','Earned','Rating','Status'].map(h=>`<th>${h}</th>`).join('')}</tr></thead>
-        <tbody>
-          ${sess.map(s=>`<tr>
-            <td class="mono" style="color:var(--ac)">${s.id}</td>
-            <td style="font-weight:600">${s.cli}</td>
-            <td style="color:var(--mt)">${s.cat}</td>
-            <td class="mono" style="color:var(--mt)">${s.dt}</td>
-            <td style="color:var(--mt)">${s.dur}</td>
-            <td style="font-weight:700;color:var(--gn)">${s.earn}</td>
-            <td>${stars(s.rtg)}</td>
-            <td>${badge(s.st)}</td>
-          </tr>`).join('')}
-        </tbody>
-      </table></div>
-    </div>
-  </div>`;
-}
-
-function xEarnings(){
-  return `
-  <div>
-    <h2 style="font-size:22px;font-weight:800;margin-bottom:24px">Earnings</h2>
-    <div class="g4" style="margin-bottom:24px">
-      ${sc_card('Total Earned','$18,420','','dollar-sign','#22c97b')}
-      ${sc_card('This Month','$3,200','↑ 18%','trending-up','#4f8ef7')}
-      ${sc_card('Pending Payout','$540','','credit-card','#f5a623')}
-      ${sc_card('Platform Fee','12%','','layers','#6b7280')}
-    </div>
-    <div style="display:grid;grid-template-columns:3fr 1fr;gap:20px" class="col2r">
-      <div class="card">
-        <div style="font-weight:700;font-size:15px;margin-bottom:4px">Monthly Revenue</div>
-        <div style="font-size:12px;color:var(--mt);margin-bottom:16px">After 12% platform commission</div>
-        ${lchart(ANA.rv,'#22c97b',100)}
-        <div style="display:flex;justify-content:space-between;margin-top:10px">
-          ${ANA.mo.map(m=>`<div style="font-size:10px;color:var(--mt);text-align:center">${m}</div>`).join('')}
-        </div>
-      </div>
-      <div class="card">
-        <div style="font-weight:700;font-size:14px;margin-bottom:16px">Payout Details</div>
-        ${[['Method','MTN MoMo'],['Account','****8823'],['Next Payout','May 25'],['Frequency','Weekly']].map(([k,v])=>`
-          <div style="display:flex;justify-content:space-between;font-size:13px;padding-bottom:10px;border-bottom:1px solid var(--b1);margin-bottom:10px">
-            <span style="color:var(--mt)">${k}</span><span style="font-weight:700">${v}</span>
-          </div>`).join('')}
-        ${btn('Request Payout','pri','','','sm','download','',`width:100%;justify-content:center;margin-top:6px`)}
-      </div>
-    </div>
-  </div>`;
-}
-
-function xAnalytics(){
-  const bkd=[['Contract Review','64%','#4f8ef7'],['IP Protection','21%','#22c97b'],['Dispute','9%','#f5a623'],['Other','6%','#6b7280']];
-  return `
-  <div>
-    <h2 style="font-size:22px;font-weight:800;margin-bottom:24px">Analytics</h2>
-    <div class="g4" style="margin-bottom:24px">
-      ${sc_card('Acceptance Rate','94%','','activity','#22c97b')}
-      ${sc_card('Avg. Response','18 min','','clock','#4f8ef7')}
-      ${sc_card('Avg. Rating','4.9','','star','#f5c842')}
-      ${sc_card('Repeat Clients','38%','','thumbs-up','#a78bfa')}
-    </div>
-    <div class="g2">
-      <div class="card">
-        <div style="font-weight:700;font-size:15px;margin-bottom:16px">Request Volume</div>
-        ${lchart(ANA.rq,'#4f8ef7',80)}
-        <div style="display:flex;justify-content:space-between;margin-top:10px">
-          ${ANA.mo.map(m=>`<div style="font-size:10px;color:var(--mt)">${m}</div>`).join('')}
-        </div>
-      </div>
-      <div class="card">
-        <div style="font-weight:700;font-size:15px;margin-bottom:16px">Category Breakdown</div>
-        ${bkd.map(([l,p,c])=>`
-          <div style="margin-bottom:12px">
-            <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px">
-              <span style="color:var(--mt)">${l}</span><span style="font-weight:700;color:${c}">${p}</span>
-            </div>${pbar(p,c)}
-          </div>`).join('')}
-      </div>
-    </div>
-  </div>`;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   ADMIN DASHBOARD
-═══════════════════════════════════════════════════════════════ */
-const AN_=[
-  {id:'overview',    lbl:'Overview',         ico:'layout-dashboard'},
-  {id:'consultants', lbl:'Consultants',       ico:'user-check',     bdg:1},
-  {id:'requests',    lbl:'All Requests',      ico:'file-text'},
-  {id:'users',       lbl:'Users',             ico:'users'},
-  {id:'analytics',   lbl:'Analytics',         ico:'pie-chart'},
-  {id:'finances',    lbl:'Financials',        ico:'dollar-sign'},
-  {id:'categories',  lbl:'Categories',        ico:'layers'},
-  {id:'disputes',    lbl:'Disputes',          ico:'flag',           bdg:1},
-  {id:'settings',    lbl:'Settings',          ico:'settings'},
-];
-const AU={nm:'Admin',em:'admin@consultlink.io',ini:'AD'};
-
-function renderAdmin(){return renderShell('admin',AN_,AU,adminTab())}
-function adminTab(){
-  switch(S.tab){
-    case'overview':    return aOverview();
-    case'consultants': return aConsultants();
-    case'requests':    return aRequests();
-    case'users':       return aUsers();
-    case'analytics':   return aAnalytics();
-    case'finances':    return aFinances();
-    case'categories':  return aCategories();
-    case'disputes':    return aDisputes();
-    case'settings':    return profilePage(AU);
-    default:           return aOverview();
-  }
-}
-
-function aOverview(){
-  const qa=[
-    {lbl:'Approve Consultants',clr:'#f5a623',ico:'user-check',tab:'consultants',cnt:'1 pending'},
-    {lbl:'Review Disputes',    clr:'#f24e4e',ico:'flag',       tab:'disputes',   cnt:'1 open'},
-    {lbl:'Financial Report',   clr:'#22c97b',ico:'bar-chart-2',tab:'finances',   cnt:'May 2025'},
-    {lbl:'Category Manager',   clr:'#a78bfa',ico:'layers',     tab:'categories', cnt:'6 active'},
-  ];
-  return `
-  <div>
-    <div style="margin-bottom:24px">
-      <h1 style="font-size:24px;font-weight:800;margin-bottom:4px">Platform Overview</h1>
-      <p style="color:var(--mt);font-size:14px">Real-time metrics across ConsultLink.</p>
-    </div>
-    <div class="g4" style="margin-bottom:24px">
-      ${sc_card('Total Users','4,218','↑ 142 this week','users','#4f8ef7')}
-      ${sc_card('Verified Consultants','1,204','18 pending','user-check','#22c97b')}
-      ${sc_card('Total Requests','18,402','↑ 834 this month','file-text','#a78bfa')}
-      ${sc_card('Platform Revenue','$84.2k','↑ 23% MoM','dollar-sign','#f5c842')}
-    </div>
-    <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;margin-bottom:20px" class="col2r">
-      <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-          <div style="font-weight:700;font-size:15px">Request Volume (12 months)</div>
-          <span style="font-size:12px;color:var(--mt)">ConsultLink Global</span>
-        </div>
-        ${lchart(ANA.rq,'#4f8ef7',80)}
-        <div style="display:flex;justify-content:space-between;margin-top:10px">
-          ${ANA.mo.map(m=>`<div style="font-size:10px;color:var(--mt)">${m}</div>`).join('')}
-        </div>
-      </div>
-      <div class="card">
-        <div style="font-weight:700;font-size:15px;margin-bottom:16px">System Health</div>
-        ${[['API Uptime','99.97%','var(--gn)'],['Avg Match Time','18 min','var(--ac)'],['Dispute Rate','0.4%','var(--gn)'],['Pending Approvals','1','var(--am)'],['Active Sessions','23','var(--ac)'],['Avg Rating','4.82 ★','var(--gd)']].map(([k,v,c])=>`
-          <div style="display:flex;justify-content:space-between;font-size:13px;padding-bottom:9px;border-bottom:1px solid var(--b1);margin-bottom:9px">
-            <span style="color:var(--mt)">${k}</span><span style="font-weight:700;color:${c}">${v}</span>
-          </div>`).join('')}
-      </div>
-    </div>
-    <div class="g4">
-      ${qa.map(a=>`
-        <div class="card card-clk" data-a="set-tab" data-v="${a.tab}" style="padding:22px">
-          <div style="width:42px;height:42px;border-radius:11px;background:${a.clr}18;border:1px solid ${a.clr}28;display:flex;align-items:center;justify-content:center;margin-bottom:12px">
-            ${ico(a.ico,19,`color:${a.clr}`)}
-          </div>
-          <div style="font-weight:700;font-size:14px;margin-bottom:4px">${a.lbl}</div>
-          <div style="font-size:12px;color:var(--mt)">${a.cnt}</div>
-        </div>`).join('')}
-    </div>
-  </div>`;
-}
-
-function aConsultants(){
-  return `
-  <div>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px">
-      <h2 style="font-size:22px;font-weight:800">Consultant Management</h2>
-      <div style="display:flex;gap:10px">
-        <div style="position:relative">${ico('search',14,'color:var(--mt);position:absolute;left:11px;top:50%;transform:translateY(-50%)')}
-        <input placeholder="Search…" style="padding-left:33px;width:210px"/></div>
-        ${btn('Filter','sec','','','sm','filter')}${btn('Export','sec','','','sm','download')}
-      </div>
-    </div>
-    <div class="card" style="padding:0;overflow:hidden">
-      <div class="tw"><table>
-        <thead><tr>${['Consultant','Specialty','Sessions','Rating','Earnings','Status','Actions'].map(h=>`<th>${h}</th>`).join('')}</tr></thead>
-        <tbody>
-          ${S.cons.map(c=>`<tr>
-            <td>
-              <div style="display:flex;align-items:center;gap:10px">
-                ${av(c.in,32,c.clr)}
-                <div><div style="font-weight:700">${c.nm}</div><div class="mono" style="color:var(--mt)">${c.id}</div></div>
-              </div>
-            </td>
-            <td style="color:var(--mt)">${c.spec}</td>
-            <td class="mono">${c.ses}</td>
-            <td><div style="display:flex;align-items:center;gap:4px">${stars(Math.round(c.rtg))}<span style="font-weight:700;font-size:13px;margin-left:3px">${c.rtg}</span></div></td>
-            <td style="font-weight:700;color:var(--gn)">${c.earn}</td>
-            <td>${badge(c.st)}</td>
-            <td>
-              <div style="display:flex;gap:6px;flex-wrap:wrap">
-                ${c.st==='Pending Verification'?btn('Approve','suc','appr-con',c.id,'sm','check-circle'):''}
-                ${c.st!=='Suspended'&&c.st!=='Pending Verification'?btn('Suspend','dan','susp-con',c.id,'sm','x-circle'):''}
-                ${btn('View','gho','','','sm','eye')}
-              </div>
-            </td>
-          </tr>`).join('')}
-        </tbody>
-      </table></div>
-    </div>
-  </div>`;
-}
-
-function aRequests(){
-  return `
-  <div>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px">
-      <h2 style="font-size:22px;font-weight:800">All Requests</h2>
-      <div style="display:flex;gap:10px">
-        <div style="position:relative">${ico('search',14,'color:var(--mt);position:absolute;left:11px;top:50%;transform:translateY(-50%)')}
-        <input placeholder="Search requests…" style="padding-left:33px;width:210px"/></div>
-        ${btn('Filter','sec','','','sm','filter')}${btn('Export','sec','','','sm','download')}
-      </div>
-    </div>
-    <div class="card" style="padding:0;overflow:hidden">
-      <div class="tw"><table>
-        <thead><tr>${['ID','Client','Category','Consultant','Date','Budget','Status','Action'].map(h=>`<th>${h}</th>`).join('')}</tr></thead>
-        <tbody>
-          ${REQS.map(r=>`<tr>
-            <td class="mono" style="color:var(--ac)">${r.id}</td>
-            <td style="font-weight:600">Sarah Owusu</td>
-            <td style="color:var(--mt)">${r.cat}</td>
-            <td style="max-width:130px">${r.con}</td>
-            <td class="mono" style="color:var(--mt)">${r.dt}</td>
-            <td style="font-weight:700;color:var(--gn)">${r.bud}</td>
-            <td>${badge(r.st)}</td>
-            <td>${btn('View','gho','','','sm','eye')}</td>
-          </tr>`).join('')}
-        </tbody>
-      </table></div>
-    </div>
-  </div>`;
-}
-
-function aUsers(){
-  const users=[
-    {nm:'Sarah Owusu',   em:'sarah@techbridge.gh',  rl:'Client',     jn:'2024-08',act:'5 requests', in:'SO',c:'#4f8ef7'},
-    {nm:'Mark Ochieng',  em:'mark@savannah.co.ke',  rl:'Client',     jn:'2024-10',act:'3 requests', in:'MO',c:'#4f8ef7'},
-    {nm:'Aisha Diallo',  em:'aisha@cloudnest.io',   rl:'Client',     jn:'2025-01',act:'2 requests', in:'AD',c:'#4f8ef7'},
-    {nm:'Amara Nwosu',   em:'amara@consultlink.io', rl:'Consultant', jn:'2024-01',act:'312 sessions',in:'AN',c:'#22c97b'},
-    {nm:'Dr. Esi Mensah',em:'esi@health.gh',         rl:'Consultant', jn:'2024-03',act:'204 sessions',in:'EM',c:'#22c97b'},
-    {nm:'Kofi Asante',   em:'kofi@fin.gh',           rl:'Consultant', jn:'2024-02',act:'180 sessions',in:'KA',c:'#f5c842'},
-  ];
-  return `
-  <div>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px">
-      <h2 style="font-size:22px;font-weight:800">User Management</h2>
-      <div style="display:flex;gap:10px">
-        <div style="position:relative">${ico('search',14,'color:var(--mt);position:absolute;left:11px;top:50%;transform:translateY(-50%)')}
-        <input placeholder="Search users…" style="padding-left:33px;width:210px"/></div>
-        ${btn('Export','sec','','','sm','download')}
-      </div>
-    </div>
-    <div class="card" style="padding:0;overflow:hidden">
-      <div class="tw"><table>
-        <thead><tr>${['User','Email','Role','Joined','Activity','Actions'].map(h=>`<th>${h}</th>`).join('')}</tr></thead>
-        <tbody>
-          ${users.map(u=>`<tr>
-            <td><div style="display:flex;align-items:center;gap:10px">${av(u.in,32,u.c)}<span style="font-weight:600">${u.nm}</span></div></td>
-            <td style="color:var(--mt);font-size:12px">${u.em}</td>
-            <td>${badge(u.rl)}</td>
-            <td class="mono" style="color:var(--mt)">${u.jn}</td>
-            <td style="color:var(--mt);font-size:13px">${u.act}</td>
-            <td><div style="display:flex;gap:6px">${btn('View','gho','','','sm','eye')}${btn('Flag','gho','','','sm','flag')}</div></td>
-          </tr>`).join('')}
-        </tbody>
-      </table></div>
-    </div>
-  </div>`;
-}
-
-function aAnalytics(){
-  const cats_=[['Legal','38%','#4f8ef7'],['Medical','21%','#22c97b'],['Accounting','18%','#f5c842'],['Business','13%','#a78bfa'],['Engineering','6%','#38bdf8'],['HR','4%','#f5a623']];
-  return `
-  <div>
-    <h2 style="font-size:22px;font-weight:800;margin-bottom:24px">Platform Analytics</h2>
-    <div class="g4" style="margin-bottom:24px">
-      ${sc_card('MoM Growth','+23%','','trending-up','#22c97b')}
-      ${sc_card('Avg Quality','4.82','','star','#f5c842')}
-      ${sc_card('Match Speed','18 min','','clock','#4f8ef7')}
-      ${sc_card('Repeat Rate','41%','','refresh-cw','#a78bfa')}
-    </div>
-    <div class="g2">
-      <div class="card">
-        <div style="font-weight:700;font-size:15px;margin-bottom:16px">Requests by Category</div>
-        ${cats_.map(([l,p,c])=>`
-          <div style="margin-bottom:13px">
-            <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px">
-              <span style="color:var(--mt)">${l}</span><span style="font-weight:700;color:${c}">${p}</span>
-            </div>${pbar(p,c)}
-          </div>`).join('')}
-      </div>
-      <div class="card">
-        <div style="font-weight:700;font-size:15px;margin-bottom:4px">Revenue (12 months)</div>
-        <div style="font-size:12px;color:var(--mt);margin-bottom:16px">Platform commission earned</div>
-        ${lchart(ANA.rv,'#f5c842',100)}
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px">
-          ${[['Total Revenue','$84.2k','#f5c842'],['Commission','$10.1k','#22c97b'],['Refunds','$1.2k','#f24e4e'],['Net','$73.1k','#4f8ef7']].map(([k,v,c])=>`
-            <div style="padding:10px;background:var(--s2);border-radius:8px">
-              <div style="font-size:11px;color:var(--mt);margin-bottom:4px">${k}</div>
-              <div style="font-weight:800;font-size:15px;color:${c};font-family:'DM Mono',monospace">${v}</div>
-            </div>`).join('')}
-        </div>
-      </div>
-    </div>
-  </div>`;
-}
-
-function aFinances(){
-  const txns=[
-    {id:'TXN-011',cli:'Sarah Owusu',  con:'Amara Nwosu',   cat:'Legal',     gr:'$80', fe:'$9.60', nt:'$70.40',st:'In Escrow',dt:'2025-05-14'},
-    {id:'TXN-010',cli:'Mark Ochieng', con:'Amara Nwosu',   cat:'Legal',     gr:'$200',fe:'$24',   nt:'$176',  st:'Released',  dt:'2025-05-13'},
-    {id:'TXN-009',cli:'Aisha Diallo', con:'Kofi Asante',   cat:'Accounting',gr:'$120',fe:'$14.40',nt:'$105.60',st:'Released', dt:'2025-05-08'},
-    {id:'TXN-008',cli:'Sarah Owusu',  con:'Dr. Esi Mensah',cat:'Medical',   gr:'$60', fe:'$7.20', nt:'$52.80',st:'In Escrow', dt:'2025-05-12'},
-  ];
-  return `
-  <div>
-    <h2 style="font-size:22px;font-weight:800;margin-bottom:24px">Financial Tracking</h2>
-    <div class="g4" style="margin-bottom:24px">
-      ${sc_card('Gross Revenue','$84.2k','↑ 23% MoM','dollar-sign','#f5c842')}
-      ${sc_card('Platform Fees','$10.1k','','layers','#22c97b')}
-      ${sc_card('Consultant Payouts','$73.1k','','credit-card','#4f8ef7')}
-      ${sc_card('Refunds Issued','$1.2k','','flag','#f24e4e')}
-    </div>
-    <div class="card" style="padding:0;overflow:hidden">
-      <div style="padding:14px 20px;border-bottom:1px solid var(--b1);display:flex;justify-content:space-between;align-items:center">
-        <div style="font-weight:700;font-size:14px">Transaction Ledger</div>
-        ${btn('Export CSV','sec','','','sm','download')}
-      </div>
-      ${txns.map(t=>`
-        <div style="padding:14px 20px;border-bottom:1px solid var(--b1);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
-          <div>
-            <div style="font-weight:600;font-size:14px">${t.cli} → ${t.con}</div>
-            <div style="font-size:11px;color:var(--mt)">${t.id} · ${t.cat} · ${t.dt}</div>
-          </div>
-          <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
-            <div style="text-align:center"><div style="font-size:10px;color:var(--mt)">Gross</div><div style="font-weight:700;font-family:'DM Mono',monospace">${t.gr}</div></div>
-            <div style="text-align:center"><div style="font-size:10px;color:var(--mt)">Fee</div><div style="font-weight:700;color:var(--ac);font-family:'DM Mono',monospace">${t.fe}</div></div>
-            <div style="text-align:center"><div style="font-size:10px;color:var(--mt)">Net</div><div style="font-weight:700;color:var(--gn);font-family:'DM Mono',monospace">${t.nt}</div></div>
-            ${badge(t.st)}
-          </div>
-        </div>`).join('')}
-    </div>
-  </div>`;
-}
-
-function aCategories(){
-  return `
-  <div>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
-      <h2 style="font-size:22px;font-weight:800">Category Management</h2>
-      ${btn('Add Category','pri','','','','plus')}
-    </div>
-    <div class="gal">
-      ${CATS.map(c=>{
-        const on=S.cats[c.id]!==false;
-        return `
-        <div class="card" style="padding:22px;${!on?'opacity:.55':''}">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
-            <div class="cico" style="background:${c.clr}18;border:1px solid ${c.clr}28">${ico(c.ico,22,`color:${c.clr}`)}</div>
-            <div style="display:flex;gap:8px;align-items:center">
-              ${btn('','gho','','','sm','edit')}
-              <button class="tgl" data-a="tog-cat" data-v="${c.id}" style="background:${on?'var(--gn)':'var(--fn)'}">
-                <div class="tgl-k" style="left:${on?'21px':'3px'}"></div>
-              </button>
-            </div>
-          </div>
-          <div style="font-weight:800;font-size:16px;margin-bottom:4px">${c.lbl}</div>
-          <div style="color:var(--mt);font-size:13px;margin-bottom:14px;line-height:1.55">${c.desc}</div>
-          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:7px">
-            <span style="color:var(--mt)">Total Requests</span>
-            <span style="font-weight:700;font-family:'DM Mono',monospace">${c.cnt.toLocaleString()}</span>
-          </div>
-          <div class="pt"><div class="pf" style="width:${Math.round(c.cnt/8000*100)}%;background:${c.clr}"></div></div>
-        </div>`}).join('')}
-    </div>
-  </div>`;
-}
-
-function aDisputes(){
-  return `
-  <div>
-    <h2 style="font-size:22px;font-weight:800;margin-bottom:24px">Dispute Management</h2>
-    <div class="dis-card">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;flex-wrap:wrap;gap:12px">
-        <div>
-          <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap">
-            <span class="mono" style="color:var(--ac)">DIS-001</span>${badge('Disputed')}${badge('Urgent')}
-          </div>
-          <div style="font-weight:800;font-size:17px;margin-bottom:4px">REQ-004: HR Consultation — Incomplete Deliverable</div>
-          <div style="font-size:13px;color:var(--mt)">Client: Mark Ochieng · Consultant: Sarah Chen · Filed: 2025-05-16</div>
-        </div>
-        <div style="font-size:22px;font-weight:800;font-family:'DM Mono',monospace;color:var(--rd)">$50</div>
-      </div>
-      <div class="dis-cols">
-        <div class="dis-col">
-          <div class="dis-cl" style="color:var(--rd)">Client Complaint</div>
-          <div class="dis-ct">"The consultant failed to deliver the dismissal policy template promised in the engagement. Only a generic framework was provided."</div>
-        </div>
-        <div class="dis-col">
-          <div class="dis-cl" style="color:var(--ac)">Consultant Response</div>
-          <div class="dis-ct">"A comprehensive 12-page framework was delivered. The client expected a bespoke document outside the agreed scope of work."</div>
-        </div>
-      </div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        ${btn('Rule for Client (Refund)','suc','','','','thumbs-up')}
-        ${btn('Rule for Consultant (Release)','dan','','','','thumbs-down')}
-        ${btn('Request More Info','sec','','','','message-square')}
-      </div>
-    </div>
-    <div class="card" style="padding:20px">
-      <div style="font-weight:700;margin-bottom:6px">No other open disputes</div>
-      <div style="color:var(--mt);font-size:13px">Platform dispute rate: 0.4% — well below industry average of 2.1%.</div>
-    </div>
-  </div>`;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   SHARED: PROFILE PAGE
-═══════════════════════════════════════════════════════════════ */
-function profilePage(user){
-  return `
-  <div style="max-width:640px">
-    <h2 style="font-size:22px;font-weight:800;margin-bottom:24px">Profile Settings</h2>
-    <div class="card" style="margin-bottom:20px">
-      <div style="display:flex;align-items:center;gap:16px;padding-bottom:24px;margin-bottom:24px;border-bottom:1px solid var(--b1)">
-        ${av(user.ini,64,'#4f8ef7')}
-        <div>
-          <div style="font-weight:800;font-size:18px">${user.nm}</div>
-          <div style="color:var(--mt);font-size:14px;margin-bottom:10px">${user.em}</div>
-          ${btn('Change Photo','sec','','','sm','upload')}
-        </div>
-      </div>
-      <div class="g2" style="gap:16px">
-        ${[['Full Name',user.nm,'text'],['Email',user.em,'email'],['Phone','+233 24 000 0000','text'],['Country','Ghana','text'],['Timezone','GMT+0','text'],['Language','English','text']].map(([l,v,t])=>`
-          <div class="fg"><label class="lbl">${l}</label><input type="${t}" value="${v}"/></div>`).join('')}
-      </div>
-    </div>
-    <div class="card" style="margin-bottom:20px">
-      <div style="font-weight:700;font-size:15px;margin-bottom:16px">Security</div>
-      <div style="display:flex;flex-direction:column;gap:12px">
-        <div class="fg"><label class="lbl">Current Password</label><input type="password" placeholder="••••••••"/></div>
-        <div class="fg"><label class="lbl">New Password</label><input type="password" placeholder="••••••••"/></div>
-        <div class="fg"><label class="lbl">Confirm New Password</label><input type="password" placeholder="••••••••"/></div>
-      </div>
-    </div>
-    <div class="card" style="margin-bottom:20px">
-      <div style="font-weight:700;font-size:15px;margin-bottom:16px">Notification Preferences</div>
-      ${[['Email notifications on new matches','on'],['SMS alerts for urgent requests','on'],['Weekly summary report','off']].map(([l,st])=>`
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--b1)">
-          <span style="font-size:14px">${l}</span>
-          <button class="tgl" style="background:${st==='on'?'var(--gn)':'var(--fn)'}">
-            <div class="tgl-k" style="left:${st==='on'?'21px':'3px'}"></div>
-          </button>
-        </div>`).join('')}
-    </div>
-    ${btn('Save Changes','pri','','','','check-circle')}
-  </div>`;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   ROUTER
-═══════════════════════════════════════════════════════════════ */
-function getHTML(){
-  switch(S.view){
-    case'landing':    return renderLanding();
-    case'client':     return renderClient();
-    case'consultant': return renderConsultant();
-    case'admin':      return renderAdmin();
-    default:          return renderLanding();
-  }
-}
-
-function initIcons(){if(typeof lucide!=='undefined')lucide.createIcons()}
-
-function render(){
-  document.getElementById('app').innerHTML=getHTML();
-  initIcons();
-  afterRender();
-}
-
-function renderPC(){
-  /* Only re-render page content — leave shell intact */
-  const el=document.getElementById('pc');
-  if(!el){render();return}
-  let c='';
-  if(S.view==='client')     c=clientTab();
-  if(S.view==='consultant') c=consultantTab();
-  if(S.view==='admin')      c=adminTab();
-  el.innerHTML=c;
-  el.style.animation='none';el.offsetHeight;el.style.animation='fadeIn .3s ease';
-  initIcons();
-  afterRender();
-  /* Update sidebar highlight */
-  document.querySelectorAll('.ni[data-v]').forEach(n=>{
-    const v=n.dataset.v, nav=S.view==='client'?CN:S.view==='consultant'?XN:AN_;
-    const rc=S.view==='client'?'#4f8ef7':S.view==='consultant'?'#22c97b':'#a78bfa';
-    const on=v===S.tab;
-    n.classList.toggle('on',on);
-    n.style.background=on?`${rc}18`:'';
-    n.style.color=on?rc:'';
-    n.style.fontWeight=on?'700':'';
-  });
-  /* Update topbar title */
-  const nav=S.view==='client'?CN:S.view==='consultant'?XN:AN_;
-  const tt=document.querySelector('.tb-t');
-  if(tt)tt.textContent=nav.find(n=>n.id===S.tab)?.lbl||'Dashboard';
-}
-
-function afterRender(){
-  /* Scroll chat to bottom */
-  if(S.tab==='messages'){
-    setTimeout(()=>{const c=document.getElementById('cmsg');if(c)c.scrollTop=c.scrollHeight},50);
-  }
-  /* Nav scroll listener on landing */
-  if(S.view==='landing'){
-    const ln=document.getElementById('ln');
-    if(ln){
-      window.onscroll=()=>{if(ln)ln.classList.toggle('stuck',window.scrollY>60)};
-    }
-  }else{window.onscroll=null}
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   EVENT HANDLING
-═══════════════════════════════════════════════════════════════ */
-document.addEventListener('click',e=>{
-  /* Close notif on outside click */
-  if(!e.target.closest('.nb-wrap')&&S.notif){S.notif=false;const nd=document.querySelector('.ndrop');if(nd)nd.remove();}
-
-  const el=e.target.closest('[data-a]');
-  if(!el)return;
-  const a=el.dataset.a, v=el.dataset.v;
-
-  switch(a){
-    /* Landing */
-    case'open-auth':
-      S.role=v;S.auth=true;S.amode='login';render();break;
-    case'close-auth':
-      S.auth=false;render();break;
-    case'tog-amode':
-      S.amode=S.amode==='login'?'register':'login';render();break;
-    case'do-auth':
-      S.view=S.role||'client';S.tab='overview';S.auth=false;render();break;
-    case'enter':
-      S.view=v;S.tab='overview';S.auth=false;render();break;
-    case'set-lrole':
-      S.lrole=v;render();break;
-    case'tog-faq':
-      S.faq=S.faq===parseInt(v)?null:parseInt(v);render();break;
-
-    /* Sidebar */
-    case'set-tab':
-      if(v===S.tab)break;S.tab=v;renderPC();break;
-    case'tog-col':
-      S.col=!S.col;
-      const sb=document.querySelector('.sb');
-      if(sb)sb.classList.toggle('col',S.col);break;
-    case'logout':
-      S.view='landing';S.tab='overview';S.auth=false;S.notif=false;render();break;
-    case'tog-notif':
-      S.notif=!S.notif;
-      const nd=document.querySelector('.ndrop');
-      if(nd)nd.remove();
-      if(S.notif){
-        const wrap=el.closest('.nb-wrap');
-        if(wrap)wrap.insertAdjacentHTML('beforeend',`
-          <div class="ndrop sd">
-            <div class="ndrop-hd">Notifications</div>
-            ${[['REQ-002 accepted by Dr. Esi Mensah','2m ago','#22c97b'],
-               ['Payment for REQ-003 confirmed','1h ago','#4f8ef7'],
-               ['New message from Amara Nwosu','3h ago','#f5c842']].map(([t,tm,d])=>`
-            <div class="ni-item"><div class="ni-ddot" style="background:${d}"></div>
-            <div><div class="ni-txt">${t}</div><div class="ni-tm">${tm}</div></div></div>`).join('')}
-          </div>`);
-        initIcons();
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+
+  <!-- APP CONTAINER -->
+  <div id="app" class="flex flex-col flex-grow"></div>
+
+  <!-- MAIN SCRIPT ENGINE -->
+  <script>
+    /* ── CONFIGURATION ─────────────────────────────────────────────────── */
+    // Paste your exact Google Apps Script Web App URL here
+    const API_URL = 'https://script.google.com/macros/s/AKfycbwjxNTV72Ypvb8kte0BxqZPB3q50pGUVjHeLvRhZeZAVx9WhIeaB_FmeR5CVXcYdA/exec';
+
+    /* ── REACTIVE STATE MANAGEMENT ─────────────────────────────────────── */
+    const S = {
+      view: 'landing',        // Options: 'landing', 'client', 'consultant', 'admin'
+      auth: false,           // Controls login/signup modal visibility
+      amode: 'login',        // Auth modal sub-state: 'login' or 'register'
+      role: 'client',        // Active registration role target: 'client' or 'consultant'
+      user: null,            // Currently authenticated user object record
+      cons: [],              // Marketplace: Complete list of available consultants
+      myRequests: [],        // Client view: Array of requests created by current user
+      inc: [],               // Consultant view: Dynamic contextual incoming matchmaking requests
+      adminData: {           // Admin view: System telemetry data aggregates
+        users: [],
+        requests: []
       }
-      break;
+    };
 
-    /* New Request Form */
-    case'sel-cat':
-      S.fcat=v;
-      document.querySelectorAll('.catc').forEach(c=>{
-        const cv=c.dataset.v,cat=CATS.find(x=>x.id===cv);
-        const on=cv===v;
-        c.classList.toggle('sel',on);
-        c.style.borderColor=on&&cat?cat.clr:'';
-        c.style.background=on&&cat?`${cat.clr}10`:'';
+    /* ── CORE API TRANSPORT ENGINE (CORS-COMPLIANT) ───────────────────── */
+    /**
+     * Executes robust, secure cross-domain requests directly to Google Apps Script.
+     * Enforces URL parameter serialization to strictly bypass pre-flight CORS errors.
+     */
+    async function apiRequest(action, data = {}) {
+      const sessionToken = localStorage.getItem('cl_session_token');
+      
+      // Transform arguments into URL encoded parameters to avoid preflight blocks
+      const params = new URLSearchParams();
+      params.append('action', action);
+      if (sessionToken) params.append('token', sessionToken);
+      params.append('data', JSON.stringify(data));
+
+      try {
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          body: params,
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        });
+
+        if (!response.ok) throw new Error(`HTTP Error Status: ${response.status}`);
+        
+        const result = await response.json();
+        if (!result.success) throw new Error(result.error || 'Unknown server error.');
+        
+        return result.data;
+      } catch (error) {
+        console.error(`[API Network Error] Action: ${action} | Details:`, error);
+        alert(`Database Connection Failure:\n${error.message}`);
+        throw error;
+      }
+    }
+
+    /* ── DATA WORKFLOWS & LOGIC ────────────────────────────────────────── */
+    
+    async function initializeDashboardData() {
+      if (!localStorage.getItem('cl_session_token')) return;
+      
+      try {
+        if (S.view === 'client') {
+          const [consultants, requests] = await Promise.all([
+            apiRequest('consultant.list'),
+            apiRequest('request.myRequests')
+          ]);
+          S.cons = consultants || [];
+          S.myRequests = requests || [];
+        } 
+        else if (S.view === 'consultant') {
+          const incoming = await apiRequest('consultant.incoming');
+          S.inc = incoming || [];
+        } 
+        else if (S.view === 'admin') {
+          const systemData = await apiRequest('admin.getSystemOverview');
+          S.adminData.users = systemData.users || [];
+          S.adminData.requests = systemData.requests || [];
+        }
+        render();
+      } catch (err) {
+        console.error("Error synchronizing active dashboard arrays:", err);
+      }
+    }
+
+    async function handleAuthSubmit(e) {
+      e.preventDefault();
+      const form = e.target;
+      const email = form.email.value.trim();
+      const password = form.password.value;
+      
+      const isRegister = S.amode === 'register';
+      const action = isRegister ? 'auth.register' : 'auth.login';
+      
+      const payload = { email, password };
+      if (isRegister) {
+        payload.name = form.username.value.trim();
+        payload.role = S.role;
+        if (S.role === 'consultant') {
+          payload.specialization = form.specialization.value;
+        }
+      }
+
+      try {
+        const responseData = await apiRequest(action, payload);
+        
+        // Retain session authentication profiles across browser tabs/refreshes
+        localStorage.setItem('cl_session_token', responseData.token);
+        localStorage.setItem('cl_user_profile', JSON.stringify(responseData.user));
+        
+        S.user = responseData.user;
+        S.view = responseData.user.role; // Transition to corresponding interface template
+        S.auth = false; // Close out modal overlay
+        
+        await initializeDashboardData();
+      } catch (err) {
+        // Core transport mechanism handles alerting user
+      }
+    }
+
+    async function handleCreateRequestSubmit(e) {
+      e.preventDefault();
+      const form = e.target;
+      
+      const payload = {
+        category: form.category.value,
+        title: form.title.value.trim(),
+        urgency: form.urgency.value,
+        budget: form.budget.value.trim(),
+        description: form.description.value.trim()
+      };
+
+      try {
+        await apiRequest('request.create', payload);
+        alert('Consultation ticket published directly to Spreadsheet rows!');
+        form.reset();
+        await initializeDashboardData();
+      } catch (err) {
+        // Handled globally
+      }
+    }
+
+    function handleLogout() {
+      localStorage.removeItem('cl_session_token');
+      localStorage.removeItem('cl_user_profile');
+      S.user = null;
+      S.view = 'landing';
+      render();
+    }
+
+    /* ── REACTIVE RENDER ENGINE & UI COMPONENTS ───────────────────────── */
+    const el = (tag, attrs = {}, children = []) => {
+      const element = document.createElement(tag);
+      Object.entries(attrs).forEach(([k, v]) => {
+        if (k.startsWith('on') && typeof v === 'function') {
+          element.addEventListener(k.substring(2).toLowerCase(), v);
+        } else if (k === 'class') {
+          element.className = v;
+        } else {
+          element.setAttribute(k, v);
+        }
       });
-      const nb_=document.querySelector('[data-a="form-next"]');
-      if(nb_)nb_.disabled=false;
-      break;
-    case'form-next':
-      if(S.fs===0&&!S.fcat)break;
-      S.fs++;
-      if(S.fs===3){submitReq();}else{renderPC();}
-      break;
-    case'form-back':
-      if(S.fs>0){S.fs--;renderPC();}break;
-    case'form-sub':
-      S.fs=3;submitReq();break;
+      children.forEach(child => {
+        if (typeof child === 'string') element.appendChild(document.createTextNode(child));
+        else if (child) element.appendChild(child);
+      });
+      return element;
+    };
 
-    /* Messages */
-    case'send-msg':
-      sendMessage();break;
+    function renderNavbar() {
+      return el('nav', { class: 'bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm' }, [
+        el('div', { class: 'flex items-center space-x-3 cursor-pointer', onclick: () => { S.view = S.user ? S.user.role : 'landing'; render(); } }, [
+          el('div', { class: 'w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-black shadow-md shadow-indigo-200' }, ['C']),
+          el('span', { class: 'text-xl font-bold tracking-tight bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent' }, ['ConsultConnect'])
+        ]),
+        el('div', { class: 'flex items-center space-x-4' }, 
+          S.user ? [
+            el('div', { class: 'text-right hidden md:block' }, [
+              el('p', { class: 'text-sm font-semibold text-slate-900' }, [S.user.name]),
+              el('p', { class: 'text-xs text-slate-500 capitalize font-medium' }, [`${S.user.role} workspace`])
+            ]),
+            el('button', { 
+              class: 'bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium transition cursor-pointer',
+              onclick: handleLogout
+            }, ['Sign Out'])
+          ] : [
+            el('button', { 
+              class: 'text-slate-600 hover:text-slate-900 px-3 py-2 text-sm font-medium cursor-pointer',
+              onclick: () => { S.auth = true; S.amode = 'login'; render(); }
+            }, ['Sign In']),
+            el('button', { 
+              class: 'bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-sm font-semibold shadow-md shadow-indigo-100 transition cursor-pointer',
+              onclick: () => { S.auth = true; S.amode = 'register'; S.role = 'client'; render(); }
+            }, ['Get Started'])
+          ]
+        )
+      ]);
+    }
 
-    /* Consultant */
-    case'acc-req':
-      S.inc=S.inc.map(r=>r.id===v?{...r,st:'Accepted'}:r);renderPC();break;
-    case'dec-req':
-      S.inc=S.inc.map(r=>r.id===v?{...r,st:'Declined'}:r);renderPC();break;
+    function renderLanding() {
+      return el('div', { class: 'max-w-5xl mx-auto px-6 py-16 text-center flex-grow flex flex-col justify-center' }, [
+        el('h1', { class: 'text-5xl md:text-6xl font-black text-slate-900 tracking-tight leading-tight mb-6' }, [
+          'On-Demand Expert Consulting\n',
+          el('span', { class: 'bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent' }, ['Powered by Google Sheets'])
+        ]),
+        el('p', { class: 'text-xl text-slate-600 max-w-2xl mx-auto mb-10 leading-relaxed' }, [
+          'Submit dynamic advice requests, connect with validated business consultants, and audit operational milestones in real-time.'
+        ]),
+        el('div', { class: 'flex flex-col sm:flex-row justify-center items-center gap-4 mb-16' }, [
+          el('button', { 
+            class: 'w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-xl font-bold shadow-lg shadow-indigo-200 text-lg transition cursor-pointer',
+            onclick: () => { S.auth = true; S.amode = 'register'; S.role = 'client'; render(); }
+          }, ['Hire an Expert']),
+          el('button', { 
+            class: 'w-full sm:w-auto bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 px-8 py-4 rounded-xl font-bold text-lg shadow-sm transition cursor-pointer',
+            onclick: () => { S.auth = true; S.amode = 'register'; S.role = 'consultant'; render(); }
+          }, ['Join as Consultant'])
+        ])
+      ]);
+    }
 
-    /* Admin */
-    case'appr-con':
-      S.cons=S.cons.map(c=>c.id===v?{...c,st:'Approved'}:c);renderPC();break;
-    case'susp-con':
-      S.cons=S.cons.map(c=>c.id===v?{...c,st:'Suspended'}:c);renderPC();break;
-    case'tog-cat':
-      S.cats[v]=!S.cats[v];renderPC();break;
-  }
-});
+    function renderClientDashboard() {
+      return el('div', { class: 'max-w-7xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-8 flex-grow w-full' }, [
+        // Left Column: Issue Ticket Creation Form
+        el('div', { class: 'bg-white border border-slate-200 rounded-2xl p-6 shadow-sm h-fit' }, [
+          el('h2', { class: 'text-xl font-bold text-slate-900 mb-1' }, ['New Consultation Request']),
+          el('p', { class: 'text-xs text-slate-500 mb-6' }, ['Dispatches metadata rows directly onto spreadsheet logic pipelines.']),
+          el('form', { onsubmit: handleCreateRequestSubmit, class: 'space-y-4' }, [
+            el('div', {}, [
+              el('label', { class: 'block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1' }, ['Category Domain']),
+              el('select', { name: 'category', class: 'w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500' }, [
+                el('option', { value: 'Strategy' }, ['Corporate Strategy']),
+                el('option', { value: 'Finance' }, ['Financial & Tax Structuring']),
+                el('option', { value: 'Technology' }, ['Software Architecture']),
+                el('option', { value: 'Marketing' }, ['Growth Marketing'])
+              ])
+            ]),
+            el('div', {}, [
+              el('label', { class: 'block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1' }, ['Short Summary Title']),
+              el('input', { name: 'title', type: 'text', required: true, placeholder: 'e.g., Formulating Scale Roadmap', class: 'w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500' })
+            ]),
+            el('div', { class: 'grid grid-cols-2 gap-4' }, [
+              el('div', {}, [
+                el('label', { class: 'block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1' }, ['Urgency Priority']),
+                el('select', { name: 'urgency', class: 'w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm focus:outline-none focus:border-indigo-500' }, [
+                  el('option', { value: 'Standard' }, ['Standard']),
+                  el('option', { value: 'Urgent' }, ['Urgent Emergency'])
+                ])
+              ]),
+              el('div', {}, [
+                el('label', { class: 'block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1' }, ['Allotted Budget ($)']),
+                el('input', { name: 'budget', type: 'number', required: true, placeholder: '500', class: 'w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm focus:outline-none focus:border-indigo-500' })
+              ])
+            ]),
+            el('div', {}, [
+              el('label', { class: 'block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1' }, ['Operational Description Brief']),
+              el('textarea', { name: 'description', required: true, rows: '4', placeholder: 'Provide full contextual objectives for evaluation...', class: 'w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500' })
+            ]),
+            el('button', { type: 'submit', class: 'w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition cursor-pointer shadow-md' }, ['Broadcast Request'])
+          ])
+        ]),
+        // Right Column: Active Marketplace & Historical Consultation Records
+        el('div', { class: 'lg:col-span-2 space-y-8' }, [
+          // Active Requests Table
+          el('div', { class: 'bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden' }, [
+            el('div', { class: 'px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50' }, [
+              el('h3', { class: 'font-bold text-slate-900' }, ['Your Open Consultation Pipelines']),
+              el('button', { onclick: initializeDashboardData, class: 'text-xs font-bold text-indigo-600 hover:text-indigo-800 cursor-pointer' }, ['Refresh Live Sheet Data'])
+            ]),
+            el('div', { class: 'divide-y divide-slate-100 overflow-x-auto' }, 
+              S.myRequests.length ? S.myRequests.map(r => el('div', { class: 'p-6 hover:bg-slate-50/50 transition' }, [
+                el('div', { class: 'flex items-start justify-between gap-4 mb-2' }, [
+                  el('div', {}, [
+                    el('span', { class: `inline-block text-[10px] uppercase tracking-wider font-extrabold px-2.5 py-1 rounded-md mb-2 ${r.urgency === 'Urgent' ? 'bg-rose-50 text-rose-600 border border-rose-100' : 'bg-slate-100 text-slate-600'}` }, [r.category]),
+                    el('h4', { class: 'font-semibold text-slate-900 text-base' }, [r.title])
+                  ]),
+                  el('span', { class: 'font-bold text-slate-900 bg-slate-100 px-3 py-1 rounded-lg text-sm' }, [`$${r.budget}`])
+                ]),
+                el('p', { class: 'text-sm text-slate-600 mb-3 line-clamp-2' }, [r.description]),
+                el('div', { class: 'flex items-center justify-between text-xs text-slate-400' }, [
+                  el('span', {}, [`ID: ${r.id.substring(0,8)}...` || 'Pending...']),
+                  el('span', { class: `font-semibold px-2 py-0.5 rounded ${r.status === 'Open' ? 'text-emerald-600 bg-emerald-50' : 'text-amber-600 bg-amber-50'}` }, [r.status || 'Active'])
+                ])
+              ])) : [el('div', { class: 'p-8 text-center text-slate-400 text-sm' }, ['No live requests recorded. Submit the tracking form to push rows.'])]
+            )
+          ]),
+          // Consultants Roster Available
+          el('div', { class: 'bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden' }, [
+            el('div', { class: 'px-6 py-4 border-b border-slate-100 bg-slate-50/50' }, [
+              el('h3', { class: 'font-bold text-slate-900' }, ['Available Enterprise Experts Available'])
+            ]),
+            el('div', { class: 'p-6 grid grid-cols-1 md:grid-cols-2 gap-4' }, 
+              S.cons.length ? S.cons.map(c => el('div', { class: 'border border-slate-100 bg-slate-50/50 p-4 rounded-xl flex items-center space-x-4' }, [
+                el('div', { class: 'w-12 h-12 rounded-full bg-gradient-to-tr from-indigo-500 to-violet-500 flex items-center justify-center text-white font-bold' }, [c.name.charAt(0)]),
+                el('div', {}, [
+                  el('h4', { class: 'font-bold text-slate-900' }, [c.name]),
+                  el('p', { class: 'text-xs text-slate-500' }, [c.specialization || 'General Management']),
+                  el('p', { class: 'text-[11px] text-emerald-600 font-medium mt-1' }, ['● Verified Advisor'])
+                ])
+              ])) : [el('div', { class: 'col-span-2 text-center text-slate-400 text-sm py-4' }, ['No expert profiles verified inside spreadsheet rows.'])]
+            )
+          ])
+        ])
+      ]);
+    }
 
-/* Input tracking */
-document.addEventListener('input',e=>{const f=e.target.dataset.f;if(f)S.fd[f]=e.target.value});
-document.addEventListener('change',e=>{const f=e.target.dataset.f;if(f)S.fd[f]=e.target.value});
+    function renderConsultantDashboard() {
+      return el('div', { class: 'max-w-4xl mx-auto p-6 flex-grow w-full' }, [
+        el('div', { class: 'flex justify-between items-center mb-6' }, [
+          el('div', {}, [
+            el('h2', { class: 'text-2xl font-bold text-slate-900' }, [`Welcome Back, ${S.user.name}`]),
+            el('p', { class: 'text-sm text-slate-500' }, [`Domain Expertise focus: ${S.user.specialization || 'General Consulting'}`])
+          ]),
+          el('button', { onclick: initializeDashboardData, class: 'bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-4 py-2 rounded-xl text-sm font-semibold shadow-sm cursor-pointer' }, ['Sync Target Pipelines'])
+        ]),
+        el('div', { class: 'bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden' }, [
+          el('div', { class: 'px-6 py-4 border-b border-slate-100 bg-slate-50/50' }, [
+            el('h3', { class: 'font-bold text-slate-900' }, ['Incoming Marketplace Placement Offers Matching Your Domain Expertise'])
+          ]),
+          el('div', { class: 'divide-y divide-slate-100' }, 
+            S.inc.length ? S.inc.map(r => el('div', { class: 'p-6 hover:bg-slate-50/50 transition flex flex-col md:flex-row justify-between items-start md:items-center gap-4' }, [
+              el('div', { class: 'space-y-1 max-w-xl' }, [
+                el('div', { class: 'flex items-center space-x-2' }, [
+                  el('span', { class: 'bg-indigo-50 text-indigo-600 font-extrabold text-[10px] px-2 py-0.5 rounded uppercase tracking-wider' }, [r.category]),
+                  el('span', { class: `text-[10px] font-bold px-1.5 py-0.5 rounded ${r.urgency === 'Urgent' ? 'bg-rose-50 text-rose-600' : 'bg-slate-100 text-slate-500'}` }, [r.urgency])
+                ]),
+                el('h4', { class: 'font-bold text-slate-900 text-base' }, [r.title]),
+                el('p', { class: 'text-sm text-slate-600 line-clamp-2' }, [r.description])
+              ]),
+              el('div', { class: 'text-right w-full md:w-auto flex md:flex-col justify-between md:justify-center items-center md:items-end gap-2' }, [
+                el('span', { class: 'text-lg font-black text-slate-900 block' }, [`$${r.budget}`]),
+                el('button', { 
+                  onclick: async () => {
+                    if (confirm('Accept assignment parameters and bind details to this row?')) {
+                      await apiRequest('request.accept', { id: r.id });
+                      alert('Row locked to your execution profile.');
+                      await initializeDashboardData();
+                    }
+                  },
+                  class: 'bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-lg shadow-md transition cursor-pointer' 
+                }, ['Accept Work Offer'])
+              ])
+            ])) : [el('div', { class: 'p-12 text-center text-slate-400 text-sm' }, ['No unassigned consultation request matching your criteria listed in backend matrices at present.'])]
+          )
+        ])
+      ]);
+    }
 
-/* Enter to send message */
-document.addEventListener('keydown',e=>{
-  if(e.key==='Enter'&&document.activeElement?.id==='minp'){sendMessage();return}
-  if(e.key==='Escape'){
-    if(S.auth){S.auth=false;render();}
-    if(S.notif){S.notif=false;const nd=document.querySelector('.ndrop');if(nd)nd.remove();}
-  }
-});
+    function renderAdminDashboard() {
+      return el('div', { class: 'max-w-7xl mx-auto p-6 flex-grow w-full space-y-8' }, [
+        el('div', { class: 'flex justify-between items-center' }, [
+          el('div', {}, [
+            el('h2', { class: 'text-2xl font-bold text-slate-900' }, ['Administrative Ledger Core Dashboard']),
+            el('p', { class: 'text-sm text-slate-500' }, ['Global system data tracking access points.'])
+          ]),
+          el('button', { onclick: initializeDashboardData, class: 'bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-sm font-semibold cursor-pointer' }, ['Force Global Cache Purge'])
+        ]),
+        el('div', { class: 'grid grid-cols-1 md:grid-cols-2 gap-8' }, [
+          // Users Table Ledger
+          el('div', { class: 'bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden' }, [
+            el('div', { class: 'px-6 py-4 border-b border-slate-100 bg-slate-50/50' }, [el('h3', { class: 'font-bold text-slate-900' }, ['Registered Database Accounts (Users Sheet)'])]),
+            el('div', { class: 'overflow-x-auto' }, [
+              el('table', { class: 'w-full text-left border-collapse text-sm' }, [
+                el('thead', { class: 'bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider border-b border-slate-100' }, [
+                  el('tr', {}, [
+                    el('th', { class: 'p-4' }, ['Name']), el('th', { class: 'p-4' }, ['Email Line Address']), el('th', { class: 'p-4' }, ['Role Mapping'])
+                  ])
+                ]),
+                el('tbody', { class: 'divide-y divide-slate-100' }, 
+                  S.adminData.users.length ? S.adminData.users.map(u => el('tr', {}, [
+                    el('td', { class: 'p-4 font-semibold text-slate-900' }, [u.name]),
+                    el('td', { class: 'p-4 text-slate-600' }, [u.email]),
+                    el('td', { class: 'p-4 text-xs' }, [el('span', { class: `px-2 py-0.5 rounded font-bold capitalize ${u.role === 'admin' ? 'bg-purple-100 text-purple-700' : u.role === 'consultant' ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-700'}` }, [u.role])])
+                  ])) : [el('tr', {}, [el('td', { colspan: 3, class: 'p-8 text-center text-slate-400' }, ['No system registrations mapped.'])] )]
+                )
+              ])
+            ])
+          ]),
+          // Requests Database View
+          el('div', { class: 'bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden' }, [
+            el('div', { class: 'px-6 py-4 border-b border-slate-100 bg-slate-50/50' }, [el('h3', { class: 'font-bold text-slate-900' }, ['Global Transaction Records (Requests Sheet)'])]),
+            el('div', { class: 'overflow-x-auto' }, [
+              el('table', { class: 'w-full text-left border-collapse text-sm' }, [
+                el('thead', { class: 'bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider border-b border-slate-100' }, [
+                  el('tr', {}, [
+                    el('th', { class: 'p-4' }, ['Title Task']), el('th', { class: 'p-4' }, ['Budget']), el('th', { class: 'p-4' }, ['Status Value Mapping'])
+                  ])
+                ]),
+                el('tbody', { class: 'divide-y divide-slate-100' }, 
+                  S.adminData.requests.length ? S.adminData.requests.map(r => el('tr', {}, [
+                    el('td', { class: 'p-4 text-slate-900 font-medium' }, [r.title]),
+                    el('td', { class: 'p-4 font-bold text-slate-700' }, [`$${r.budget}`]),
+                    el('td', { class: 'p-4 text-xs' }, [el('span', { class: `px-2 py-0.5 rounded font-semibold ${r.status === 'Open' ? 'text-emerald-700 bg-emerald-50' : 'text-amber-700 bg-amber-50'}` }, [r.status || 'Active'])])
+                  ])) : [el('tr', {}, [el('td', { colspan: 3, class: 'p-8 text-center text-slate-400' }, ['No master dataset objects loaded.'])] )]
+                )
+              ])
+            ])
+          ])
+        ])
+      ]);
+    }
 
-/* Helpers */
-function sendMessage(){
-  const el=document.getElementById('minp');
-  const tx=(el?el.value:S.fd.msgDraft||'').trim();
-  if(!tx)return;
-  S.msgs.push({id:Date.now(),fr:'You',me:true,tx,tm:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});
-  if(el)el.value='';
-  S.fd.msgDraft='';
-  renderPC();
-}
+    function renderAuthModal() {
+      if (!S.auth) return null;
+      const isReg = S.amode === 'register';
+      
+      return el('div', { class: 'fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50' }, [
+        el('div', { class: 'bg-white rounded-2xl max-w-md w-full p-8 shadow-xl relative animate-in fade-in zoom-in-95 duration-150' }, [
+          el('button', { 
+            class: 'absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl font-bold cursor-pointer w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100',
+            onclick: () => { S.auth = false; render(); }
+          }, ['×']),
+          el('h3', { class: 'text-2xl font-bold text-slate-900 mb-2' }, [isReg ? 'Create Platform Profile' : 'Account Identity Validation']),
+          el('p', { class: 'text-sm text-slate-500 mb-6' }, [isReg ? 'Gain access to database consultation services.' : 'Input credentials to resume database session loops.']),
+          
+          isReg ? el('div', { class: 'flex bg-slate-100 p-1 rounded-xl mb-6' }, [
+            el('button', { 
+              class: `flex-1 text-center py-2 text-xs font-bold rounded-lg transition cursor-pointer ${S.role === 'client' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`,
+              onclick: () => { S.role = 'client'; render(); }
+            }, ['Client Role']),
+            el('button', { 
+              class: `flex-1 text-center py-2 text-xs font-bold rounded-lg transition cursor-pointer ${S.role === 'consultant' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`,
+              onclick: () => { S.role = 'consultant'; render(); }
+            }, ['Consultant Expert'])
+          ]) : null,
 
-function submitReq(){
-  const cat=CATS.find(c=>c.id===S.fcat);
-  S.reqs.unshift({
-    id:`REQ-00${S.reqs.length+1}`,
-    cat:cat?.lbl||S.fcat,
-    ttl:`${cat?.lbl||'New'} Consultation`,
-    st:'Pending',dt:new Date().toISOString().split('T')[0],
-    bud:S.fd.budget?`$${S.fd.budget}`:'TBD',con:'—',urg:'Standard'
-  });
-  renderPC();
-  setTimeout(()=>{S.fs=0;S.fcat='';S.fd={};S.tab='requests';renderPC();},2600);
-}
+          el('form', { onsubmit: handleAuthSubmit, class: 'space-y-4' }, [
+            isReg ? el('div', {}, [
+              el('label', { class: 'block text-xs font-bold text-slate-600 uppercase mb-1' }, ['Full Display Name']),
+              el('input', { name: 'username', type: 'text', required: true, placeholder: 'John Doe', class: 'w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500' })
+            ]) : null,
+            el('div', {}, [
+              el('label', { class: 'block text-xs font-bold text-slate-600 uppercase mb-1' }, ['Email Address']),
+              el('input', { name: 'email', type: 'email', required: true, placeholder: 'you@example.com', class: 'w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500' })
+            ]),
+            isReg && S.role === 'consultant' ? el('div', {}, [
+              el('label', { class: 'block text-xs font-bold text-slate-600 uppercase mb-1' }, ['Specialization Expertise Category']),
+              el('select', { name: 'specialization', class: 'w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500' }, [
+                el('option', { value: 'Strategy' }, ['Corporate Strategy']),
+                el('option', { value: 'Finance' }, ['Financial & Tax Structuring']),
+                el('option', { value: 'Technology' }, ['Software Architecture']),
+                el('option', { value: 'Marketing' }, ['Growth Marketing'])
+              ])
+            ]) : null,
+            el('div', {}, [
+              el('label', { class: 'block text-xs font-bold text-slate-600 uppercase mb-1' }, ['Account Password']),
+              el('input', { name: 'password', type: 'password', required: true, placeholder: '••••••••', class: 'w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500' })
+            ]),
+            el('button', { type: 'submit', class: 'w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl text-sm transition shadow-lg shadow-indigo-100 mt-2 cursor-pointer' }, [
+              isReg ? 'Complete Sheet Registration' : 'Validate and Transmit'
+            ]),
+            el('div', { class: 'text-center mt-4' }, [
+              el('button', { 
+                type: 'button',
+                class: 'text-xs text-indigo-600 font-semibold hover:underline cursor-pointer',
+                onclick: () => { S.amode = isReg ? 'login' : 'register'; render(); }
+              }, [isReg ? 'Already registered? Login here.' : 'Need a system login account? Form profile.'])
+            ])
+          ])
+        ])
+      ]);
+    }
 
-/* ═══════════════════════════════════════════════════════════════
-   INIT
-═══════════════════════════════════════════════════════════════ */
-render();
-</script>
+   function renderFooter() {
+      return el('footer', { class: 'mt-auto border-t border-slate-200 bg-white py-12 px-6' }, [
+        el('div', { class: 'max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6' }, [
+          
+          // Branding Block
+          el('div', { class: 'flex items-center space-x-3' }, [
+            // Icon with Vyeta Custom Electric Blue and Turquoise Gradient
+            el('div', { class: 'w-9 h-9 rounded-xl bg-gradient-to-tr from-[#0052FF] to-[#00E5FF] flex items-center justify-center text-white font-black shadow-md shadow-cyan-100' }, ['V']),
+            el('div', { class: 'flex flex-col' }, [
+              el('span', { class: 'text-base font-bold tracking-tight text-slate-900' }, [
+                'Vyeta ',
+                el('span', { class: 'bg-gradient-to-r from-[#0052FF] to-[#00E5FF] bg-clip-text text-transparent' }, ['Digital Solutions'])
+              ]),
+              el('span', { class: 'text-[10px] text-slate-400 font-medium tracking-wider uppercase' }, ['Next-Gen Ecosystems'])
+            ])
+          ]),
+
+          // Operational Architecture Status Tag
+          el('div', { class: 'flex items-center space-x-2 bg-slate-50 border border-slate-100 px-3 py-1.5 rounded-xl' }, [
+            el('span', { class: 'relative flex h-2 w-2' }, [
+              el('span', { class: 'animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75' }),
+              el('span', { class: 'relative inline-flex rounded-full h-2 w-2 bg-emerald-500' })
+            ]),
+            el('span', { class: 'text-[11px] font-semibold text-slate-500' }, [
+              'System Status: ',
+              el('span', { class: 'text-slate-800' }, ['Live Connection'])
+            ])
+          ]),
+
+          // Copyright and Architecture Meta Trace
+          el('div', { class: 'text-center md:text-right text-xs text-slate-400 font-medium' }, [
+            el('p', {}, [`© ${new Date().getFullYear()} Vyeta Digital Solutions. All rights reserved.`]),
+            el('p', { class: 'text-[10px] text-slate-300 mt-0.5 font-mono' }, ['Secured via Static Token Architecture & Google App Engine'])
+          ])
+
+        ])
+      ]);
+    }
+    }
+
+    function render() {
+      const root = document.getElementById('app');
+      root.innerHTML = '';
+      
+      root.appendChild(renderNavbar());
+      
+      if (S.view === 'landing') root.appendChild(renderLanding());
+      else if (S.view === 'client') root.appendChild(renderClientDashboard());
+      else if (S.view === 'consultant') root.appendChild(renderConsultantDashboard());
+      else if (S.view === 'admin') root.appendChild(renderAdminDashboard());
+      
+      root.appendChild(renderFooter());
+      
+      const modal = renderAuthModal();
+      if (modal) root.appendChild(modal);
+    }
+
+    /* ── RUNTIME INITIALIZATION ────────────────────────────────────────── */
+    window.addEventListener('DOMContentLoaded', async () => {
+      const savedToken = localStorage.getItem('cl_session_token');
+      const savedProfile = localStorage.getItem('cl_user_profile');
+      
+      if (savedToken && savedProfile) {
+        try {
+          S.user = JSON.parse(savedProfile);
+          S.view = S.user.role; // Automatically point routing target
+          await initializeDashboardData();
+        } catch (e) {
+          console.error("Corrupted profile data trace elements cleared.");
+          handleLogout();
+        }
+      } else {
+        S.view = 'landing';
+        render();
+      }
+    });
+  </script>
 </body>
 </html>
