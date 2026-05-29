@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ConsultConnect - Live Sheet Platform</title>
-  <!-- Tailwind CSS CDN for complete production styling -->
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <style>
     [v-cloak] { display: none !important; }
@@ -12,10 +11,8 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
 
-  <!-- APP CONTAINER -->
   <div id="app" class="flex flex-col flex-grow"></div>
 
-  <!-- MAIN SCRIPT ENGINE -->
   <script>
     /* ── CONFIGURATION ─────────────────────────────────────────────────── */
     // Paste your exact Google Apps Script Web App URL here
@@ -217,11 +214,11 @@
     function renderLanding() {
       return el('div', { class: 'max-w-5xl mx-auto px-6 py-16 text-center flex-grow flex flex-col justify-center' }, [
         el('h1', { class: 'text-5xl md:text-6xl font-black text-slate-900 tracking-tight leading-tight mb-6' }, [
-          'On-Demand Expert Consulting\n',
+          'On-Demand Expert Consultations\n',
           el('span', { class: 'bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent' }, ['Powered by Google Sheets'])
         ]),
         el('p', { class: 'text-xl text-slate-600 max-w-2xl mx-auto mb-10 leading-relaxed' }, [
-          'Submit dynamic advice requests, connect with validated business consultants, and audit operational milestones in real-time.'
+          'Submit advice request instances, access dynamic expertise grids, and monitor milestone executions in real-time.'
         ]),
         el('div', { class: 'flex flex-col sm:flex-row justify-center items-center gap-4 mb-16' }, [
           el('button', { 
@@ -295,7 +292,7 @@
                 ]),
                 el('p', { class: 'text-sm text-slate-600 mb-3 line-clamp-2' }, [r.description]),
                 el('div', { class: 'flex items-center justify-between text-xs text-slate-400' }, [
-                  el('span', {}, [`ID: ${r.id.substring(0,8)}...` || 'Pending...']),
+                  el('span', {}, [`ID: ${r.id ? r.id.substring(0,8) : 'Pending'}...`]),
                   el('span', { class: `font-semibold px-2 py-0.5 rounded ${r.status === 'Open' ? 'text-emerald-600 bg-emerald-50' : 'text-amber-600 bg-amber-50'}` }, [r.status || 'Active'])
                 ])
               ])) : [el('div', { class: 'p-8 text-center text-slate-400 text-sm' }, ['No live requests recorded. Submit the tracking form to push rows.'])]
@@ -304,11 +301,11 @@
           // Consultants Roster Available
           el('div', { class: 'bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden' }, [
             el('div', { class: 'px-6 py-4 border-b border-slate-100 bg-slate-50/50' }, [
-              el('h3', { class: 'font-bold text-slate-900' }, ['Available Enterprise Experts Available'])
+              el('h3', { class: 'font-bold text-slate-900' }, ['Available Enterprise Experts'])
             ]),
             el('div', { class: 'p-6 grid grid-cols-1 md:grid-cols-2 gap-4' }, 
               S.cons.length ? S.cons.map(c => el('div', { class: 'border border-slate-100 bg-slate-50/50 p-4 rounded-xl flex items-center space-x-4' }, [
-                el('div', { class: 'w-12 h-12 rounded-full bg-gradient-to-tr from-indigo-500 to-violet-500 flex items-center justify-center text-white font-bold' }, [c.name.charAt(0)]),
+                el('div', { class: 'w-12 h-12 rounded-full bg-gradient-to-tr from-indigo-500 to-violet-500 flex items-center justify-center text-white font-bold' }, [c.name ? c.name.charAt(0) : 'E']),
                 el('div', {}, [
                   el('h4', { class: 'font-bold text-slate-900' }, [c.name]),
                   el('p', { class: 'text-xs text-slate-500' }, [c.specialization || 'General Management']),
@@ -325,8 +322,8 @@
       return el('div', { class: 'max-w-4xl mx-auto p-6 flex-grow w-full' }, [
         el('div', { class: 'flex justify-between items-center mb-6' }, [
           el('div', {}, [
-            el('h2', { class: 'text-2xl font-bold text-slate-900' }, [`Welcome Back, ${S.user.name}`]),
-            el('p', { class: 'text-sm text-slate-500' }, [`Domain Expertise focus: ${S.user.specialization || 'General Consulting'}`])
+            el('h2', { class: 'text-2xl font-bold text-slate-900' }, [`Welcome Back, ${S.user ? S.user.name : 'Expert'}`]),
+            el('p', { class: 'text-sm text-slate-500' }, [`Domain Expertise focus: ${S.user?.specialization || 'General Consulting'}`])
           ]),
           el('button', { onclick: initializeDashboardData, class: 'bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-4 py-2 rounded-xl text-sm font-semibold shadow-sm cursor-pointer' }, ['Sync Target Pipelines'])
         ]),
@@ -380,7 +377,7 @@
               el('table', { class: 'w-full text-left border-collapse text-sm' }, [
                 el('thead', { class: 'bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider border-b border-slate-100' }, [
                   el('tr', {}, [
-                    el('th', { class: 'p-4' }, ['Name']), el('th', { class: 'p-4' }, ['Email Line Address']), el('th', { class: 'p-4' }, ['Role Mapping'])
+                    el('th', { class: 'p-4' }, ['Name']), el('th', { class: 'p-4' }, ['Email Address']), el('th', { class: 'p-4' }, ['Role Mapping'])
                   ])
                 ]),
                 el('tbody', { class: 'divide-y divide-slate-100' }, 
@@ -400,7 +397,7 @@
               el('table', { class: 'w-full text-left border-collapse text-sm' }, [
                 el('thead', { class: 'bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider border-b border-slate-100' }, [
                   el('tr', {}, [
-                    el('th', { class: 'p-4' }, ['Title Task']), el('th', { class: 'p-4' }, ['Budget']), el('th', { class: 'p-4' }, ['Status Value Mapping'])
+                    el('th', { class: 'p-4' }, ['Title Task']), el('th', { class: 'p-4' }, ['Budget']), el('th', { class: 'p-4' }, ['Status Mapping'])
                   ])
                 ]),
                 el('tbody', { class: 'divide-y divide-slate-100' }, 
@@ -427,8 +424,8 @@
             class: 'absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl font-bold cursor-pointer w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100',
             onclick: () => { S.auth = false; render(); }
           }, ['×']),
-          el('h3', { class: 'text-2xl font-bold text-slate-900 mb-2' }, [isReg ? 'Create Platform Profile' : 'Account Identity Validation']),
-          el('p', { class: 'text-sm text-slate-500 mb-6' }, [isReg ? 'Gain access to database consultation services.' : 'Input credentials to resume database session loops.']),
+          el('h3', { class: 'text-2xl font-bold text-slate-900 mb-2' }, [isReg ? 'Create Profile' : 'Account Validation']),
+          el('p', { class: 'text-sm text-slate-500 mb-6' }, [isReg ? 'Gain access to database consultation services.' : 'Input credentials to resume session loops.']),
           
           isReg ? el('div', { class: 'flex bg-slate-100 p-1 rounded-xl mb-6' }, [
             el('button', { 
@@ -451,7 +448,7 @@
               el('input', { name: 'email', type: 'email', required: true, placeholder: 'you@example.com', class: 'w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500' })
             ]),
             isReg && S.role === 'consultant' ? el('div', {}, [
-              el('label', { class: 'block text-xs font-bold text-slate-600 uppercase mb-1' }, ['Specialization Expertise Category']),
+              el('label', { class: 'block text-xs font-bold text-slate-600 uppercase mb-1' }, ['Specialization Category']),
               el('select', { name: 'specialization', class: 'w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500' }, [
                 el('option', { value: 'Strategy' }, ['Corporate Strategy']),
                 el('option', { value: 'Finance' }, ['Financial & Tax Structuring']),
@@ -464,21 +461,21 @@
               el('input', { name: 'password', type: 'password', required: true, placeholder: '••••••••', class: 'w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500' })
             ]),
             el('button', { type: 'submit', class: 'w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl text-sm transition shadow-lg shadow-indigo-100 mt-2 cursor-pointer' }, [
-              isReg ? 'Complete Sheet Registration' : 'Validate and Transmit'
+              isReg ? 'Complete Registration' : 'Validate and Transmit'
             ]),
             el('div', { class: 'text-center mt-4' }, [
               el('button', { 
                 type: 'button',
                 class: 'text-xs text-indigo-600 font-semibold hover:underline cursor-pointer',
                 onclick: () => { S.amode = isReg ? 'login' : 'register'; render(); }
-              }, [isReg ? 'Already registered? Login here.' : 'Need a system login account? Form profile.'])
+              }, [isReg ? 'Already registered? Login here.' : 'Need a login account? Create profile.'])
             ])
           ])
         ])
       ]);
     }
 
-   function renderFooter() {
+    function renderFooter() {
       return el('footer', { class: 'mt-auto border-t border-slate-200 bg-white py-12 px-6' }, [
         el('div', { class: 'max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6' }, [
           
@@ -515,7 +512,6 @@
 
         ])
       ]);
-    }
     }
 
     function render() {
