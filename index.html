@@ -1,555 +1,937 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ConsultConnect - Live Sheet Platform</title>
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-  <style>
-    [v-cloak] { display: none !important; }
-  </style>
-</head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
-
-  <div id="app" class="flex flex-col flex-grow"></div>
-
-  <script>
-    /* ── CONFIGURATION ─────────────────────────────────────────────────── */
-    // Paste your exact Google Apps Script Web App URL here
-    const API_URL = 'https://script.google.com/macros/s/AKfycbwjxNTV72Ypvb8kte0BxqZPB3q50pGUVjHeLvRhZeZAVx9WhIeaB_FmeR5CVXcYdA/exec';
-
-    /* ── REACTIVE STATE MANAGEMENT ─────────────────────────────────────── */
-    const S = {
-      view: 'landing',        // Options: 'landing', 'client', 'consultant', 'admin'
-      auth: false,           // Controls login/signup modal visibility
-      amode: 'login',        // Auth modal sub-state: 'login' or 'register'
-      role: 'client',        // Active registration role target: 'client' or 'consultant'
-      user: null,            // Currently authenticated user object record
-      cons: [],              // Marketplace: Complete list of available consultants
-      myRequests: [],        // Client view: Array of requests created by current user
-      inc: [],               // Consultant view: Dynamic contextual incoming matchmaking requests
-      adminData: {           // Admin view: System telemetry data aggregates
-        users: [],
-        requests: []
-      }
-    };
-
-    /* ── CORE API TRANSPORT ENGINE (CORS-COMPLIANT) ───────────────────── */
-    /**
-     * Executes robust, secure cross-domain requests directly to Google Apps Script.
-     * Enforces URL parameter serialization to strictly bypass pre-flight CORS errors.
-     */
-    async function apiRequest(action, data = {}) {
-      const sessionToken = localStorage.getItem('cl_session_token');
-      
-      // Transform arguments into URL encoded parameters to avoid preflight blocks
-      const params = new URLSearchParams();
-      params.append('action', action);
-      if (sessionToken) params.append('token', sessionToken);
-      params.append('data', JSON.stringify(data));
-
-      try {
-        const response = await fetch(API_URL, {
-          method: 'POST',
-          body: params,
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-        });
-
-        if (!response.ok) throw new Error(`HTTP Error Status: ${response.status}`);
-        
-        const result = await response.json();
-        if (!result.success) throw new Error(result.error || 'Unknown server error.');
-        
-        return result.data;
-      } catch (error) {
-        console.error(`[API Network Error] Action: ${action} | Details:`, error);
-        alert(`Database Connection Failure:\n${error.message}`);
-        throw error;
-      }
-    }
-
-    /* ── DATA WORKFLOWS & LOGIC ────────────────────────────────────────── */
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConsultLink // Enterprise SaaS Client</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    async function initializeDashboardData() {
-      if (!localStorage.getItem('cl_session_token')) return;
-      
-      try {
-        if (S.view === 'client') {
-          const [consultants, requests] = await Promise.all([
-            apiRequest('consultant.list'),
-            apiRequest('request.myRequests')
-          ]);
-          S.cons = consultants || [];
-          S.myRequests = requests || [];
-        } 
-        else if (S.view === 'consultant') {
-          const incoming = await apiRequest('consultant.incoming');
-          S.inc = incoming || [];
-        } 
-        else if (S.view === 'admin') {
-          const systemData = await apiRequest('admin.getSystemOverview');
-          S.adminData.users = systemData.users || [];
-          S.adminData.requests = systemData.requests || [];
+    <style>
+        :root {
+            --bg-main: #0B0F19;
+            --bg-card: rgba(20, 26, 44, 0.65);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-primary: #F3F4F6;
+            --text-secondary: #9CA3AF;
+            --primary-glow: #8B5CF6;
+            --accent-cyan: #06B6D4;
+            --danger: #EF4444;
+            --success: #10B981;
+            --font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
         }
-        render();
-      } catch (err) {
-        console.error("Error synchronizing active dashboard arrays:", err);
-      }
-    }
 
-    async function handleAuthSubmit(e) {
-      e.preventDefault();
-      const form = e.target;
-      const email = form.email.value.trim();
-      const password = form.password.value;
-      
-      const isRegister = S.amode === 'register';
-      const action = isRegister ? 'auth.register' : 'auth.login';
-      
-      const payload = { email, password };
-      if (isRegister) {
-        payload.name = form.username.value.trim();
-        payload.role = S.role;
-        if (S.role === 'consultant') {
-          payload.specialization = form.specialization.value;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
-      }
 
-      try {
-        const responseData = await apiRequest(action, payload);
-        
-        // Retain session authentication profiles across browser tabs/refreshes
-        localStorage.setItem('cl_session_token', responseData.token);
-        localStorage.setItem('cl_user_profile', JSON.stringify(responseData.user));
-        
-        S.user = responseData.user;
-        S.view = responseData.user.role; // Transition to corresponding interface template
-        S.auth = false; // Close out modal overlay
-        
-        await initializeDashboardData();
-      } catch (err) {
-        // Core transport mechanism handles alerting user
-      }
-    }
-
-    async function handleCreateRequestSubmit(e) {
-      e.preventDefault();
-      const form = e.target;
-      
-      const payload = {
-        category: form.category.value,
-        title: form.title.value.trim(),
-        urgency: form.urgency.value,
-        budget: form.budget.value.trim(),
-        description: form.description.value.trim()
-      };
-
-      try {
-        await apiRequest('request.create', payload);
-        alert('Consultation ticket published directly to Spreadsheet rows!');
-        form.reset();
-        await initializeDashboardData();
-      } catch (err) {
-        // Handled globally
-      }
-    }
-
-    function handleLogout() {
-      localStorage.removeItem('cl_session_token');
-      localStorage.removeItem('cl_user_profile');
-      S.user = null;
-      S.view = 'landing';
-      render();
-    }
-
-    /* ── REACTIVE RENDER ENGINE & UI COMPONENTS ───────────────────────── */
-    const el = (tag, attrs = {}, children = []) => {
-      const element = document.createElement(tag);
-      Object.entries(attrs).forEach(([k, v]) => {
-        if (k.startsWith('on') && typeof v === 'function') {
-          element.addEventListener(k.substring(2).toLowerCase(), v);
-        } else if (k === 'class') {
-          element.className = v;
-        } else {
-          element.setAttribute(k, v);
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            font-family: var(--font-family);
+            overflow-x: hidden;
+            min-height: 100vh;
         }
-      });
-      children.forEach(child => {
-        if (typeof child === 'string') element.appendChild(document.createTextNode(child));
-        else if (child) element.appendChild(child);
-      });
-      return element;
-    };
 
-    function renderNavbar() {
-      return el('nav', { class: 'bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm' }, [
-        el('div', { class: 'flex items-center space-x-3 cursor-pointer', onclick: () => { S.view = S.user ? S.user.role : 'landing'; render(); } }, [
-          el('div', { class: 'w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-black shadow-md shadow-indigo-200' }, ['C']),
-          el('span', { class: 'text-xl font-bold tracking-tight bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent' }, ['ConsultConnect'])
-        ]),
-        el('div', { class: 'flex items-center space-x-4' }, 
-          S.user ? [
-            el('div', { class: 'text-right hidden md:block' }, [
-              el('p', { class: 'text-sm font-semibold text-slate-900' }, [S.user.name]),
-              el('p', { class: 'text-xs text-slate-500 capitalize font-medium' }, [`${S.user.role} workspace`])
-            ]),
-            el('button', { 
-              class: 'bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium transition cursor-pointer',
-              onclick: handleLogout
-            }, ['Sign Out'])
-          ] : [
-            el('button', { 
-              class: 'text-slate-600 hover:text-slate-900 px-3 py-2 text-sm font-medium cursor-pointer',
-              onclick: () => { S.auth = true; S.amode = 'login'; render(); }
-            }, ['Sign In']),
-            el('button', { 
-              class: 'bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-sm font-semibold shadow-md shadow-indigo-100 transition cursor-pointer',
-              onclick: () => { S.auth = true; S.amode = 'register'; S.role = 'client'; render(); }
-            }, ['Get Started'])
-          ]
-        )
-      ]);
-    }
+        /* Glassmorphism Design System */
+        .glass {
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+        }
 
-    function renderLanding() {
-      return el('div', { class: 'max-w-5xl mx-auto px-6 py-16 text-center flex-grow flex flex-col justify-center' }, [
-        el('h1', { class: 'text-5xl md:text-6xl font-black text-slate-900 tracking-tight leading-tight mb-6' }, [
-          'On-Demand Expert Consultations\n',
-          el('span', { class: 'bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent' }, ['Powered by Google Sheets'])
-        ]),
-        el('p', { class: 'text-xl text-slate-600 max-w-2xl mx-auto mb-10 leading-relaxed' }, [
-          'Submit advice request instances, access dynamic expertise grids, and monitor milestone executions in real-time.'
-        ]),
-        el('div', { class: 'flex flex-col sm:flex-row justify-center items-center gap-4 mb-16' }, [
-          el('button', { 
-            class: 'w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-xl font-bold shadow-lg shadow-indigo-200 text-lg transition cursor-pointer',
-            onclick: () => { S.auth = true; S.amode = 'register'; S.role = 'client'; render(); }
-          }, ['Hire an Expert']),
-          el('button', { 
-            class: 'w-full sm:w-auto bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 px-8 py-4 rounded-xl font-bold text-lg shadow-sm transition cursor-pointer',
-            onclick: () => { S.auth = true; S.amode = 'register'; S.role = 'consultant'; render(); }
-          }, ['Join as Consultant'])
-        ])
-      ]);
-    }
+        .text-gradient {
+            background: linear-gradient(135deg, var(--primary-glow), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-    function renderClientDashboard() {
-      return el('div', { class: 'max-w-7xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-8 flex-grow w-full' }, [
-        // Left Column: Issue Ticket Creation Form
-        el('div', { class: 'bg-white border border-slate-200 rounded-2xl p-6 shadow-sm h-fit' }, [
-          el('h2', { class: 'text-xl font-bold text-slate-900 mb-1' }, ['New Consultation Request']),
-          el('p', { class: 'text-xs text-slate-500 mb-6' }, ['Dispatches metadata rows directly onto spreadsheet logic pipelines.']),
-          el('form', { onsubmit: handleCreateRequestSubmit, class: 'space-y-4' }, [
-            el('div', {}, [
-              el('label', { class: 'block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1' }, ['Category Domain']),
-              el('select', { name: 'category', class: 'w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500' }, [
-                el('option', { value: 'Strategy' }, ['Corporate Strategy']),
-                el('option', { value: 'Finance' }, ['Financial & Tax Structuring']),
-                el('option', { value: 'Technology' }, ['Software Architecture']),
-                el('option', { value: 'Marketing' }, ['Growth Marketing'])
-              ])
-            ]),
-            el('div', {}, [
-              el('label', { class: 'block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1' }, ['Short Summary Title']),
-              el('input', { name: 'title', type: 'text', required: true, placeholder: 'e.g., Formulating Scale Roadmap', class: 'w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500' })
-            ]),
-            el('div', { class: 'grid grid-cols-2 gap-4' }, [
-              el('div', {}, [
-                el('label', { class: 'block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1' }, ['Urgency Priority']),
-                el('select', { name: 'urgency', class: 'w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm focus:outline-none focus:border-indigo-500' }, [
-                  el('option', { value: 'Standard' }, ['Standard']),
-                  el('option', { value: 'Urgent' }, ['Urgent Emergency'])
-                ])
-              ]),
-              el('div', {}, [
-                el('label', { class: 'block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1' }, ['Allotted Budget ($)']),
-                el('input', { name: 'budget', type: 'number', required: true, placeholder: '500', class: 'w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-sm focus:outline-none focus:border-indigo-500' })
-              ])
-            ]),
-            el('div', {}, [
-              el('label', { class: 'block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1' }, ['Operational Description Brief']),
-              el('textarea', { name: 'description', required: true, rows: '4', placeholder: 'Provide full contextual objectives for evaluation...', class: 'w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500' })
-            ]),
-            el('button', { type: 'submit', class: 'w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition cursor-pointer shadow-md' }, ['Broadcast Request'])
-          ])
-        ]),
-        // Right Column: Active Marketplace & Historical Consultation Records
-        el('div', { class: 'lg:col-span-2 space-y-8' }, [
-          // Active Requests Table
-          el('div', { class: 'bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden' }, [
-            el('div', { class: 'px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50' }, [
-              el('h3', { class: 'font-bold text-slate-900' }, ['Your Open Consultation Pipelines']),
-              el('button', { onclick: initializeDashboardData, class: 'text-xs font-bold text-indigo-600 hover:text-indigo-800 cursor-pointer' }, ['Refresh Live Sheet Data'])
-            ]),
-            el('div', { class: 'divide-y divide-slate-100 overflow-x-auto' }, 
-              S.myRequests.length ? S.myRequests.map(r => el('div', { class: 'p-6 hover:bg-slate-50/50 transition' }, [
-                el('div', { class: 'flex items-start justify-between gap-4 mb-2' }, [
-                  el('div', {}, [
-                    el('span', { class: `inline-block text-[10px] uppercase tracking-wider font-extrabold px-2.5 py-1 rounded-md mb-2 ${r.urgency === 'Urgent' ? 'bg-rose-50 text-rose-600 border border-rose-100' : 'bg-slate-100 text-slate-600'}` }, [r.category]),
-                    el('h4', { class: 'font-semibold text-slate-900 text-base' }, [r.title])
-                  ]),
-                  el('span', { class: 'font-bold text-slate-900 bg-slate-100 px-3 py-1 rounded-lg text-sm' }, [`$${r.budget}`])
-                ]),
-                el('p', { class: 'text-sm text-slate-600 mb-3 line-clamp-2' }, [r.description]),
-                el('div', { class: 'flex items-center justify-between text-xs text-slate-400' }, [
-                  el('span', {}, [`ID: ${r.id ? r.id.substring(0,8) : 'Pending'}...`]),
-                  el('span', { class: `font-semibold px-2 py-0.5 rounded ${r.status === 'Open' ? 'text-emerald-600 bg-emerald-50' : 'text-amber-600 bg-amber-50'}` }, [r.status || 'Active'])
-                ])
-              ])) : [el('div', { class: 'p-8 text-center text-slate-400 text-sm' }, ['No live requests recorded. Submit the tracking form to push rows.'])]
-            )
-          ]),
-          // Consultants Roster Available
-          el('div', { class: 'bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden' }, [
-            el('div', { class: 'px-6 py-4 border-b border-slate-100 bg-slate-50/50' }, [
-              el('h3', { class: 'font-bold text-slate-900' }, ['Available Enterprise Experts'])
-            ]),
-            el('div', { class: 'p-6 grid grid-cols-1 md:grid-cols-2 gap-4' }, 
-              S.cons.length ? S.cons.map(c => el('div', { class: 'border border-slate-100 bg-slate-50/50 p-4 rounded-xl flex items-center space-x-4' }, [
-                el('div', { class: 'w-12 h-12 rounded-full bg-gradient-to-tr from-indigo-500 to-violet-500 flex items-center justify-center text-white font-bold' }, [c.name ? c.name.charAt(0) : 'E']),
-                el('div', {}, [
-                  el('h4', { class: 'font-bold text-slate-900' }, [c.name]),
-                  el('p', { class: 'text-xs text-slate-500' }, [c.specialization || 'General Management']),
-                  el('p', { class: 'text-[11px] text-emerald-600 font-medium mt-1' }, ['● Verified Advisor'])
-                ])
-              ])) : [el('div', { class: 'col-span-2 text-center text-slate-400 text-sm py-4' }, ['No expert profiles verified inside spreadsheet rows.'])]
-            )
-          ])
-        ])
-      ]);
-    }
+        /* Layout Frameworks */
+        .landing-page {
+            position: relative;
+            padding: 2rem;
+        }
 
-    function renderConsultantDashboard() {
-      return el('div', { class: 'max-w-4xl mx-auto p-6 flex-grow w-full' }, [
-        el('div', { class: 'flex justify-between items-center mb-6' }, [
-          el('div', {}, [
-            el('h2', { class: 'text-2xl font-bold text-slate-900' }, [`Welcome Back, ${S.user ? S.user.name : 'Expert'}`]),
-            el('p', { class: 'text-sm text-slate-500' }, [`Domain Expertise focus: ${S.user?.specialization || 'General Consulting'}`])
-          ]),
-          el('button', { onclick: initializeDashboardData, class: 'bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 px-4 py-2 rounded-xl text-sm font-semibold shadow-sm cursor-pointer' }, ['Sync Target Pipelines'])
-        ]),
-        el('div', { class: 'bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden' }, [
-          el('div', { class: 'px-6 py-4 border-b border-slate-100 bg-slate-50/50' }, [
-            el('h3', { class: 'font-bold text-slate-900' }, ['Incoming Marketplace Placement Offers Matching Your Domain Expertise'])
-          ]),
-          el('div', { class: 'divide-y divide-slate-100' }, 
-            S.inc.length ? S.inc.map(r => el('div', { class: 'p-6 hover:bg-slate-50/50 transition flex flex-col md:flex-row justify-between items-start md:items-center gap-4' }, [
-              el('div', { class: 'space-y-1 max-w-xl' }, [
-                el('div', { class: 'flex items-center space-x-2' }, [
-                  el('span', { class: 'bg-indigo-50 text-indigo-600 font-extrabold text-[10px] px-2 py-0.5 rounded uppercase tracking-wider' }, [r.category]),
-                  el('span', { class: `text-[10px] font-bold px-1.5 py-0.5 rounded ${r.urgency === 'Urgent' ? 'bg-rose-50 text-rose-600' : 'bg-slate-100 text-slate-500'}` }, [r.urgency])
-                ]),
-                el('h4', { class: 'font-bold text-slate-900 text-base' }, [r.title]),
-                el('p', { class: 'text-sm text-slate-600 line-clamp-2' }, [r.description])
-              ]),
-              el('div', { class: 'text-right w-full md:w-auto flex md:flex-col justify-between md:justify-center items-center md:items-end gap-2' }, [
-                el('span', { class: 'text-lg font-black text-slate-900 block' }, [`$${r.budget}`]),
-                el('button', { 
-                  onclick: async () => {
-                    if (confirm('Accept assignment parameters and bind details to this row?')) {
-                      await apiRequest('request.accept', { id: r.id });
-                      alert('Row locked to your execution profile.');
-                      await initializeDashboardData();
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto 5rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .logo span { color: var(--primary-glow); }
+
+        .hero-section {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .hero-glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: var(--primary-glow);
+            filter: blur(150px);
+            top: -50px;
+            left: calc(50% - 150px);
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1.5px;
+        }
+
+        .hero-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+        }
+
+        /* Premium Interface Controls */
+        .btn {
+            font-family: var(--font-family);
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            border: none;
+            font-size: 0.9rem;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-glow), #7C3AED);
+            color: white;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.25);
+        }
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 24px rgba(139, 92, 246, 0.35);
+        }
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+        .btn-secondary:hover { background: rgba(255,255,255,0.05); }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
+        .btn-block { width: 100%; display: block; }
+
+        /* Complex Dashboard App Shell */
+        .dashboard-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: #0D1222;
+            border-right: 1px solid var(--border-color);
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-brand {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 2.5rem;
+        }
+        .sidebar-brand span { color: var(--accent-cyan); }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            flex-grow: 1;
+        }
+
+        .sidebar-menu a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.15s ease;
+        }
+        .sidebar-menu a.active, .sidebar-menu a:hover {
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-primary);
+        }
+
+        .sidebar-footer {
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .profile-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 3rem;
+            overflow-y: auto;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .system-status {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .indicator.live {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--success);
+        }
+
+        .status-panel {
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .status-panel label {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        /* Metrics Data Engine Layout */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .metric-card {
+            padding: 1.5rem;
+        }
+        .metric-card h5 {
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .metric-card h2 {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .max-width-md {
+            max-width: 600px;
+            padding: 2.5rem;
+        }
+
+        /* Tabular Data Components */
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        .table th {
+            padding: 1rem 1.5rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .table td {
+            padding: 1.2rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .text-center { text-align: center; }
+        .badge {
+            background: rgba(139, 92, 246, 0.15);
+            color: var(--primary-glow);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .status-lbl {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+        }
+
+        /* Form Subsystem Elements */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: var(--font-family);
+            outline: none;
+            transition: border-color 0.15s ease;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary-glow);
+        }
+
+        /* Auth Portal Card Components */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        .auth-card {
+            width: 100%;
+            max-width: 440px;
+            padding: 2.5rem;
+        }
+        .auth-footer {
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+        .auth-footer a {
+            color: var(--accent-cyan);
+            font-size: 0.85rem;
+            text-decoration: none;
+        }
+
+        /* Global Dynamic Toast Engine layout */
+        .toast-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            z-index: 10000;
+        }
+        .toast {
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            animation: slideIn 0.3s forwards cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes slideIn {
+            from { transform: translateX(120%); }
+            to { transform: translateX(0); }
+        }
+
+        @media(max-width: 768px) {
+            .dashboard-layout { flex-direction: column; }
+            .sidebar { width: 100%; }
+            .main-content { padding: 1.5rem; }
+            h1 { font-size: 2.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Dynamic Container Node for Platform Alerts -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Application Routing Shell Entry Target -->
+    <div id="app-root"></div>
+
+    <!-- VIEW TEMPLATE: LANDING CORNERSTONE -->
+    <template id="view-landing">
+        <div class="landing-page">
+            <header class="navbar">
+                <div class="logo">Consult<span>Link</span></div>
+                <div class="nav-actions">
+                    <button class="btn btn-secondary" onclick="Router.navigate('auth')">Sign In</button>
+                    <button class="btn btn-primary" onclick="Router.navigate('auth')">Get Started</button>
+                </div>
+            </header>
+            <main class="hero-section">
+                <div class="hero-glow"></div>
+                <h1>On-Demand Expert Advisory <br><span class="text-gradient">Engineered for Precision.</span></h1>
+                <p class="hero-subtitle">Connect instantly with verified legal, medical, financial, and technical consultants. End-to-end workflow automation with full security matching.</p>
+                <div class="cta-group">
+                    <button class="btn btn-primary btn-lg" onclick="Router.navigate('auth')">Launch Console</button>
+                </div>
+            </main>
+        </div>
+    </template>
+
+    <!-- VIEW TEMPLATE: CRYPTOGRAPHIC AUTH PIPELINE -->
+    <template id="view-auth">
+        <div class="auth-container">
+            <div class="auth-card glass">
+                <h2 id="auth-title">Welcome to ConsultLink</h2>
+                <p id="auth-subtitle" class="text-muted" style="margin-bottom: 1.5rem; font-size: 0.9rem; color: var(--text-secondary);">Sign in to access your secure workstation console.</p>
+                
+                <form id="auth-form" onsubmit="App.handleAuth(event)">
+                    <div class="form-group" id="group-fullname" style="display: none;">
+                        <label>Legal Full Name</label>
+                        <input type="text" id="auth-fullname" placeholder="John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label>Corporate Email</label>
+                        <input type="email" id="auth-email" required placeholder="name@company.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="auth-password" required placeholder="••••••••">
+                    </div>
+                    <div class="form-group" id="group-role" style="display: none;">
+                        <label>Account Node Role</label>
+                        <select id="auth-role">
+                            <option value="client">Client Node</option>
+                            <option value="consultant">Consultant Node</option>
+                        </select>
+                    </div>
+                    <div class="form-group id-consultant-fields" id="group-specialty" style="display: none;">
+                        <label>Professional Domain Specialty</label>
+                        <select id="auth-specialty">
+                            <option value="legal">Legal Frameworks</option>
+                            <option value="medical">Medical Advisory</option>
+                            <option value="financial">Quantitative Finance</option>
+                            <option value="engineering">Systems Engineering</option>
+                        </select>
+                    </div>
+                    <div class="form-group id-consultant-fields" id="group-rate" style="display: none;">
+                        <label>Hourly Rate (ZMW)</label>
+                        <input type="number" id="auth-rate" value="1500" placeholder="1500">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block" id="auth-submit-btn">Authenticate Session</button>
+                </form>
+                <div class="auth-footer">
+                    <a href="#" id="auth-toggle-mode" onclick="App.toggleAuthMode(event)">Need a production access key? Create account</a>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- VIEW TEMPLATE: SECURE CLIENT INTERFACE HUB -->
+    <template id="view-client-dashboard">
+        <div class="dashboard-layout">
+            <aside class="sidebar">
+                <div class="sidebar-brand">Consult<span>Link</span></div>
+                <nav class="sidebar-menu">
+                    <a href="#" id="menu-link-client-overview" class="active" onclick="App.switchTab('client-overview')">Console Matrix</a>
+                    <a href="#" id="menu-link-client-new-request" onclick="App.switchTab('client-new-request')">Submit Proposal</a>
+                </nav>
+                <div class="sidebar-footer">
+                    <span id="client-profile-name" class="profile-name">Client Workstation</span>
+                    <button class="btn btn-sm btn-danger" onclick="App.logout()">Terminate</button>
+                </div>
+            </aside>
+            <main class="main-content">
+                <header class="content-header">
+                    <h2>Client Operations Node</h2>
+                    <div class="system-status"><span class="indicator live"></span>Node Online</div>
+                </header>
+                
+                <div id="tab-client-overview" class="dashboard-tab">
+                    <div class="metrics-grid">
+                        <div class="metric-card glass"><h5>Active Queries</h5><h2 id="m-client-active">0</h2></div>
+                        <div class="metric-card glass"><h5>System Capital Settled</h5><h2 id="m-client-spent">K0.00</h2></div>
+                    </div>
+                    <h3 class="section-title">Consultation Registry Logs</h3>
+                    <div class="table-container glass">
+                        <table class="table">
+                            <thead>
+                                <tr><th>ID</th><th>Service Vertical</th><th>Headline</th><th>Status</th><th>Actions</th></tr>
+                            </thead>
+                            <tbody id="client-requests-table">
+                                <tr><td colspan="5" class="text-center">Awaiting data initialization...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="tab-client-new-request" class="dashboard-tab" style="display:none;">
+                    <div class="card glass max-width-md">
+                        <h3 style="margin-bottom: 1.5rem;">Deploy New Request Pipeline</h3>
+                        <form id="request-form" onsubmit="App.submitRequest(event)">
+                            <div class="form-group">
+                                <label>Vertical Domain Classification</label>
+                                <select id="req-category">
+                                    <option value="legal">Legal Frameworks</option>
+                                    <option value="medical">Medical Advisory</option>
+                                    <option value="financial">Quantitative Finance</option>
+                                    <option value="engineering">Systems Engineering</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Brief Title</label>
+                                <input type="text" id="req-title" required placeholder="e.g., Cross-border Fintech Regulatory Advisory">
+                            </div>
+                            <div class="form-group">
+                                <label>Detailed Statements & Parameters</label>
+                                <textarea id="req-description" rows="5" required placeholder="Describe the problem context parameters..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>System Payload Documents</label>
+                                <input type="file" id="req-file">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Initialize Matching Protocol</button>
+                        </form>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </template>
+
+    <!-- VIEW TEMPLATE: VERIFIED CONSULTANT NODE APPARATUS -->
+    <template id="view-consultant-dashboard">
+        <div class="dashboard-layout">
+            <aside class="sidebar">
+                <div class="sidebar-brand">Consult<span>Link</span></div>
+                <div class="status-panel glass">
+                    <label>Availability Matrix</label>
+                    <select id="consultant-status-toggle" onchange="App.updateConsultantStatus(this.value)">
+                        <option value="Available">Available (Broadcasting)</option>
+                        <option value="Busy">Busy (Locked)</option>
+                        <option value="Offline">Offline (Stealth)</option>
+                    </select>
+                </div>
+                <nav class="sidebar-menu">
+                    <a href="#" class="active">Operator Dashboard</a>
+                </nav>
+                <div class="sidebar-footer">
+                    <span id="consultant-profile-name" class="profile-name">Consultant Node</span>
+                    <button class="btn btn-sm btn-danger" onclick="App.logout()">Disconnect</button>
+                </div>
+            </aside>
+            <main class="main-content">
+                <header class="content-header">
+                    <h2>Expert Practitioner Console</h2>
+                    <div class="system-status"><span class="indicator live"></span>Verified Agent</div>
+                </header>
+                <div class="metrics-grid">
+                    <div class="metric-card glass"><h5>Accrued Net Yield</h5><h2 id="m-consultant-earnings">K0.00</h2></div>
+                    <div class="metric-card glass"><h5>Domain Authority Rating</h5><h2 id="m-consultant-rating">5.00</h2></div>
+                </div>
+                <h3 class="section-title">Incoming Request Pipelines</h3>
+                <div class="table-container glass">
+                    <table class="table">
+                        <thead>
+                            <tr><th>Request ID</th><th>Client Identity</th><th>Title</th><th>Action Vectors</th></tr>
+                        </thead>
+                        <tbody id="consultant-queue-table">
+                            <tr><td colspan="4" class="text-center">Scanning synchronization nodes...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </div>
+    </template>
+
+    <!-- VIEW TEMPLATE: SYSTEM ROOT COMMAND CENTER -->
+    <template id="view-admin-dashboard">
+        <div class="dashboard-layout">
+            <aside class="sidebar">
+                <div class="sidebar-brand">Consult<span>Admin</span></div>
+                <nav class="sidebar-menu">
+                    <a href="#" class="active">Core Analytics Engine</a>
+                </nav>
+                <div class="sidebar-footer">
+                    <span class="profile-name">Root Administrator</span>
+                    <button class="btn btn-sm btn-danger" onclick="App.logout()">Kill Session</button>
+                </div>
+            </aside>
+            <main class="main-content">
+                <header class="content-header">
+                    <h2>Platform Root Command Center</h2>
+                </header>
+                <h3 class="section-title">Consultant Verification Pipeline</h3>
+                <div class="table-container glass">
+                    <table class="table">
+                        <thead>
+                            <tr><th>Consultant ID</th><th>Specialty Node</th><th>Rate/hr</th><th>Approval Vector</th></tr>
+                        </thead>
+                        <tbody id="admin-consultants-table">
+                            <tr><td colspan="4" class="text-center">Querying node registries...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </div>
+    </template>
+
+    <!-- LOGICAL ENGINE PIPELINE SCRIPT -->
+    <script>
+        /**
+         * SDK Core Bridge Driver to handle fetch interactions with Google Apps Script
+         */
+        const ConsultLinkSDK = {
+            // REPLACEMENT REQUIRED: Put your macro deployment URL here
+            endpoint: "https://script.google.com/macros/s/AKfycbwYOUR_DEPLOYMENT_ID/exec",
+
+            async request(action, payload = {}) {
+                const token = sessionStorage.getItem('consultlink_session_token');
+                const bodyParameters = { action: action, token: token, payload: payload };
+
+                try {
+                    const response = await fetch(this.endpoint, {
+                        method: 'POST',
+                        mode: 'cors',
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                        body: JSON.stringify(bodyParameters)
+                    });
+
+                    if (!response.ok) throw new Error(`HTTP system degradation: ${response.statusText}`);
+                    const data = await response.json();
+                    if (!data.success) throw new Error(data.message || "Execution verification rejected by backend.");
+                    return data;
+                } catch (error) {
+                    console.error(`[SDK Engine Exception]:`, error);
+                    throw error;
+                }
+            }
+        };
+
+        /**
+         * Web View Client Router Logic Engine
+         */
+        const Router = {
+            currentView: null,
+            init() {
+                this.navigate('landing');
+            },
+            navigate(viewName) {
+                const template = document.getElementById(`view-${viewName}`);
+                if (!template) return;
+                
+                const appRoot = document.getElementById('app-root');
+                appRoot.innerHTML = '';
+                appRoot.appendChild(template.content.cloneNode(true));
+                this.currentView = viewName;
+                
+                if (viewName === 'client-dashboard') App.loadClientDashboardData();
+                if (viewName === 'consultant-dashboard') App.loadConsultantDashboardData();
+                if (viewName === 'admin-dashboard') App.loadAdminDashboardData();
+            }
+        };
+
+        /**
+         * Global Application Controller State Machine
+         */
+        const App = {
+            isSignUpMode: false,
+
+            init() {
+                const savedToken = sessionStorage.getItem('consultlink_session_token');
+                const savedRole = sessionStorage.getItem('consultlink_session_role');
+                if (savedToken && savedRole) {
+                    Router.navigate(`${savedRole}-dashboard`);
+                }
+            },
+
+            showToast(message, type = 'success') {
+                const container = document.getElementById('toast-container');
+                if (!container) return;
+                const toast = document.createElement('div');
+                toast.className = `toast glass`;
+                toast.style.borderLeft = `4px solid ${type === 'success' ? 'var(--success)' : 'var(--danger)'}`;
+                toast.innerText = message;
+                container.appendChild(toast);
+                setTimeout(() => toast.remove(), 4000);
+            },
+
+            toggleAuthMode(e) {
+                e.preventDefault();
+                this.isSignUpMode = !this.isSignUpMode;
+                
+                document.getElementById('auth-title').innerText = this.isSignUpMode ? 'Create Core Node Profile' : 'Welcome to ConsultLink';
+                document.getElementById('group-fullname').style.display = this.isSignUpMode ? 'block' : 'none';
+                document.getElementById('group-role').style.display = this.isSignUpMode ? 'block' : 'none';
+                document.getElementById('auth-submit-btn').innerText = this.isSignUpMode ? 'Provision Identity' : 'Authenticate Session';
+                document.getElementById('auth-toggle-mode').innerText = this.isSignUpMode ? 'Already registered on ledger? Authenticate instead' : 'Need a production access key? Create account';
+                
+                if (this.isSignUpMode) {
+                    document.getElementById('auth-role').addEventListener('change', (ev) => {
+                        const displayStatus = ev.target.value === 'consultant' ? 'block' : 'none';
+                        document.querySelectorAll('.id-consultant-fields').forEach(el => el.style.display = displayStatus);
+                    });
+                } else {
+                    document.querySelectorAll('.id-consultant-fields').forEach(el => el.style.display = 'none');
+                }
+            },
+
+            async handleAuth(e) {
+                e.preventDefault();
+                const email = document.getElementById('auth-email').value;
+                const password = document.getElementById('auth-password').value;
+
+                try {
+                    if (this.isSignUpMode) {
+                        const fullName = document.getElementById('auth-fullname').value;
+                        const role = document.getElementById('auth-role').value;
+                        const payload = { email, password, fullName, role };
+
+                        if (role === 'consultant') {
+                            payload.specialty = document.getElementById('auth-specialty').value;
+                            payload.ratePerHour = parseFloat(document.getElementById('auth-rate').value);
+                        }
+
+                        await ConsultLinkSDK.request('registerUser', payload);
+                        this.showToast("Node Identity verified. Proceed to sign-in protocol.");
+                        this.isSignUpMode = false;
+                        Router.navigate('auth');
+                    } else {
+                        const data = await ConsultLinkSDK.request('loginUser', { email, password });
+                        sessionStorage.setItem('consultlink_session_token', data.token);
+                        sessionStorage.setItem('consultlink_session_role', data.user.role);
+                        sessionStorage.setItem('consultlink_session_user', JSON.stringify(data.user));
+                        
+                        this.showToast(`Access Cleared. Identity confirmed.`);
+                        Router.navigate(`${data.user.role}-dashboard`);
                     }
-                  },
-                  class: 'bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-lg shadow-md transition cursor-pointer' 
-                }, ['Accept Work Offer'])
-              ])
-            ])) : [el('div', { class: 'p-12 text-center text-slate-400 text-sm' }, ['No unassigned consultation request matching your criteria listed in backend matrices at present.'])]
-          )
-        ])
-      ]);
-    }
+                } catch (err) {
+                    this.showToast(err.message, 'error');
+                }
+            },
 
-    function renderAdminDashboard() {
-      return el('div', { class: 'max-w-7xl mx-auto p-6 flex-grow w-full space-y-8' }, [
-        el('div', { class: 'flex justify-between items-center' }, [
-          el('div', {}, [
-            el('h2', { class: 'text-2xl font-bold text-slate-900' }, ['Administrative Ledger Core Dashboard']),
-            el('p', { class: 'text-sm text-slate-500' }, ['Global system data tracking access points.'])
-          ]),
-          el('button', { onclick: initializeDashboardData, class: 'bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-sm font-semibold cursor-pointer' }, ['Force Global Cache Purge'])
-        ]),
-        el('div', { class: 'grid grid-cols-1 md:grid-cols-2 gap-8' }, [
-          // Users Table Ledger
-          el('div', { class: 'bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden' }, [
-            el('div', { class: 'px-6 py-4 border-b border-slate-100 bg-slate-50/50' }, [el('h3', { class: 'font-bold text-slate-900' }, ['Registered Database Accounts (Users Sheet)'])]),
-            el('div', { class: 'overflow-x-auto' }, [
-              el('table', { class: 'w-full text-left border-collapse text-sm' }, [
-                el('thead', { class: 'bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider border-b border-slate-100' }, [
-                  el('tr', {}, [
-                    el('th', { class: 'p-4' }, ['Name']), el('th', { class: 'p-4' }, ['Email Address']), el('th', { class: 'p-4' }, ['Role Mapping'])
-                  ])
-                ]),
-                el('tbody', { class: 'divide-y divide-slate-100' }, 
-                  S.adminData.users.length ? S.adminData.users.map(u => el('tr', {}, [
-                    el('td', { class: 'p-4 font-semibold text-slate-900' }, [u.name]),
-                    el('td', { class: 'p-4 text-slate-600' }, [u.email]),
-                    el('td', { class: 'p-4 text-xs' }, [el('span', { class: `px-2 py-0.5 rounded font-bold capitalize ${u.role === 'admin' ? 'bg-purple-100 text-purple-700' : u.role === 'consultant' ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-700'}` }, [u.role])])
-                  ])) : [el('tr', {}, [el('td', { colspan: 3, class: 'p-8 text-center text-slate-400' }, ['No system registrations mapped.'])] )]
-                )
-              ])
-            ])
-          ]),
-          // Requests Database View
-          el('div', { class: 'bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden' }, [
-            el('div', { class: 'px-6 py-4 border-b border-slate-100 bg-slate-50/50' }, [el('h3', { class: 'font-bold text-slate-900' }, ['Global Transaction Records (Requests Sheet)'])]),
-            el('div', { class: 'overflow-x-auto' }, [
-              el('table', { class: 'w-full text-left border-collapse text-sm' }, [
-                el('thead', { class: 'bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider border-b border-slate-100' }, [
-                  el('tr', {}, [
-                    el('th', { class: 'p-4' }, ['Title Task']), el('th', { class: 'p-4' }, ['Budget']), el('th', { class: 'p-4' }, ['Status Mapping'])
-                  ])
-                ]),
-                el('tbody', { class: 'divide-y divide-slate-100' }, 
-                  S.adminData.requests.length ? S.adminData.requests.map(r => el('tr', {}, [
-                    el('td', { class: 'p-4 text-slate-900 font-medium' }, [r.title]),
-                    el('td', { class: 'p-4 font-bold text-slate-700' }, [`$${r.budget}`]),
-                    el('td', { class: 'p-4 text-xs' }, [el('span', { class: `px-2 py-0.5 rounded font-semibold ${r.status === 'Open' ? 'text-emerald-700 bg-emerald-50' : 'text-amber-700 bg-amber-50'}` }, [r.status || 'Active'])])
-                  ])) : [el('tr', {}, [el('td', { colspan: 3, class: 'p-8 text-center text-slate-400' }, ['No master dataset objects loaded.'])] )]
-                )
-              ])
-            ])
-          ])
-        ])
-      ]);
-    }
+            logout() {
+                sessionStorage.clear();
+                this.showToast("Session dropped. Node disconnected.");
+                Router.navigate('landing');
+            },
 
-    function renderAuthModal() {
-      if (!S.auth) return null;
-      const isReg = S.amode === 'register';
-      
-      return el('div', { class: 'fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50' }, [
-        el('div', { class: 'bg-white rounded-2xl max-w-md w-full p-8 shadow-xl relative animate-in fade-in zoom-in-95 duration-150' }, [
-          el('button', { 
-            class: 'absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl font-bold cursor-pointer w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100',
-            onclick: () => { S.auth = false; render(); }
-          }, ['×']),
-          el('h3', { class: 'text-2xl font-bold text-slate-900 mb-2' }, [isReg ? 'Create Profile' : 'Account Validation']),
-          el('p', { class: 'text-sm text-slate-500 mb-6' }, [isReg ? 'Gain access to database consultation services.' : 'Input credentials to resume session loops.']),
-          
-          isReg ? el('div', { class: 'flex bg-slate-100 p-1 rounded-xl mb-6' }, [
-            el('button', { 
-              class: `flex-1 text-center py-2 text-xs font-bold rounded-lg transition cursor-pointer ${S.role === 'client' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`,
-              onclick: () => { S.role = 'client'; render(); }
-            }, ['Client Role']),
-            el('button', { 
-              class: `flex-1 text-center py-2 text-xs font-bold rounded-lg transition cursor-pointer ${S.role === 'consultant' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`,
-              onclick: () => { S.role = 'consultant'; render(); }
-            }, ['Consultant Expert'])
-          ]) : null,
+            switchTab(tabId) {
+                document.querySelectorAll('.dashboard-tab').forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.sidebar-menu a').forEach(el => el.classList.remove('active'));
+                
+                document.getElementById(`tab-${tabId}`).style.display = 'block';
+                document.getElementById(`menu-link-${tabId}`).classList.add('active');
+            },
 
-          el('form', { onsubmit: handleAuthSubmit, class: 'space-y-4' }, [
-            isReg ? el('div', {}, [
-              el('label', { class: 'block text-xs font-bold text-slate-600 uppercase mb-1' }, ['Full Display Name']),
-              el('input', { name: 'username', type: 'text', required: true, placeholder: 'John Doe', class: 'w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500' })
-            ]) : null,
-            el('div', {}, [
-              el('label', { class: 'block text-xs font-bold text-slate-600 uppercase mb-1' }, ['Email Address']),
-              el('input', { name: 'email', type: 'email', required: true, placeholder: 'you@example.com', class: 'w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500' })
-            ]),
-            isReg && S.role === 'consultant' ? el('div', {}, [
-              el('label', { class: 'block text-xs font-bold text-slate-600 uppercase mb-1' }, ['Specialization Category']),
-              el('select', { name: 'specialization', class: 'w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500' }, [
-                el('option', { value: 'Strategy' }, ['Corporate Strategy']),
-                el('option', { value: 'Finance' }, ['Financial & Tax Structuring']),
-                el('option', { value: 'Technology' }, ['Software Architecture']),
-                el('option', { value: 'Marketing' }, ['Growth Marketing'])
-              ])
-            ]) : null,
-            el('div', {}, [
-              el('label', { class: 'block text-xs font-bold text-slate-600 uppercase mb-1' }, ['Account Password']),
-              el('input', { name: 'password', type: 'password', required: true, placeholder: '••••••••', class: 'w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500' })
-            ]),
-            el('button', { type: 'submit', class: 'w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl text-sm transition shadow-lg shadow-indigo-100 mt-2 cursor-pointer' }, [
-              isReg ? 'Complete Registration' : 'Validate and Transmit'
-            ]),
-            el('div', { class: 'text-center mt-4' }, [
-              el('button', { 
-                type: 'button',
-                class: 'text-xs text-indigo-600 font-semibold hover:underline cursor-pointer',
-                onclick: () => { S.amode = isReg ? 'login' : 'register'; render(); }
-              }, [isReg ? 'Already registered? Login here.' : 'Need a login account? Create profile.'])
-            ])
-          ])
-        ])
-      ]);
-    }
+            async loadClientDashboardData() {
+                try {
+                    const user = JSON.parse(sessionStorage.getItem('consultlink_session_user'));
+                    document.getElementById('client-profile-name').innerText = user.fullName;
+                    
+                    const response = await ConsultLinkSDK.request('getClientRequests');
+                    const requests = response.requests;
+                    
+                    document.getElementById('m-client-active').innerText = requests.filter(r => r.status !== 'Completed').length;
+                    
+                    const tableBody = document.getElementById('client-requests-table');
+                    tableBody.innerHTML = '';
+                    
+                    if(requests.length === 0) {
+                        tableBody.innerHTML = `<tr><td colspan="5" class="text-center">No transactions on this pipeline.</td></tr>`;
+                        return;
+                    }
 
-    function renderFooter() {
-      return el('footer', { class: 'mt-auto border-t border-slate-200 bg-white py-12 px-6' }, [
-        el('div', { class: 'max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6' }, [
-          
-          // Branding Block
-          el('div', { class: 'flex items-center space-x-3' }, [
-            // Icon with Vyeta Custom Electric Blue and Turquoise Gradient
-            el('div', { class: 'w-9 h-9 rounded-xl bg-gradient-to-tr from-[#0052FF] to-[#00E5FF] flex items-center justify-center text-white font-black shadow-md shadow-cyan-100' }, ['V']),
-            el('div', { class: 'flex flex-col' }, [
-              el('span', { class: 'text-base font-bold tracking-tight text-slate-900' }, [
-                'Vyeta ',
-                el('span', { class: 'bg-gradient-to-r from-[#0052FF] to-[#00E5FF] bg-clip-text text-transparent' }, ['Digital Solutions'])
-              ]),
-              el('span', { class: 'text-[10px] text-slate-400 font-medium tracking-wider uppercase' }, ['Next-Gen Ecosystems'])
-            ])
-          ]),
+                    requests.forEach(req => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${req.id.substring(0,8)}</td>
+                            <td><span class="badge">${req.category}</span></td>
+                            <td>${req.title}</td>
+                            <td><span class="status-lbl">${req.status}</span></td>
+                            <td>${req.status === 'Matched' ? `<button class="btn btn-sm btn-primary" onclick="App.processPayment('${req.id}')">Settle Invoicing</button>` : 'System Sync Continuous'}</td>
+                        `;
+                        tableBody.appendChild(tr);
+                    });
+                } catch(err) {
+                    this.showToast("Failed to initialize remote structural metrics.", "error");
+                }
+            },
 
-          // Operational Architecture Status Tag
-          el('div', { class: 'flex items-center space-x-2 bg-slate-50 border border-slate-100 px-3 py-1.5 rounded-xl' }, [
-            el('span', { class: 'relative flex h-2 w-2' }, [
-              el('span', { class: 'animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75' }),
-              el('span', { class: 'relative inline-flex rounded-full h-2 w-2 bg-emerald-500' })
-            ]),
-            el('span', { class: 'text-[11px] font-semibold text-slate-500' }, [
-              'System Status: ',
-              el('span', { class: 'text-slate-800' }, ['Live Connection'])
-            ])
-          ]),
+            async submitRequest(e) {
+                e.preventDefault();
+                const category = document.getElementById('req-category').value;
+                const title = document.getElementById('req-title').value;
+                const description = document.getElementById('req-description').value;
+                const fileInput = document.getElementById('req-file');
 
-          // Copyright and Architecture Meta Trace
-          el('div', { class: 'text-center md:text-right text-xs text-slate-400 font-medium' }, [
-            el('p', {}, [`© ${new Date().getFullYear()} Vyeta Digital Solutions. All rights reserved.`]),
-            el('p', { class: 'text-[10px] text-slate-300 mt-0.5 font-mono' }, ['Secured via Static Token Architecture & Google App Engine'])
-          ])
+                let fileData = null;
+                if(fileInput.files.length > 0) {
+                    const file = fileInput.files[0];
+                    fileData = {
+                        base64: await this.convertFileToBase64(file),
+                        mimeType: file.type,
+                        name: file.name
+                    };
+                }
 
-        ])
-      ]);
-    }
+                try {
+                    await ConsultLinkSDK.request('createRequest', { category, title, description, fileData });
+                    this.showToast("Deployment system accepted configuration parameters.");
+                    this.switchTab('client-overview');
+                    this.loadClientDashboardData();
+                } catch(err) {
+                    this.showToast(err.message, "error");
+                }
+            },
 
-    function render() {
-      const root = document.getElementById('app');
-      root.innerHTML = '';
-      
-      root.appendChild(renderNavbar());
-      
-      if (S.view === 'landing') root.appendChild(renderLanding());
-      else if (S.view === 'client') root.appendChild(renderClientDashboard());
-      else if (S.view === 'consultant') root.appendChild(renderConsultantDashboard());
-      else if (S.view === 'admin') root.appendChild(renderAdminDashboard());
-      
-      root.appendChild(renderFooter());
-      
-      const modal = renderAuthModal();
-      if (modal) root.appendChild(modal);
-    }
+            async processPayment(requestId) {
+                try {
+                    await ConsultLinkSDK.request('executePaymentSimulator', { requestId });
+                    this.showToast("Transactional confirmation ledger cleared.");
+                    this.loadClientDashboardData();
+                } catch(err) {
+                    this.showToast(err.message, "error");
+                }
+            },
 
-    /* ── RUNTIME INITIALIZATION ────────────────────────────────────────── */
-    window.addEventListener('DOMContentLoaded', async () => {
-      const savedToken = localStorage.getItem('cl_session_token');
-      const savedProfile = localStorage.getItem('cl_user_profile');
-      
-      if (savedToken && savedProfile) {
-        try {
-          S.user = JSON.parse(savedProfile);
-          S.view = S.user.role; // Automatically point routing target
-          await initializeDashboardData();
-        } catch (e) {
-          console.error("Corrupted profile data trace elements cleared.");
-          handleLogout();
-        }
-      } else {
-        S.view = 'landing';
-        render();
-      }
-    });
-  </script>
+            async loadConsultantDashboardData() {
+                try {
+                    const user = JSON.parse(sessionStorage.getItem('consultlink_session_user'));
+                    document.getElementById('consultant-profile-name').innerText = user.fullName;
+                    
+                    const response = await ConsultLinkSDK.request('getConsultantQueue');
+                    const queue = response.queue;
+                    
+                    const tableBody = document.getElementById('consultant-queue-table');
+                    tableBody.innerHTML = '';
+                    
+                    if(queue.length === 0) {
+                        tableBody.innerHTML = `<tr><td colspan="4" class="text-center">No active work packets in pipeline.</td></tr>`;
+                        return;
+                    }
+
+                    queue.forEach(item => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${item.id.substring(0,8)}</td>
+                            <td>Secure Masked Node</td>
+                            <td>${item.title}</td>
+                            <td><button class="btn btn-sm btn-primary" onclick="App.acceptJob('${item.id}')">Accept Resource Frame</button></td>
+                        `;
+                        tableBody.appendChild(tr);
+                    });
+                } catch (err) {
+                    this.showToast("Failed to compile work metrics queue.", "error");
+                }
+            },
+
+            async acceptJob(requestId) {
+                try {
+                    await ConsultLinkSDK.request('acceptConsultationRequest', { requestId });
+                    this.showToast("Job added to operational block ledger.");
+                    this.loadConsultantDashboardData();
+                } catch(err) {
+                    this.showToast(err.message, "error");
+                }
+            },
+
+            async updateConsultantStatus(status) {
+                try {
+                    await ConsultLinkSDK.request('setConsultantStatus', { status });
+                    this.showToast(`Presence state modified -> ${status}`);
+                } catch(err) {
+                    this.showToast(err.message, "error");
+                }
+            },
+
+            async loadAdminDashboardData() {
+                try {
+                    const response = await ConsultLinkSDK.request('getAdminConsoleData');
+                    const tableBody = document.getElementById('admin-consultants-table');
+                    tableBody.innerHTML = '';
+                    
+                    response.consultants.forEach(c => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${c.id.substring(0,8)}</td>
+                            <td>${c.specialty}</td>
+                            <td>K${c.ratePerHour}/hr</td>
+                            <td>${c.isApproved ? '<span class="status-lbl">Verified Active</span>' : `<button class="btn btn-sm btn-primary" onclick="App.approveConsultant('${c.id}')">Approve Core Node</button>`}</td>
+                        `;
+                        tableBody.appendChild(tr);
+                    });
+                } catch(err) {
+                    this.showToast("Admin dashboard data stream interrupted.", "error");
+                }
+            },
+
+            async approveConsultant(consultantId) {
+                try {
+                    await ConsultLinkSDK.request('approveConsultantNode', { consultantId });
+                    this.showToast("Operator credential clearance completed.");
+                    this.loadAdminDashboardData();
+                } catch(err) {
+                    this.showToast(err.message, "error");
+                }
+            },
+
+            convertFileToBase64(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = () => resolve(reader.result.split(',')[1]);
+                    reader.onerror = error => reject(error);
+                });
+            }
+        };
+
+        // Application Lifecyle Boot Init Hooks
+        document.addEventListener("DOMContentLoaded", () => {
+            Router.init();
+            App.init();
+        });
+    </script>
 </body>
 </html>
