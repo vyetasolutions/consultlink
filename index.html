@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ConsultLink // Enterprise SaaS Client</title>
+    <title>ConsultLink // Expert Advisory Platform</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -34,6 +34,8 @@
             font-family: var(--font-family);
             overflow-x: hidden;
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         /* Glassmorphism Design System */
@@ -55,20 +57,26 @@
         .landing-page {
             position: relative;
             padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
         }
 
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            max-width: 1200px;
-            margin: 0 auto 5rem;
+            margin-bottom: 5rem;
+            padding: 1rem 0;
         }
 
         .logo {
             font-size: 1.5rem;
             font-weight: 700;
             letter-spacing: -0.5px;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text-primary);
         }
         .logo span { color: var(--primary-glow); }
 
@@ -77,6 +85,7 @@
             max-width: 800px;
             margin: 0 auto;
             position: relative;
+            padding: 2rem 0;
         }
 
         .hero-glow {
@@ -88,7 +97,7 @@
             top: -50px;
             left: calc(50% - 150px);
             z-index: -1;
-            opacity: 0.3;
+            opacity: 0.25;
         }
 
         h1 {
@@ -109,13 +118,17 @@
         /* Premium Interface Controls */
         .btn {
             font-family: var(--font-family);
-            padding: 0.6rem 1.2rem;
+            padding: 0.65rem 1.4rem;
             border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
             border: none;
             font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
         }
         .btn-primary {
             background: linear-gradient(135deg, var(--primary-glow), #7C3AED);
@@ -134,12 +147,13 @@
         .btn-secondary:hover { background: rgba(255,255,255,0.05); }
         .btn-danger { background: var(--danger); color: white; }
         .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
-        .btn-block { width: 100%; display: block; }
+        .btn-block { width: 100%; display: flex; }
 
         /* Complex Dashboard App Shell */
         .dashboard-layout {
             display: flex;
-            min-height: 100vh;
+            min-height: calc(100vh - 120px);
+            width: 100%;
         }
 
         .sidebar {
@@ -341,13 +355,27 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            padding: 1rem;
+            min-height: calc(100vh - 120px);
+            padding: 2rem 1rem;
         }
         .auth-card {
             width: 100%;
             max-width: 440px;
             padding: 2.5rem;
+            position: relative;
+        }
+        .back-home-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+            transition: color 0.2s ease;
+        }
+        .back-home-btn:hover {
+            color: var(--text-primary);
         }
         .auth-footer {
             margin-top: 1.5rem;
@@ -383,6 +411,13 @@
             to { transform: translateX(0); }
         }
 
+        /* Empty State Clean UI */
+        .empty-state {
+            padding: 3rem 1.5rem;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
         @media(max-width: 768px) {
             .dashboard-layout { flex-direction: column; }
             .sidebar { width: 100%; }
@@ -393,17 +428,14 @@
 </head>
 <body>
 
-    <!-- Dynamic Container Node for Platform Alerts -->
     <div id="toast-container" class="toast-container"></div>
 
-    <!-- Application Routing Shell Entry Target -->
-    <div id="app-root"></div>
+    <div id="app-root" style="flex: 1 0 auto;"></div>
 
-    <!-- VIEW TEMPLATE: LANDING CORNERSTONE -->
     <template id="view-landing">
         <div class="landing-page">
             <header class="navbar">
-                <div class="logo">Consult<span>Link</span></div>
+                <a href="#" class="logo" onclick="Router.navigate('landing')">Consult<span>Link</span></a>
                 <div class="nav-actions">
                     <button class="btn btn-secondary" onclick="Router.navigate('auth')">Sign In</button>
                     <button class="btn btn-primary" onclick="Router.navigate('auth')">Get Started</button>
@@ -411,40 +443,40 @@
             </header>
             <main class="hero-section">
                 <div class="hero-glow"></div>
-                <h1>On-Demand Expert Advisory <br><span class="text-gradient">Engineered for Precision.</span></h1>
-                <p class="hero-subtitle">Connect instantly with verified legal, medical, financial, and technical consultants. End-to-end workflow automation with full security matching.</p>
+                <h1>Instant Access to Verified <br><span class="text-gradient">Professional Advice.</span></h1>
+                <p class="hero-subtitle">Connect with top-tier specialists in law, medicine, finance, and engineering. Schedule sessions, share files, and get answers securely in minutes.</p>
                 <div class="cta-group">
-                    <button class="btn btn-primary btn-lg" onclick="Router.navigate('auth')">Launch Console</button>
+                    <button class="btn btn-primary btn-lg" onclick="Router.navigate('auth')">Open Dashboard</button>
                 </div>
             </main>
         </div>
     </template>
 
-    <!-- VIEW TEMPLATE: CRYPTOGRAPHIC AUTH PIPELINE -->
     <template id="view-auth">
         <div class="auth-container">
             <div class="auth-card glass">
-                <h2 id="auth-title">Welcome to ConsultLink</h2>
-                <p id="auth-subtitle" class="text-muted" style="margin-bottom: 1.5rem; font-size: 0.9rem; color: var(--text-secondary);">Sign in to access your secure workstation console.</p>
+                <a href="#" class="back-home-btn" onclick="Router.navigate('landing')">← Back to Home</a>
+                <h2 id="auth-title">Welcome Back</h2>
+                <p id="auth-subtitle" style="margin-bottom: 1.5rem; font-size: 0.9rem; color: var(--text-secondary);">Sign in to access your dashboard workspace.</p>
                 
                 <form id="auth-form" onsubmit="App.handleAuth(event)">
                     <div class="form-group" id="group-fullname" style="display: none;">
-                        <label>Legal Full Name</label>
-                        <input type="text" id="auth-fullname" placeholder="John Doe">
+                        <label>Your Full Legal Name</label>
+                        <input type="text" id="auth-fullname" placeholder="e.g. John Doe">
                     </div>
                     <div class="form-group">
-                        <label>Corporate Email</label>
-                        <input type="email" id="auth-email" required placeholder="name@company.com">
+                        <label>Email Address</label>
+                        <input type="email" id="auth-email" required placeholder="name@domain.com">
                     </div>
                     <div class="form-group">
                         <label>Password</label>
                         <input type="password" id="auth-password" required placeholder="••••••••">
                     </div>
                     <div class="form-group" id="group-role" style="display: none;">
-                        <label>Account Node Role</label>
+                        <label>I want to join as a:</label>
                         <select id="auth-role">
-                            <option value="client">Client Node</option>
-                            <option value="consultant">Consultant Node</option>
+                            <option value="client">Client (Seeking Advice)</option>
+                            <option value="consultant">Consultant (Offering Advice)</option>
                         </select>
                     </div>
                     <div class="form-group id-consultant-fields" id="group-specialty" style="display: none;">
@@ -457,51 +489,50 @@
                         </select>
                     </div>
                     <div class="form-group id-consultant-fields" id="group-rate" style="display: none;">
-                        <label>Hourly Rate (ZMW)</label>
+                        <label>Hourly Consulting Rate (ZMW)</label>
                         <input type="number" id="auth-rate" value="1500" placeholder="1500">
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block" id="auth-submit-btn">Authenticate Session</button>
+                    <button type="submit" class="btn btn-primary btn-block" id="auth-submit-btn">Sign In</button>
                 </form>
                 <div class="auth-footer">
-                    <a href="#" id="auth-toggle-mode" onclick="App.toggleAuthMode(event)">Need a production access key? Create account</a>
+                    <a href="#" id="auth-toggle-mode" onclick="App.toggleAuthMode(event)">New to the platform? Create an account</a>
                 </div>
             </div>
         </div>
     </template>
 
-    <!-- VIEW TEMPLATE: SECURE CLIENT INTERFACE HUB -->
     <template id="view-client-dashboard">
         <div class="dashboard-layout">
             <aside class="sidebar">
                 <div class="sidebar-brand">Consult<span>Link</span></div>
                 <nav class="sidebar-menu">
-                    <a href="#" id="menu-link-client-overview" class="active" onclick="App.switchTab('client-overview')">Console Matrix</a>
-                    <a href="#" id="menu-link-client-new-request" onclick="App.switchTab('client-new-request')">Submit Proposal</a>
+                    <a href="#" id="menu-link-client-overview" class="active" onclick="App.switchTab('client-overview')">Dashboard Overview</a>
+                    <a href="#" id="menu-link-client-new-request" onclick="App.switchTab('client-new-request')">Book a Consultant</a>
                 </nav>
                 <div class="sidebar-footer">
-                    <span id="client-profile-name" class="profile-name">Client Workstation</span>
-                    <button class="btn btn-sm btn-danger" onclick="App.logout()">Terminate</button>
+                    <span id="client-profile-name" class="profile-name">User Workstation</span>
+                    <button class="btn btn-sm btn-danger" onclick="App.logout()">Sign Out</button>
                 </div>
             </aside>
             <main class="main-content">
                 <header class="content-header">
-                    <h2>Client Operations Node</h2>
-                    <div class="system-status"><span class="indicator live"></span>Node Online</div>
+                    <h2>Client Dashboard</h2>
+                    <div class="system-status"><span class="indicator live"></span>Connected</div>
                 </header>
                 
                 <div id="tab-client-overview" class="dashboard-tab">
                     <div class="metrics-grid">
-                        <div class="metric-card glass"><h5>Active Queries</h5><h2 id="m-client-active">0</h2></div>
-                        <div class="metric-card glass"><h5>System Capital Settled</h5><h2 id="m-client-spent">K0.00</h2></div>
+                        <div class="metric-card glass"><h5>Active Requests</h5><h2 id="m-client-active">0</h2></div>
+                        <div class="metric-card glass"><h5>Total Investment</h5><h2 id="m-client-spent">K0.00</h2></div>
                     </div>
-                    <h3 class="section-title">Consultation Registry Logs</h3>
+                    <h3 class="section-title">Your Consultation History</h3>
                     <div class="table-container glass">
                         <table class="table">
                             <thead>
-                                <tr><th>ID</th><th>Service Vertical</th><th>Headline</th><th>Status</th><th>Actions</th></tr>
+                                <tr><th>ID</th><th>Category</th><th>Topic Headline</th><th>Status</th><th>Actions</th></tr>
                             </thead>
                             <tbody id="client-requests-table">
-                                <tr><td colspan="5" class="text-center">Awaiting data initialization...</td></tr>
+                                <tr><td colspan="5" class="text-center empty-state">Loading history logs...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -509,10 +540,10 @@
 
                 <div id="tab-client-new-request" class="dashboard-tab" style="display:none;">
                     <div class="card glass max-width-md">
-                        <h3 style="margin-bottom: 1.5rem;">Deploy New Request Pipeline</h3>
+                        <h3 style="margin-bottom: 1.5rem;">Submit a Project Request</h3>
                         <form id="request-form" onsubmit="App.submitRequest(event)">
                             <div class="form-group">
-                                <label>Vertical Domain Classification</label>
+                                <label>What field do you need help in?</label>
                                 <select id="req-category">
                                     <option value="legal">Legal Frameworks</option>
                                     <option value="medical">Medical Advisory</option>
@@ -521,18 +552,18 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Brief Title</label>
-                                <input type="text" id="req-title" required placeholder="e.g., Cross-border Fintech Regulatory Advisory">
+                                <label>Short Project Headline</label>
+                                <input type="text" id="req-title" required placeholder="e.g., Contract review for new digital platform">
                             </div>
                             <div class="form-group">
-                                <label>Detailed Statements & Parameters</label>
-                                <textarea id="req-description" rows="5" required placeholder="Describe the problem context parameters..."></textarea>
+                                <label>Tell us what you need in detail</label>
+                                <textarea id="req-description" rows="5" required placeholder="Provide clear contextual details about your requirements..."></textarea>
                             </div>
                             <div class="form-group">
-                                <label>System Payload Documents</label>
+                                <label>Attach Supporting Documents (Optional)</label>
                                 <input type="file" id="req-file">
                             </div>
-                            <button type="submit" class="btn btn-primary">Initialize Matching Protocol</button>
+                            <button type="submit" class="btn btn-primary" id="req-submit-btn">Find Matched Consultant</button>
                         </form>
                     </div>
                 </div>
@@ -540,44 +571,43 @@
         </div>
     </template>
 
-    <!-- VIEW TEMPLATE: VERIFIED CONSULTANT NODE APPARATUS -->
     <template id="view-consultant-dashboard">
         <div class="dashboard-layout">
             <aside class="sidebar">
                 <div class="sidebar-brand">Consult<span>Link</span></div>
                 <div class="status-panel glass">
-                    <label>Availability Matrix</label>
+                    <label>Your Active Status</label>
                     <select id="consultant-status-toggle" onchange="App.updateConsultantStatus(this.value)">
-                        <option value="Available">Available (Broadcasting)</option>
-                        <option value="Busy">Busy (Locked)</option>
-                        <option value="Offline">Offline (Stealth)</option>
+                        <option value="Available">Available (Accepting Offers)</option>
+                        <option value="Busy">Busy</option>
+                        <option value="Offline">Offline</option>
                     </select>
                 </div>
                 <nav class="sidebar-menu">
-                    <a href="#" class="active">Operator Dashboard</a>
+                    <a href="#" class="active">Consultant Panel</a>
                 </nav>
                 <div class="sidebar-footer">
                     <span id="consultant-profile-name" class="profile-name">Consultant Node</span>
-                    <button class="btn btn-sm btn-danger" onclick="App.logout()">Disconnect</button>
+                    <button class="btn btn-sm btn-danger" onclick="App.logout()">Sign Out</button>
                 </div>
             </aside>
             <main class="main-content">
                 <header class="content-header">
-                    <h2>Expert Practitioner Console</h2>
-                    <div class="system-status"><span class="indicator live"></span>Verified Agent</div>
+                    <h2>Consultant Portal</h2>
+                    <div class="system-status"><span class="indicator live"></span>Verified Profile</div>
                 </header>
                 <div class="metrics-grid">
-                    <div class="metric-card glass"><h5>Accrued Net Yield</h5><h2 id="m-consultant-earnings">K0.00</h2></div>
-                    <div class="metric-card glass"><h5>Domain Authority Rating</h5><h2 id="m-consultant-rating">5.00</h2></div>
+                    <div class="metric-card glass"><h5>Total Earnings</h5><h2 id="m-consultant-earnings">K0.00</h2></div>
+                    <div class="metric-card glass"><h5>Platform Rating</h5><h2 id="m-consultant-rating">5.00</h2></div>
                 </div>
-                <h3 class="section-title">Incoming Request Pipelines</h3>
+                <h3 class="section-title">Open Client Proposals</h3>
                 <div class="table-container glass">
                     <table class="table">
                         <thead>
-                            <tr><th>Request ID</th><th>Client Identity</th><th>Title</th><th>Action Vectors</th></tr>
+                            <tr><th>Request ID</th><th>Client Profile</th><th>Project Title</th><th>Actions</th></tr>
                         </thead>
                         <tbody id="consultant-queue-table">
-                            <tr><td colspan="4" class="text-center">Scanning synchronization nodes...</td></tr>
+                            <tr><td colspan="4" class="text-center empty-state">Scanning for open requests...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -585,83 +615,45 @@
         </div>
     </template>
 
-    <!-- VIEW TEMPLATE: SYSTEM ROOT COMMAND CENTER -->
     <template id="view-admin-dashboard">
         <div class="dashboard-layout">
             <aside class="sidebar">
                 <div class="sidebar-brand">Consult<span>Admin</span></div>
                 <nav class="sidebar-menu">
-                    <a href="#" class="active">Core Analytics Engine</a>
+                    <a href="#" class="active">Platform Analytics</a>
                 </nav>
                 <div class="sidebar-footer">
-                    <span class="profile-name">Root Administrator</span>
-                    <button class="btn btn-sm btn-danger" onclick="App.logout()">Kill Session</button>
+                    <span class="profile-name">Platform Admin</span>
+                    <button class="btn btn-sm btn-danger" onclick="App.logout()">Sign Out</button>
                 </div>
             </aside>
             <main class="main-content">
                 <header class="content-header">
-                    <h2>Platform Root Command Center</h2>
+                    <h2>Admin Management Console</h2>
                 </header>
-                <h3 class="section-title">Consultant Verification Pipeline</h3>
+                <h3 class="section-title">Pending Consultant Verification Profiles</h3>
                 <div class="table-container glass">
                     <table class="table">
                         <thead>
-                            <tr><th>Consultant ID</th><th>Specialty Node</th><th>Rate/hr</th><th>Approval Vector</th></tr>
+                            <tr><th>Consultant ID</th><th>Specialty</th><th>Hourly Rate</th><th>Approvals</th></tr>
                         </thead>
                         <tbody id="admin-consultants-table">
-                            <tr><td colspan="4" class="text-center">Querying node registries...</td></tr>
+                            <tr><td colspan="4" class="text-center empty-state">Querying database registries...</td></tr>
                         </tbody>
                     </table>
                 </div>
             </main>
         </div>
     </template>
-    <footer style="
-    width: 100%; 
-    padding: 2rem 1rem; 
-    margin-top: auto; 
-    border-top: 1px solid rgba(255, 255, 255, 0.05); 
-    background: rgba(13, 18, 34, 0.4); 
-    backdrop-filter: blur(8px); 
-    text-align: center;
-">
-    <div style="
-        max-width: 1200px; 
-        margin: 0 auto; 
-        display: flex; 
-        flex-direction: column; 
-        align-items: center; 
-        gap: 0.5rem;
-    ">
-        <p style="
-            font-size: 0.85rem; 
-            color: rgba(243, 244, 246, 0.6); 
-            letter-spacing: 0.5px;
-        ">
-            &copy; 2026 ConsultLink Engine Platform. All rights reserved.
-        </p>
-        <p style="
-            font-size: 0.8rem; 
-            color: rgba(243, 244, 246, 0.4);
-        ">
-            Engineered & Maintained by 
-            <span style="
-                font-weight: 600; 
-                background: linear-gradient(135deg, #06B6D4, #8B5CF6); 
-                -webkit-background-clip: text; 
-                -webkit-text-fill-color: transparent;
-                letter-spacing: 0.5px;
-            ">Vyeta Digital Solutions</span>
-        </p>
-    </div>
-</footer>
 
+    <footer style="width: 100%; padding: 2rem 1rem; margin-top: auto; border-top: 1px solid rgba(255, 255, 255, 0.05); background: rgba(13, 18, 34, 0.4); backdrop-filter: blur(8px); text-align: center; flex-shrink: 0;">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+            <p style="font-size: 0.85rem; color: rgba(243, 244, 246, 0.6); letter-spacing: 0.5px;">&copy; 2026 ConsultLink Platform. All rights reserved.</p>
+            <p style="font-size: 0.8rem; color: rgba(243, 244, 246, 0.4);">Engineered & Maintained by <span style="font-weight: 600; background: linear-gradient(135deg, #06B6D4, #8B5CF6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 0.5px;">Vyeta Digital Solutions</span></p>
+        </div>
+    </footer>
 
-    <!-- LOGICAL ENGINE PIPELINE SCRIPT -->
     <script>
-        /**
-         * SDK Core Bridge Driver to handle fetch interactions with Google Apps Script
-         */
         const ConsultLinkSDK = {
             // REPLACEMENT REQUIRED: Put your macro deployment URL here
             endpoint: "https://script.google.com/macros/s/AKfycbwYOUR_DEPLOYMENT_ID/exec",
@@ -678,9 +670,9 @@
                         body: JSON.stringify(bodyParameters)
                     });
 
-                    if (!response.ok) throw new Error(`HTTP system degradation: ${response.statusText}`);
+                    if (!response.ok) throw new Error(`Network response issue: ${response.statusText}`);
                     const data = await response.json();
-                    if (!data.success) throw new Error(data.message || "Execution verification rejected by backend.");
+                    if (!data.success) throw new Error(data.message || "Request was rejected by database.");
                     return data;
                 } catch (error) {
                     console.error(`[SDK Engine Exception]:`, error);
@@ -689,9 +681,6 @@
             }
         };
 
-        /**
-         * Web View Client Router Logic Engine
-         */
         const Router = {
             currentView: null,
             init() {
@@ -712,9 +701,6 @@
             }
         };
 
-        /**
-         * Global Application Controller State Machine
-         */
         const App = {
             isSignUpMode: false,
 
@@ -741,11 +727,12 @@
                 e.preventDefault();
                 this.isSignUpMode = !this.isSignUpMode;
                 
-                document.getElementById('auth-title').innerText = this.isSignUpMode ? 'Create Core Node Profile' : 'Welcome to ConsultLink';
+                document.getElementById('auth-title').innerText = this.isSignUpMode ? 'Create Your Account' : 'Welcome Back';
+                document.getElementById('auth-subtitle').innerText = this.isSignUpMode ? 'Join us as a client or verified advisor.' : 'Sign in to access your dashboard workspace.';
                 document.getElementById('group-fullname').style.display = this.isSignUpMode ? 'block' : 'none';
                 document.getElementById('group-role').style.display = this.isSignUpMode ? 'block' : 'none';
-                document.getElementById('auth-submit-btn').innerText = this.isSignUpMode ? 'Provision Identity' : 'Authenticate Session';
-                document.getElementById('auth-toggle-mode').innerText = this.isSignUpMode ? 'Already registered on ledger? Authenticate instead' : 'Need a production access key? Create account';
+                document.getElementById('auth-submit-btn').innerText = this.isSignUpMode ? 'Create Account' : 'Sign In';
+                document.getElementById('auth-toggle-mode').innerText = this.isSignUpMode ? 'Already have an account? Sign in' : 'New to the platform? Create an account';
                 
                 if (this.isSignUpMode) {
                     document.getElementById('auth-role').addEventListener('change', (ev) => {
@@ -759,6 +746,12 @@
 
             async handleAuth(e) {
                 e.preventDefault();
+                const btn = document.getElementById('auth-submit-btn');
+                const originalText = btn.innerText;
+                
+                btn.innerText = "Processing...";
+                btn.disabled = true;
+
                 const email = document.getElementById('auth-email').value;
                 const password = document.getElementById('auth-password').value;
 
@@ -774,7 +767,7 @@
                         }
 
                         await ConsultLinkSDK.request('registerUser', payload);
-                        this.showToast("Node Identity verified. Proceed to sign-in protocol.");
+                        this.showToast("Account created successfully. You can now sign in.");
                         this.isSignUpMode = false;
                         Router.navigate('auth');
                     } else {
@@ -783,17 +776,20 @@
                         sessionStorage.setItem('consultlink_session_role', data.user.role);
                         sessionStorage.setItem('consultlink_session_user', JSON.stringify(data.user));
                         
-                        this.showToast(`Access Cleared. Identity confirmed.`);
+                        this.showToast(`Welcome back, ${data.user.fullName}`);
                         Router.navigate(`${data.user.role}-dashboard`);
                     }
                 } catch (err) {
                     this.showToast(err.message, 'error');
+                } finally {
+                    btn.innerText = originalText;
+                    btn.disabled = false;
                 }
             },
 
             logout() {
                 sessionStorage.clear();
-                this.showToast("Session dropped. Node disconnected.");
+                this.showToast("Signed out successfully.");
                 Router.navigate('landing');
             },
 
@@ -819,7 +815,7 @@
                     tableBody.innerHTML = '';
                     
                     if(requests.length === 0) {
-                        tableBody.innerHTML = `<tr><td colspan="5" class="text-center">No transactions on this pipeline.</td></tr>`;
+                        tableBody.innerHTML = `<tr><td colspan="5" class="text-center empty-state">You haven't requested any consultations yet. Click 'Book a Consultant' to get started!</td></tr>`;
                         return;
                     }
 
@@ -829,18 +825,22 @@
                             <td>${req.id.substring(0,8)}</td>
                             <td><span class="badge">${req.category}</span></td>
                             <td>${req.title}</td>
-                            <td><span class="status-lbl">${req.status}</span></td>
-                            <td>${req.status === 'Matched' ? `<button class="btn btn-sm btn-primary" onclick="App.processPayment('${req.id}')">Settle Invoicing</button>` : 'System Sync Continuous'}</td>
+                            <td><span class="status-lbl">${req.status === 'Open' ? 'Finding Match' : req.status}</span></td>
+                            <td>${req.status === 'Matched' ? `<button class="btn btn-sm btn-primary" onclick="App.processPayment('${req.id}')">Approve & Pay Invoice</button>` : '<span style="color:var(--text-secondary); font-size:0.85rem">No action required</span>'}</td>
                         `;
                         tableBody.appendChild(tr);
                     });
                 } catch(err) {
-                    this.showToast("Failed to initialize remote structural metrics.", "error");
+                    this.showToast("Failed to sync your dashboard history.", "error");
                 }
             },
 
             async submitRequest(e) {
                 e.preventDefault();
+                const btn = document.getElementById('req-submit-btn');
+                btn.innerText = "Submitting...";
+                btn.disabled = true;
+
                 const category = document.getElementById('req-category').value;
                 const title = document.getElementById('req-title').value;
                 const description = document.getElementById('req-description').value;
@@ -858,18 +858,21 @@
 
                 try {
                     await ConsultLinkSDK.request('createRequest', { category, title, description, fileData });
-                    this.showToast("Deployment system accepted configuration parameters.");
+                    this.showToast("Your project request has been published to our expert network!");
                     this.switchTab('client-overview');
                     this.loadClientDashboardData();
                 } catch(err) {
                     this.showToast(err.message, "error");
+                } finally {
+                    btn.innerText = "Find Matched Consultant";
+                    btn.disabled = false;
                 }
             },
 
             async processPayment(requestId) {
                 try {
                     await ConsultLinkSDK.request('executePaymentSimulator', { requestId });
-                    this.showToast("Transactional confirmation ledger cleared.");
+                    this.showToast("Payment processed successfully.");
                     this.loadClientDashboardData();
                 } catch(err) {
                     this.showToast(err.message, "error");
@@ -888,7 +891,7 @@
                     tableBody.innerHTML = '';
                     
                     if(queue.length === 0) {
-                        tableBody.innerHTML = `<tr><td colspan="4" class="text-center">No active work packets in pipeline.</td></tr>`;
+                        tableBody.innerHTML = `<tr><td colspan="4" class="text-center empty-state">No open project listings match your criteria right now. Check back soon!</td></tr>`;
                         return;
                     }
 
@@ -896,21 +899,21 @@
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
                             <td>${item.id.substring(0,8)}</td>
-                            <td>Secure Masked Node</td>
+                            <td>Anonymous Client</td>
                             <td>${item.title}</td>
-                            <td><button class="btn btn-sm btn-primary" onclick="App.acceptJob('${item.id}')">Accept Resource Frame</button></td>
+                            <td><button class="btn btn-sm btn-primary" onclick="App.acceptJob('${item.id}')">Accept Offer</button></td>
                         `;
                         tableBody.appendChild(tr);
                     });
                 } catch (err) {
-                    this.showToast("Failed to compile work metrics queue.", "error");
+                    this.showToast("Failed to compile incoming requests.", "error");
                 }
             },
 
             async acceptJob(requestId) {
                 try {
                     await ConsultLinkSDK.request('acceptConsultationRequest', { requestId });
-                    this.showToast("Job added to operational block ledger.");
+                    this.showToast("Proposal accepted. Client has been notified.");
                     this.loadConsultantDashboardData();
                 } catch(err) {
                     this.showToast(err.message, "error");
@@ -920,7 +923,7 @@
             async updateConsultantStatus(status) {
                 try {
                     await ConsultLinkSDK.request('setConsultantStatus', { status });
-                    this.showToast(`Presence state modified -> ${status}`);
+                    this.showToast(`Your profile status is now set to: ${status}`);
                 } catch(err) {
                     this.showToast(err.message, "error");
                 }
@@ -938,19 +941,19 @@
                             <td>${c.id.substring(0,8)}</td>
                             <td>${c.specialty}</td>
                             <td>K${c.ratePerHour}/hr</td>
-                            <td>${c.isApproved ? '<span class="status-lbl">Verified Active</span>' : `<button class="btn btn-sm btn-primary" onclick="App.approveConsultant('${c.id}')">Approve Core Node</button>`}</td>
+                            <td>${c.isApproved ? '<span class="status-lbl">Verified Active</span>' : `<button class="btn btn-sm btn-primary" onclick="App.approveConsultant('${c.id}')">Approve Expert</button>`}</td>
                         `;
                         tableBody.appendChild(tr);
                     });
                 } catch(err) {
-                    this.showToast("Admin dashboard data stream interrupted.", "error");
+                    this.showToast("Admin dashboard data sync interrupted.", "error");
                 }
             },
 
             async approveConsultant(consultantId) {
                 try {
                     await ConsultLinkSDK.request('approveConsultantNode', { consultantId });
-                    this.showToast("Operator credential clearance completed.");
+                    this.showToast("Consultant profile has been verified.");
                     this.loadAdminDashboardData();
                 } catch(err) {
                     this.showToast(err.message, "error");
@@ -967,7 +970,6 @@
             }
         };
 
-        // Application Lifecyle Boot Init Hooks
         document.addEventListener("DOMContentLoaded", () => {
             Router.init();
             App.init();
