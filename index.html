@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ConsultLink // Expert Advisory Platform</title>
+    <title>ConsultLink // Enterprise SaaS Specialist Platform</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -19,14 +19,11 @@
             --accent-cyan: #06B6D4;
             --danger: #EF4444;
             --success: #10B981;
+            --warning: #F59E0B;
             --font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             background-color: var(--bg-main);
@@ -38,7 +35,6 @@
             flex-direction: column;
         }
 
-        /* Glassmorphism Design System */
         .glass {
             background: var(--bg-card);
             backdrop-filter: blur(16px);
@@ -53,669 +49,246 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* Layout Frameworks */
-        .landing-page {
-            position: relative;
-            padding: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        /* FIXED NAVBAR ALIGNMENT */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 4rem;
-            padding: 1rem 0;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            cursor: pointer;
-            text-decoration: none;
-            color: var(--text-primary);
-            line-height: 1;
-        }
+        .landing-page { padding: 2rem; max-width: 1200px; margin: 0 auto; width: 100%; flex: 1; display: flex; flex-direction: column; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4rem; width: 100%; }
+        .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.5px; }
         .logo span { color: var(--primary-glow); }
 
-        /* FIXED NAV ACTIONS ALIGNMENT */
-        .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
+        .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; margin: auto 0; }
+        @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 2rem; } .hero-left { margin: 0 auto; max-width: 600px; } }
 
-        .hero-section {
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto 3rem;
-            position: relative;
-            padding-top: 1rem;
-        }
-
-        .hero-glow {
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            background: var(--primary-glow);
-            filter: blur(150px);
-            top: -50px;
-            left: calc(50% - 150px);
-            z-index: -1;
-            opacity: 0.25;
-        }
-
-        h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            line-height: 1.15;
-            margin-bottom: 1.5rem;
-            letter-spacing: -1.5px;
-        }
-
+        h1 { font-size: 3.2rem; font-weight: 800; line-height: 1.15; margin-bottom: 1.5rem; letter-spacing: -1.5px; }
+        
+        /* The requested text body size reduction */
         .hero-subtitle {
             color: var(--text-secondary);
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
+            font-size: 1.05rem; 
+            margin-bottom: 2.5rem;
             line-height: 1.6;
         }
 
-        /* Premium Interface Controls */
-        .btn {
-            font-family: var(--font-family);
-            padding: 0.65rem 1.4rem;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-            border: none;
-            font-size: 0.9rem;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            line-height: 1;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary-glow), #7C3AED);
-            color: white;
-            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.25);
-        }
-        .btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 24px rgba(139, 92, 246, 0.35);
-        }
-        .btn-secondary {
-            background: transparent;
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-        }
+        /* Simulated Live Console Dashboard UI */
+        .simulated-console { padding: 1.5rem; border: 1px solid rgba(6, 182, 212, 0.2); box-shadow: 0 15px 35px rgba(0,0,0,0.4); text-align: left; }
+        .console-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-color); }
+        .console-title { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--accent-cyan); display: flex; align-items: center; gap: 0.5rem; }
+        .console-status { font-size: 0.75rem; color: var(--success); display: flex; align-items: center; gap: 0.35rem; }
+        .dot { width: 6px; height: 6px; background: var(--success); border-radius: 50%; display: inline-block; box-shadow: 0 0 8px var(--success); }
+        
+        .expert-pool-list { display: flex; flex-direction: column; gap: 0.75rem; }
+        .pool-item { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; background: rgba(255,255,255,0.02); border-radius: 6px; border: 1px solid rgba(255,255,255,0.03); }
+        .pool-info { display: flex; align-items: center; gap: 0.75rem; }
+        .pool-name { font-size: 0.9rem; font-weight: 600; }
+        .pool-count { font-size: 0.8rem; background: rgba(6, 182, 212, 0.1); color: var(--accent-cyan); padding: 0.15rem 0.5rem; border-radius: 20px; font-weight: 700; }
+        .pool-action-btn { background: transparent; border: 1px solid rgba(139, 92, 246, 0.4); color: var(--primary-glow); padding: 0.3rem 0.6rem; font-size: 0.75rem; border-radius: 4px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
+        .pool-action-btn:hover { background: var(--primary-glow); color: white; }
+
+        .btn { font-family: var(--font-family); padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; border: none; font-size: 0.9rem; }
+        .btn-primary { background: linear-gradient(135deg, var(--primary-glow), #7C3AED); color: white; box-shadow: 0 4px 20px rgba(139, 92, 246, 0.25); }
+        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(139, 92, 246, 0.35); }
+        .btn-secondary { background: transparent; color: var(--text-primary); border: 1px solid var(--border-color); }
         .btn-secondary:hover { background: rgba(255,255,255,0.05); }
         .btn-danger { background: var(--danger); color: white; }
+        .btn-warning { background: var(--warning); color: white; }
         .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
-        .btn-block { width: 100%; display: flex; }
+        .btn-block { width: 100%; display: block; }
 
-        /* CLEVER MATCH ENGINE CONSOLE STYLES */
-        .console-container {
-            max-width: 850px;
-            margin: 0 auto 4rem;
-            padding: 1.5rem;
-        }
-        .console-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 1rem;
-            margin-bottom: 1.5rem;
-        }
-        .console-tabs {
-            display: flex;
-            gap: 0.5rem;
-        }
-        .console-tab {
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            font-family: var(--font-family);
-            font-size: 0.85rem;
-            font-weight: 600;
-            padding: 0.5rem 1rem;
-            cursor: pointer;
-            border-radius: 6px;
-            transition: all 0.15s ease;
-        }
-        .console-tab.active {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-        }
-        .expert-card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1rem;
-        }
-        .expert-mini-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1.25rem;
-            text-align: left;
-            position: relative;
-        }
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--success);
-            border-radius: 50%;
-            display: inline-block;
-            box-shadow: 0 0 8px var(--success);
-            margin-right: 0.4rem;
-        }
-        .card-badge {
-            float: right;
-            background: rgba(6, 182, 212, 0.15);
-            color: var(--accent-cyan);
-            font-size: 0.75rem;
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-        .feed-stream {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-            max-height: 200px;
-            overflow: hidden;
-        }
-        .feed-item {
-            padding: 0.75rem 1rem;
-            background: rgba(255,255,255,0.02);
-            border-left: 3px solid var(--primary-glow);
-            border-radius: 0 6px 6px 0;
-            font-size: 0.85rem;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        /* Complex Dashboard App Shell */
-        .dashboard-layout {
-            display: flex;
-            min-height: calc(100vh - 120px);
-            width: 100%;
-        }
-
-        .sidebar {
-            width: 280px;
-            background: #0D1222;
-            border-right: 1px solid var(--border-color);
-            padding: 2rem 1.5rem;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .sidebar-brand {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 2.5rem;
-        }
+        .dashboard-layout { display: flex; min-height: 100vh; flex: 1; }
+        .sidebar { width: 280px; background: #0D1222; border-right: 1px solid var(--border-color); padding: 2rem 1.5rem; display: flex; flex-direction: column; }
+        .sidebar-brand { font-size: 1.3rem; font-weight: 700; margin-bottom: 2.5rem; }
         .sidebar-brand span { color: var(--accent-cyan); }
+        .sidebar-menu { display: flex; flex-direction: column; gap: 0.5rem; flex-grow: 1; }
+        .sidebar-menu a { color: var(--text-secondary); text-decoration: none; padding: 0.75rem 1rem; border-radius: 8px; font-weight: 500; transition: all 0.15s ease; }
+        .sidebar-menu a.active, .sidebar-menu a:hover { background: rgba(255, 255, 255, 0.04); color: var(--text-primary); }
+        .sidebar-footer { padding-top: 1.5rem; border-top: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 0.75rem; }
+        .profile-name { font-size: 0.85rem; font-weight: 600; color: var(--text-primary); }
 
-        .sidebar-menu {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            flex-grow: 1;
-        }
+        .main-content { flex-grow: 1; padding: 3rem; overflow-y: auto; }
+        .content-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; }
+        .system-status { font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; }
+        .indicator.live { width: 8px; height: 8px; background: var(--success); border-radius: 50%; box-shadow: 0 0 10px var(--success); }
 
-        .sidebar-menu a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            padding: 0.75rem 1rem;
-            border-radius: 8px;
-            font-weight: 500;
-            transition: all 0.15s ease;
-        }
-        .sidebar-menu a.active, .sidebar-menu a:hover {
-            background: rgba(255, 255, 255, 0.04);
-            color: var(--text-primary);
-        }
+        .status-panel { padding: 1rem; margin-bottom: 1.5rem; }
+        .status-panel label { display: block; font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 0.5rem; text-transform: uppercase; }
 
-        .sidebar-footer {
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
+        .metric-card { padding: 1.5rem; }
+        .metric-card h5 { color: var(--text-secondary); font-weight: 500; margin-bottom: 0.5rem; font-size: 0.85rem; text-transform: uppercase; }
+        .metric-card h2 { font-size: 2rem; font-weight: 700; }
 
-        .profile-name {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
+        .section-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 1.5rem; }
+        .max-width-md { max-width: 600px; padding: 2.5rem; }
 
-        .main-content {
-            flex-grow: 1;
-            padding: 3rem;
-            overflow-y: auto;
-        }
+        .table-container { width: 100%; overflow-x: auto; }
+        .table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
+        .table th { padding: 1rem 1.5rem; color: var(--text-secondary); font-weight: 600; border-bottom: 1px solid var(--border-color); }
+        .table td { padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--border-color); color: var(--text-primary); }
+        .badge { background: rgba(139, 92, 246, 0.15); color: var(--primary-glow); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; }
+        .status-lbl { font-weight: 600; font-size: 0.85rem; color: var(--accent-cyan); }
 
-        .content-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2.5rem;
-        }
+        .form-group { margin-bottom: 1.25rem; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 0.5rem; color: var(--text-secondary); }
+        input, select, textarea { width: 100%; padding: 0.75rem 1rem; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-family: var(--font-family); outline: none; }
+        input:focus, select:focus, textarea:focus { border-color: var(--primary-glow); }
 
-        .system-status {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
+        .auth-container { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 1rem; }
+        .auth-card { width: 100%; max-width: 440px; padding: 2.5rem; }
 
-        .indicator.live {
-            width: 8px;
-            height: 8px;
-            background: var(--success);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--success);
-        }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 20000; }
+        .modal-card { width: 100%; max-width: 460px; padding: 2.5rem; }
 
-        .status-panel {
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-        }
-        .status-panel label {
-            display: block;
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            margin-bottom: 0.5rem;
-            text-transform: uppercase;
-        }
+        .toast-container { position: fixed; bottom: 2rem; right: 2rem; display: flex; flex-direction: column; gap: 0.75rem; z-index: 30000; }
+        .toast { padding: 1rem 1.5rem; border-radius: 8px; color: white; font-weight: 600; font-size: 0.9rem; box-shadow: 0 10px 30px rgba(0,0,0,0.5); animation: slideIn 0.3s forwards; }
+        @keyframes slideIn { from { transform: translateX(120%); } to { transform: translateX(0); } }
 
-        /* Metrics Data Engine Layout */
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-        }
-
-        .metric-card {
-            padding: 1.5rem;
-        }
-        .metric-card h5 {
-            color: var(--text-secondary);
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .metric-card h2 {
-            font-size: 2rem;
-            font-weight: 700;
-        }
-
-        .section-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-        }
-
-        .max-width-md {
-            max-width: 600px;
-            padding: 2.5rem;
-        }
-
-        /* Tabular Data Components */
-        .table-container {
-            width: 100%;
-            overflow-x: auto;
-        }
-
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-            font-size: 0.9rem;
-        }
-
-        .table th {
-            padding: 1rem 1.5rem;
-            color: var(--text-secondary);
-            font-weight: 600;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .table td {
-            padding: 1.2rem 1.5rem;
-            border-bottom: 1px solid var(--border-color);
-            color: var(--text-primary);
-        }
-
-        .text-center { text-align: center; }
-        .badge {
-            background: rgba(139, 92, 246, 0.15);
-            color: var(--primary-glow);
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-        .status-lbl {
-            font-weight: 600;
-            font-size: 0.85rem;
-            color: var(--accent-cyan);
-        }
-
-        /* Form Subsystem Elements */
-        .form-group {
-            margin-bottom: 1.25rem;
-        }
-        .form-group label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-            color: var(--text-secondary);
-        }
-        input, select, textarea {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            color: var(--text-primary);
-            font-family: var(--font-family);
-            outline: none;
-            transition: border-color 0.15s ease;
-        }
-        input:focus, select:focus, textarea:focus {
-            border-color: var(--primary-glow);
-        }
-
-        /* Auth Portal Card Components */
-        .auth-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: calc(100vh - 120px);
-            padding: 2rem 1rem;
-        }
-        .auth-card {
-            width: 100%;
-            max-width: 440px;
-            padding: 2.5rem;
-            position: relative;
-        }
-        .back-home-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.85rem;
-            margin-bottom: 1.5rem;
-            transition: color 0.2s ease;
-        }
-        .back-home-btn:hover {
-            color: var(--text-primary);
-        }
-        .auth-footer {
-            margin-top: 1.5rem;
-            text-align: center;
-        }
-        .auth-footer a {
-            color: var(--accent-cyan);
-            font-size: 0.85rem;
-            text-decoration: none;
-        }
-
-        /* Global Dynamic Toast Engine layout */
-        .toast-container {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-            z-index: 10000;
-        }
-        .toast {
-            padding: 1rem 1.5rem;
-            border-radius: 8px;
-            color: white;
-            font-weight: 600;
-            font-size: 0.9rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            animation: slideIn 0.3s forwards cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        @keyframes slideIn {
-            from { transform: translateX(120%); }
-            to { transform: translateX(0); }
-        }
-
-        /* Empty State Clean UI */
-        .empty-state {
-            padding: 3rem 1.5rem;
-            text-align: center;
-            color: var(--text-secondary);
-        }
-
-        @media(max-width: 768px) {
-            .dashboard-layout { flex-direction: column; }
-            .sidebar { width: 100%; }
-            .main-content { padding: 1.5rem; }
-            h1 { font-size: 2.2rem; }
-        }
+        footer { width: 100%; padding: 2rem 1rem; border-top: 1px solid rgba(255, 255, 255, 0.05); background: rgba(13, 18, 34, 0.4); backdrop-filter: blur(8px); text-align: center; }
     </style>
 </head>
 <body>
 
     <div id="toast-container" class="toast-container"></div>
+    <div id="modal-layer"></div>
+    <div id="app-root" style="flex: 1; display: flex; flex-direction: column;"></div>
 
-    <div id="app-root" style="flex: 1 0 auto;"></div>
-
+    <!-- VIEW: LANDING PAGE WITH INTERACTIVE SIMULATED CONSOLE -->
     <template id="view-landing">
         <div class="landing-page">
             <header class="navbar">
-                <a href="#" class="logo" onclick="Router.navigate('landing')">Consult<span>Link</span></a>
-                <div class="nav-actions">
-                    <button class="btn btn-secondary" onclick="Router.navigate('auth')">Sign In</button>
-                    <button class="btn btn-primary" onclick="Router.navigate('auth')">Get Started</button>
-                </div>
+                <div class="logo">Consult<span>Link</span></div>
+                <div><button class="btn btn-primary" onclick="Router.navigate('auth')">Launch Console</button></div>
             </header>
-            <main class="hero-section">
-                <div class="hero-glow"></div>
-                <h1>Instant Access to Verified <br><span class="text-gradient">Professional Advice.</span></h1>
-                <p class="hero-subtitle">Connect with top-tier verified specialists in law, medicine, finance, IT, mechanics & agriculture. Schedule sessions, share files, and get answers and solutions to your problems securely in minutes.</p>
-                <div class="cta-group">
-                    <button class="btn btn-primary btn-lg" onclick="Router.navigate('auth')">Talk to an Expert Now</button>
+            
+            <div class="hero-grid">
+                <div class="hero-left">
+                    <h1>On-Demand Expert Advisory <br><span class="text-gradient">Engineered for Precision.</span></h1>
+                    <p class="hero-subtitle">Connect with top-tier verified specialists in law, medicine, finance, IT, mechanics & agriculture. Schedule sessions, share files, and get answers and solutions to your problems securely in minutes.</p>
+                    <button class="btn btn-primary btn-lg" onclick="Router.navigate('auth')">Get Access Key</button>
                 </div>
-            </main>
-
-            <section class="console-container glass">
-                <div class="console-header">
-                    <div style="display:flex; align-items:center; gap:0.5rem;">
-                        <span class="indicator live"></span>
-                        <span style="font-size:0.85rem; font-weight:700; letter-spacing:0.5px; text-transform:uppercase;">Live Matching Network</span>
-                    </div>
-                    <div class="console-tabs">
-                        <button class="console-tab active" id="btn-tab-experts" onclick="App.toggleConsoleTab('experts')">Available Experts Now</button>
-                        <button class="console-tab" id="btn-tab-feed" onclick="App.toggleConsoleTab('feed')">Recent Placements</button>
-                    </div>
-                </div>
-
-                <div id="console-content-experts" class="expert-card-grid">
-                    <div class="expert-mini-card">
-                        <span class="card-badge">Legal</span>
-                        <h4 style="margin-bottom:0.25rem;">Adv. Mwansa K.</h4>
-                        <p style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:1rem;">Corporate & IP Frameworks</p>
-                        <div style="display:flex; justify-content:between; align-items:center; width:100%">
-                            <span style="font-size:0.85rem; font-weight:600;"><span class="status-dot"></span>Online</span>
-                            <button class="btn btn-primary btn-sm" style="margin-left:auto;" onclick="Router.navigate('auth')">Request Call</button>
-                        </div>
-                    </div>
-                    <div class="expert-mini-card">
-                        <span class="card-badge">Financial</span>
-                        <h4 style="margin-bottom:0.25rem;">Chileshe M., CFA</h4>
-                        <p style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:1rem;">Tax Advisory & Compliance</p>
-                        <div style="display:flex; justify-content:between; align-items:center; width:100%">
-                            <span style="font-size:0.85rem; font-weight:600;"><span class="status-dot"></span>Online</span>
-                            <button class="btn btn-primary btn-sm" style="margin-left:auto;" onclick="Router.navigate('auth')">Request Call</button>
-                        </div>
-                    </div>
-                    <div class="expert-mini-card">
-                        <span class="card-badge">Software</span>
-                        <h4 style="margin-bottom:0.25rem;">Dev. Suwilanji P.</h4>
-                        <p style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:1rem;">Systems Architecture & Dev</p>
-                        <div style="display:flex; justify-content:between; align-items:center; width:100%">
-                            <span style="font-size:0.85rem; font-weight:600;"><span class="status-dot"></span>Online</span>
-                            <button class="btn btn-primary btn-sm" style="margin-left:auto;" onclick="Router.navigate('auth')">Request Call</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="console-content-feed" class="feed-stream" style="display:none;">
-                    <div class="feed-item">
-                        <span>Corporate Legal expert assigned to FinTech regulatory review request.</span>
-                        <span style="color:var(--accent-cyan); font-weight:600;">Matched 3 mins ago</span>
-                    </div>
-                    <div class="feed-item">
-                        <span>Systems Engineering architect verified secure payload mapping layout.</span>
-                        <span style="color:var(--accent-cyan); font-weight:600;">Matched 14 mins ago</span>
-                    </div>
-                    <div class="feed-item">
-                        <span>Quantitative Financial strategist assigned to enterprise debt structure.</span>
-                        <span style="color:var(--accent-cyan); font-weight:600;">Matched 28 mins ago</span>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </template>
-
-    <template id="view-auth">
-        <div class="auth-container">
-            <div class="auth-card glass">
-                <a href="#" class="back-home-btn" onclick="Router.navigate('landing')">← Back to Home</a>
-                <h2 id="auth-title">Welcome Back</h2>
-                <p id="auth-subtitle" style="margin-bottom: 1.5rem; font-size: 0.9rem; color: var(--text-secondary);">Sign in to access your dashboard workspace.</p>
                 
-                <form id="auth-form" onsubmit="App.handleAuth(event)">
-                    <div class="form-group" id="group-fullname" style="display: none;">
-                        <label>Your Full Legal Name</label>
-                        <input type="text" id="auth-fullname" placeholder="e.g. John Doe">
+                <div class="hero-right">
+                    <!-- The Simulated Interactive Console Panel showing specialist states -->
+                    <div class="simulated-console glass">
+                        <div class="console-header">
+                            <div class="console-title"><span style="color:var(--primary-glow);">//</span> Availability Feed Matrix</div>
+                            <div class="console-status"><span class="dot"></span> Nodes Broadcasting</div>
+                        </div>
+                        <div class="expert-pool-list">
+                            <div class="pool-item">
+                                <div class="pool-info"><span class="pool-name">Legal Experts</span></div>
+                                <div style="display:flex; align-items:center; gap:1rem;"><span class="pool-count" id="count-legal">14 Online</span><button class="pool-action-btn" onclick="Router.navigate('auth')">Connect</button></div>
+                            </div>
+                            <div class="pool-item">
+                                <div class="pool-info"><span class="pool-name">Medical Experts</span></div>
+                                <div style="display:flex; align-items:center; gap:1rem;"><span class="pool-count" id="count-medical">9 Online</span><button class="pool-action-btn" onclick="Router.navigate('auth')">Connect</button></div>
+                            </div>
+                            <div class="pool-item">
+                                <div class="pool-info"><span class="pool-name">Financial Experts</span></div>
+                                <div style="display:flex; align-items:center; gap:1rem;"><span class="pool-count" id="count-financial">22 Online</span><button class="pool-action-btn" onclick="Router.navigate('auth')">Connect</button></div>
+                            </div>
+                            <div class="pool-item">
+                                <div class="pool-info"><span class="pool-name">IT Experts</span></div>
+                                <div style="display:flex; align-items:center; gap:1rem;"><span class="pool-count" id="count-it">31 Online</span><button class="pool-action-btn" onclick="Router.navigate('auth')">Connect</button></div>
+                            </div>
+                            <div class="pool-item">
+                                <div class="pool-info"><span class="pool-name">Mechanical Experts</span></div>
+                                <div style="display:flex; align-items:center; gap:1rem;"><span class="pool-count" id="count-mechanical">8 Online</span><button class="pool-action-btn" onclick="Router.navigate('auth')">Connect</button></div>
+                            </div>
+                            <div class="pool-item">
+                                <div class="pool-info"><span class="pool-name">Agricultural Experts</span></div>
+                                <div style="display:flex; align-items:center; gap:1rem;"><span class="pool-count" id="count-agricultural">12 Online</span><button class="pool-action-btn" onclick="Router.navigate('auth')">Connect</button></div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Email Address</label>
-                        <input type="email" id="auth-email" required placeholder="name@domain.com">
-                    </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" id="auth-password" required placeholder="••••••••">
-                    </div>
-                    <div class="form-group" id="group-role" style="display: none;">
-                        <label>I want to join as a:</label>
-                        <select id="auth-role">
-                            <option value="client">Client (Seeking Advice)</option>
-                            <option value="consultant">Consultant (Offering Advice)</option>
-                        </select>
-                    </div>
-                    <div class="form-group id-consultant-fields" id="group-specialty" style="display: none;">
-                        <label>Professional Domain Specialty</label>
-                        <select id="auth-specialty">
-                            <option value="legal">Legal Frameworks</option>
-                            <option value="medical">Medical Advisory</option>
-                            <option value="financial">Quantitative Finance</option>
-                            <option value="engineering">Systems Engineering</option>
-                        </select>
-                    </div>
-                    <div class="form-group id-consultant-fields" id="group-rate" style="display: none;">
-                        <label>Hourly Consulting Rate (ZMW)</label>
-                        <input type="number" id="auth-rate" value="1500" placeholder="1500">
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-block" id="auth-submit-btn">Sign In</button>
-                </form>
-                <div class="auth-footer">
-                    <a href="#" id="auth-toggle-mode" onclick="App.toggleAuthMode(event)">New to the platform? Create an account</a>
                 </div>
             </div>
         </div>
     </template>
 
+    <!-- VIEW: AUTHENTICATION -->
+    <template id="view-auth">
+        <div class="auth-container">
+            <div class="auth-card glass">
+                <h2 id="auth-title" style="margin-bottom:0.5rem;">Welcome to ConsultLink</h2>
+                <p id="auth-subtitle" style="margin-bottom: 1.5rem; font-size: 0.9rem; color: var(--text-secondary);">Sign in to access your workspace node.</p>
+                <form id="auth-form" onsubmit="App.handleAuth(event)">
+                    <div class="form-group" id="group-fullname" style="display: none;"><label>Legal Full Name</label><input type="text" id="auth-fullname" placeholder="Suwilanji Puta"></div>
+                    <div class="form-group"><label>Corporate Email</label><input type="email" id="auth-email" required placeholder="name@company.com"></div>
+                    <div class="form-group"><label>Password</label><input type="password" id="auth-password" required placeholder="••••••••"></div>
+                    <div class="form-group" id="group-role" style="display: none;">
+                        <label>Account Node Role</label>
+                        <select id="auth-role">
+                            <option value="client">Client Node</option>
+                            <option value="consultant">Consultant Node</option>
+                        </select>
+                    </div>
+                    <div class="form-group id-consultant-fields" id="group-specialty" style="display: none;">
+                        <label>Professional Domain Specialty</label>
+                        <select id="auth-specialty">
+                            <option value="legal">Legal Experts</option>
+                            <option value="medical">Medical Experts</option>
+                            <option value="financial">Financial Experts</option>
+                            <option value="it">IT Experts</option>
+                            <option value="mechanical">Mechanical Experts</option>
+                            <option value="agricultural">Agricultural Experts</option>
+                        </select>
+                    </div>
+                    <div class="form-group id-consultant-fields" id="group-rate" style="display: none;"><label>Hourly Rate (ZMW)</label><input type="number" id="auth-rate" value="1500"></div>
+                    <button type="submit" class="btn btn-primary btn-block" id="auth-submit-btn">Authenticate Session</button>
+                </form>
+                <div class="auth-footer" style="margin-top:1.5rem; text-align:center;"><a href="#" id="auth-toggle-mode" onclick="App.toggleAuthMode(event)" style="color:var(--accent-cyan); text-decoration:none; font-size:0.85rem;">Need an access path? Create account</a></div>
+            </div>
+        </div>
+    </template>
+
+    <!-- VIEW: CLIENT ENVIRONMENT -->
     <template id="view-client-dashboard">
         <div class="dashboard-layout">
             <aside class="sidebar">
                 <div class="sidebar-brand">Consult<span>Link</span></div>
                 <nav class="sidebar-menu">
-                    <a href="#" id="menu-link-client-overview" class="active" onclick="App.switchTab('client-overview')">Dashboard Overview</a>
-                    <a href="#" id="menu-link-client-new-request" onclick="App.switchTab('client-new-request')">Book a Consultant</a>
+                    <a href="#" id="menu-link-client-overview" class="active" onclick="App.switchTab('client-overview')">Console Matrix</a>
+                    <a href="#" id="menu-link-client-new-request" onclick="App.switchTab('client-new-request')">Submit Proposal</a>
                 </nav>
                 <div class="sidebar-footer">
-                    <span id="client-profile-name" class="profile-name">User Workstation</span>
-                    <button class="btn btn-sm btn-danger" onclick="App.logout()">Sign Out</button>
+                    <span id="client-profile-name" class="profile-name">Operator Node</span>
+                    <button class="btn btn-sm btn-danger" onclick="App.logout()">Terminate</button>
                 </div>
             </aside>
             <main class="main-content">
-                <header class="content-header">
-                    <h2>Client Dashboard</h2>
-                    <div class="system-status"><span class="indicator live"></span>Connected</div>
-                </header>
+                <header class="content-header"><h2>Client Operational Environment</h2><div class="system-status"><span class="indicator live"></span>Secure Node Link</div></header>
                 
                 <div id="tab-client-overview" class="dashboard-tab">
                     <div class="metrics-grid">
-                        <div class="metric-card glass"><h5>Active Requests</h5><h2 id="m-client-active">0</h2></div>
-                        <div class="metric-card glass"><h5>Total Investment</h5><h2 id="m-client-spent">K0.00</h2></div>
+                        <div class="metric-card glass"><h5>Active Sessions</h5><h2 id="m-client-active">0</h2></div>
+                        <div class="metric-card glass"><h5>System Trust Tier</h5><h2>Verified</h2></div>
                     </div>
-                    <h3 class="section-title">Your Consultation History</h3>
+                    <h3 class="section-title">Consultation Ledger Logs</h3>
                     <div class="table-container glass">
                         <table class="table">
-                            <thead>
-                                <tr><th>ID</th><th>Category</th><th>Topic Headline</th><th>Status</th><th>Actions</th></tr>
-                            </thead>
-                            <tbody id="client-requests-table">
-                                <tr><td colspan="5" class="text-center empty-state">Loading history logs...</td></tr>
-                            </tbody>
+                            <thead><tr><th>ID</th><th>Specialty Pool</th><th>Headline</th><th>Status</th><th>Actions</th></tr></thead>
+                            <tbody id="client-requests-table"><tr><td colspan="5" style="text-align:center; padding:2rem;">Awaiting database synchronization...</td></tr></tbody>
                         </table>
                     </div>
                 </div>
 
                 <div id="tab-client-new-request" class="dashboard-tab" style="display:none;">
                     <div class="card glass max-width-md">
-                        <h3 style="margin-bottom: 1.5rem;">Submit a Project Request</h3>
+                        <h3 style="margin-bottom: 1.5rem;">Deploy Core Request Parameters</h3>
                         <form id="request-form" onsubmit="App.submitRequest(event)">
                             <div class="form-group">
-                                <label>What field do you need help in?</label>
+                                <label>Target Domain Specialist</label>
                                 <select id="req-category">
-                                    <option value="legal">Legal Frameworks</option>
-                                    <option value="medical">Medical Advisory</option>
-                                    <option value="financial">Quantitative Finance</option>
-                                    <option value="engineering">Systems Engineering</option>
+                                    <option value="legal">Legal Experts</option>
+                                    <option value="medical">Medical Experts</option>
+                                    <option value="financial">Financial Experts</option>
+                                    <option value="it">IT Experts</option>
+                                    <option value="mechanical">Mechanical Experts</option>
+                                    <option value="agricultural">Agricultural Experts</option>
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label>Short Project Headline</label>
-                                <input type="text" id="req-title" required placeholder="e.g., Contract review for new digital platform">
-                            </div>
-                            <div class="form-group">
-                                <label>Tell us what you need in detail</label>
-                                <textarea id="req-description" rows="5" required placeholder="Provide clear contextual details about your requirements..."></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label>Attach Supporting Documents (Optional)</label>
-                                <input type="file" id="req-file">
-                            </div>
-                            <button type="submit" class="btn btn-primary" id="req-submit-btn">Find Matched Consultant</button>
+                            <div class="form-group"><label>Brief Title</label><input type="text" id="req-title" required placeholder="Describe task requirement..."></div>
+                            <div class="form-group"><label>Statement of Requirements / Context</label><textarea id="req-description" rows="5" required></textarea></div>
+                            <div class="form-group"><label>Payload Documentation attachment</label><input type="file" id="req-file"></div>
+                            <button type="submit" class="btn btn-primary">Initialize Matching Pipeline</button>
                         </form>
                     </div>
                 </div>
@@ -723,84 +296,76 @@
         </div>
     </template>
 
+    <!-- VIEW: CONSULTANT WORKSTATION -->
     <template id="view-consultant-dashboard">
         <div class="dashboard-layout">
             <aside class="sidebar">
                 <div class="sidebar-brand">Consult<span>Link</span></div>
                 <div class="status-panel glass">
-                    <label>Your Active Status</label>
+                    <label>Broadcast Presence</label>
                     <select id="consultant-status-toggle" onchange="App.updateConsultantStatus(this.value)">
-                        <option value="Available">Available (Accepting Offers)</option>
-                        <option value="Busy">Busy</option>
-                        <option value="Offline">Offline</option>
+                        <option value="Available">Available (Broadcasting)</option>
+                        <option value="Busy">Busy (Locked)</option>
+                        <option value="Offline">Offline (Stealth)</option>
                     </select>
                 </div>
-                <nav class="sidebar-menu">
-                    <a href="#" class="active">Consultant Panel</a>
-                </nav>
+                <nav class="sidebar-menu"><a href="#" class="active">Operator Dashboard</a></nav>
                 <div class="sidebar-footer">
-                    <span id="consultant-profile-name" class="profile-name">Consultant Node</span>
-                    <button class="btn btn-sm btn-danger" onclick="App.logout()">Sign Out</button>
+                    <span id="consultant-profile-name" class="profile-name">Consultant</span>
+                    <button class="btn btn-sm btn-danger" onclick="App.logout()">Disconnect</button>
                 </div>
             </aside>
             <main class="main-content">
-                <header class="content-header">
-                    <h2>Consultant Portal</h2>
-                    <div class="system-status"><span class="indicator live"></span>Verified Profile</div>
-                </header>
+                <header class="content-header"><h2>Specialist Execution Console</h2></header>
                 <div class="metrics-grid">
-                    <div class="metric-card glass"><h5>Total Earnings</h5><h2 id="m-consultant-earnings">K0.00</h2></div>
-                    <div class="metric-card glass"><h5>Platform Rating</h5><h2 id="m-consultant-rating">5.00</h2></div>
+                    <div class="metric-card glass"><h5>Domain Authority Rating</h5><h2 id="m-consultant-rating">5.00★</h2></div>
                 </div>
-                <h3 class="section-title">Open Client Proposals</h3>
+                <h3 class="section-title">Incoming Demand Ingestion Streams</h3>
                 <div class="table-container glass">
                     <table class="table">
-                        <thead>
-                            <tr><th>Request ID</th><th>Client Profile</th><th>Project Title</th><th>Actions</th></tr>
-                        </thead>
-                        <tbody id="consultant-queue-table">
-                            <tr><td colspan="4" class="text-center empty-state">Scanning for open requests...</td></tr>
-                        </tbody>
+                        <thead><tr><th>Request ID</th><th>Context Summary</th><th>Action Vectors</th></tr></thead>
+                        <tbody id="consultant-queue-table"><tr><td colspan="3" style="text-align:center; padding:2rem;">Scanning infrastructure grids...</td></tr></tbody>
                     </table>
                 </div>
             </main>
         </div>
     </template>
 
+    <!-- VIEW: PLATFORM CONTROL LAYER (ADMIN) -->
     <template id="view-admin-dashboard">
         <div class="dashboard-layout">
             <aside class="sidebar">
                 <div class="sidebar-brand">Consult<span>Admin</span></div>
-                <nav class="sidebar-menu">
-                    <a href="#" class="active">Platform Analytics</a>
-                </nav>
-                <div class="sidebar-footer">
-                    <span class="profile-name">Platform Admin</span>
-                    <button class="btn btn-sm btn-danger" onclick="App.logout()">Sign Out</button>
-                </div>
+                <nav class="sidebar-menu"><a href="#" class="active">Governance Matrix</a></nav>
+                <div class="sidebar-footer"><button class="btn btn-sm btn-danger" onclick="App.logout()">Kill Web Shell</button></div>
             </aside>
             <main class="main-content">
-                <header class="content-header">
-                    <h2>Admin Management Console</h2>
-                </header>
-                <h3 class="section-title">Pending Consultant Verification Profiles</h3>
-                <div class="table-container glass">
-                    <table class="table">
-                        <thead>
-                            <tr><th>Consultant ID</th><th>Specialty</th><th>Hourly Rate</th><th>Approvals</th></tr>
-                        </thead>
-                        <tbody id="admin-consultants-table">
-                            <tr><td colspan="4" class="text-center empty-state">Querying database registries...</td></tr>
-                        </tbody>
-                    </table>
+                <div style="margin-bottom: 3rem;">
+                    <h3 class="section-title">Consultant Verification Pipeline</h3>
+                    <div class="table-container glass">
+                        <table class="table">
+                            <thead><tr><th>Consultant ID</th><th>Domain</th><th>Rate / Hr</th><th>Clearance</th></tr></thead>
+                            <tbody id="admin-consultants-table"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="section-title">System Disputes & Escalation Queues</h3>
+                    <div class="table-container glass">
+                        <table class="table">
+                            <thead><tr><th>Dispute ID</th><th>Target Request</th><th>Narrative Context</th><th>Resolution Engine</th></tr></thead>
+                            <tbody id="admin-disputes-table"></tbody>
+                        </table>
+                    </div>
                 </div>
             </main>
         </div>
     </template>
 
-    <footer style="width: 100%; padding: 2rem 1rem; margin-top: auto; border-top: 1px solid rgba(255, 255, 255, 0.05); background: rgba(13, 18, 34, 0.4); backdrop-filter: blur(8px); text-align: center; flex-shrink: 0;">
+    <!-- BRAND FOOTPRINT CORNERSTONE -->
+    <footer id="system-footer">
         <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
-            <p style="font-size: 0.85rem; color: rgba(243, 244, 246, 0.6); letter-spacing: 0.5px;">&copy; 2026 ConsultLink Platform. All rights reserved.</p>
+            <p style="font-size: 0.85rem; color: rgba(243, 244, 246, 0.6); letter-spacing: 0.5px;">&copy; 2026 ConsultLink Engine Platform. All rights reserved.</p>
             <p style="font-size: 0.8rem; color: rgba(243, 244, 246, 0.4);">Engineered & Maintained by <span style="font-weight: 600; background: linear-gradient(135deg, #06B6D4, #8B5CF6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 0.5px;">Vyeta Digital Solutions</span></p>
         </div>
     </footer>
@@ -810,329 +375,261 @@
             endpoint: "https://script.google.com/macros/s/AKfycbwYOUR_DEPLOYMENT_ID/exec",
 
             async request(action, payload = {}) {
-                const token = sessionStorage.getItem('consultlink_session_token');
-                const bodyParameters = { action: action, token: token, payload: payload };
-
+                const token = sessionStorage.getItem('cl_token');
                 try {
                     const response = await fetch(this.endpoint, {
                         method: 'POST',
                         mode: 'cors',
                         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                        body: JSON.stringify(bodyParameters)
+                        body: JSON.stringify({ action, token, payload })
                     });
-
-                    if (!response.ok) throw new Error(`Network response issue: ${response.statusText}`);
                     const data = await response.json();
-                    if (!data.success) throw new Error(data.message || "Request was rejected by database.");
+                    if (!data.success) throw new Error(data.message);
                     return data;
                 } catch (error) {
-                    console.error(`[SDK Engine Exception]:`, error);
+                    App.showToast(error.message, 'error');
                     throw error;
                 }
             }
         };
 
         const Router = {
-            currentView: null,
-            init() {
-                this.navigate('landing');
-            },
-            navigate(viewName) {
-                const template = document.getElementById(`view-${viewName}`);
+            navigate(view) {
+                const template = document.getElementById(`view-${view}`);
                 if (!template) return;
+                document.getElementById('app-root').innerHTML = '';
+                document.getElementById('app-root').appendChild(template.content.cloneNode(true));
+                document.getElementById('system-footer').style.display = (view === 'landing' || view === 'auth') ? 'block' : 'none';
                 
-                const appRoot = document.getElementById('app-root');
-                appRoot.innerHTML = '';
-                appRoot.appendChild(template.content.cloneNode(true));
-                this.currentView = viewName;
-                
-                if (viewName === 'client-dashboard') App.loadClientDashboardData();
-                if (viewName === 'consultant-dashboard') App.loadConsultantDashboardData();
-                if (viewName === 'admin-dashboard') App.loadAdminDashboardData();
+                if (view === 'landing') App.runLiveConsoleSimulation();
+                if (view === 'client-dashboard') App.loadClientData();
+                if (view === 'consultant-dashboard') App.loadConsultantData();
+                if (view === 'admin-dashboard') App.loadAdminData();
             }
         };
 
         const App = {
             isSignUpMode: false,
-
-            init() {
-                const savedToken = sessionStorage.getItem('consultlink_session_token');
-                const savedRole = sessionStorage.getItem('consultlink_session_role');
-                if (savedToken && savedRole) {
-                    Router.navigate(`${savedRole}-dashboard`);
-                }
-            },
-
-            showToast(message, type = 'success') {
+            simulationInterval: null,
+            init() { Router.navigate('landing'); },
+            showToast(msg, type = 'success') {
                 const container = document.getElementById('toast-container');
-                if (!container) return;
                 const toast = document.createElement('div');
-                toast.className = `toast glass`;
+                toast.className = 'toast glass';
                 toast.style.borderLeft = `4px solid ${type === 'success' ? 'var(--success)' : 'var(--danger)'}`;
-                toast.innerText = message;
+                toast.innerText = msg;
                 container.appendChild(toast);
                 setTimeout(() => toast.remove(), 4000);
             },
-
-            toggleConsoleTab(tabName) {
-                document.getElementById('console-content-experts').style.display = tabName === 'experts' ? 'grid' : 'none';
-                document.getElementById('console-content-feed').style.display = tabName === 'feed' ? 'flex' : 'none';
+            runLiveConsoleSimulation() {
+                // Clear any existing simulation interval loop
+                if (this.simulationInterval) clearInterval(this.simulationInterval);
                 
-                document.getElementById('btn-tab-experts').classList.toggle('active', tabName === 'experts');
-                document.getElementById('btn-tab-feed').classList.toggle('active', tabName === 'feed');
+                const pools = ['legal', 'medical', 'financial', 'it', 'mechanical', 'agricultural'];
+                
+                // Shift simulated numbers realistically every 2.5 seconds to mimic a high-traffic production pool
+                this.simulationInterval = setInterval(() => {
+                    const randomPool = pools[Math.floor(Math.random() * pools.length)];
+                    const el = document.getElementById(`count-${randomPool}`);
+                    if (el) {
+                        const current = parseInt(el.innerText);
+                        const fluctuation = Math.random() > 0.4 ? 1 : -1;
+                        const updated = Math.max(2, current + fluctuation);
+                        el.innerText = `${updated} Online`;
+                        el.style.color = 'var(--primary-glow)';
+                        setTimeout(() => el.style.color = 'var(--accent-cyan)', 300);
+                    }
+                }, 2500);
             },
-
             toggleAuthMode(e) {
                 e.preventDefault();
                 this.isSignUpMode = !this.isSignUpMode;
-                
-                document.getElementById('auth-title').innerText = this.isSignUpMode ? 'Create Your Account' : 'Welcome Back';
-                document.getElementById('auth-subtitle').innerText = this.isSignUpMode ? 'Join us as a client or verified advisor.' : 'Sign in to access your dashboard workspace.';
+                document.getElementById('auth-title').innerText = this.isSignUpMode ? 'Create Structural Node Profile' : 'Welcome to ConsultLink';
                 document.getElementById('group-fullname').style.display = this.isSignUpMode ? 'block' : 'none';
                 document.getElementById('group-role').style.display = this.isSignUpMode ? 'block' : 'none';
-                document.getElementById('auth-submit-btn').innerText = this.isSignUpMode ? 'Create Account' : 'Sign In';
-                document.getElementById('auth-toggle-mode').innerText = this.isSignUpMode ? 'Already have an account? Sign in' : 'New to the platform? Create an account';
-                
-                if (this.isSignUpMode) {
+                document.getElementById('auth-submit-btn').innerText = this.isSignUpMode ? 'Provision Node' : 'Authenticate Session';
+                if(this.isSignUpMode) {
                     document.getElementById('auth-role').addEventListener('change', (ev) => {
-                        const displayStatus = ev.target.value === 'consultant' ? 'block' : 'none';
-                        document.querySelectorAll('.id-consultant-fields').forEach(el => el.style.display = displayStatus);
+                        const display = ev.target.value === 'consultant' ? 'block' : 'none';
+                        document.querySelectorAll('.id-consultant-fields').forEach(el => el.style.display = display);
                     });
-                } else {
-                    document.querySelectorAll('.id-consultant-fields').forEach(el => el.style.display = 'none');
                 }
             },
-
             async handleAuth(e) {
                 e.preventDefault();
-                const btn = document.getElementById('auth-submit-btn');
-                const originalText = btn.innerText;
-                
-                btn.innerText = "Processing...";
-                btn.disabled = true;
-
                 const email = document.getElementById('auth-email').value;
                 const password = document.getElementById('auth-password').value;
-
-                try {
-                    if (this.isSignUpMode) {
-                        const fullName = document.getElementById('auth-fullname').value;
-                        const role = document.getElementById('auth-role').value;
-                        const payload = { email, password, fullName, role };
-
-                        if (role === 'consultant') {
-                            payload.specialty = document.getElementById('auth-specialty').value;
-                            payload.ratePerHour = parseFloat(document.getElementById('auth-rate').value);
-                        }
-
-                        await ConsultLinkSDK.request('registerUser', payload);
-                        this.showToast("Account created successfully. You can now sign in.");
-                        this.isSignUpMode = false;
-                        Router.navigate('auth');
-                    } else {
-                        const data = await ConsultLinkSDK.request('loginUser', { email, password });
-                        sessionStorage.setItem('consultlink_session_token', data.token);
-                        sessionStorage.setItem('consultlink_session_role', data.user.role);
-                        sessionStorage.setItem('consultlink_session_user', JSON.stringify(data.user));
-                        
-                        this.showToast(`Welcome back, ${data.user.fullName}`);
-                        Router.navigate(`${data.user.role}-dashboard`);
+                if (this.isSignUpMode) {
+                    const fullName = document.getElementById('auth-fullname').value;
+                    const role = document.getElementById('auth-role').value;
+                    const payload = { email, password, fullName, role };
+                    if (role === 'consultant') {
+                        payload.specialty = document.getElementById('auth-specialty').value;
+                        payload.ratePerHour = parseFloat(document.getElementById('auth-rate').value);
                     }
-                } catch (err) {
-                    this.showToast(err.message, 'error');
-                } finally {
-                    btn.innerText = originalText;
-                    btn.disabled = false;
+                    await ConsultLinkSDK.request('registerUser', payload);
+                    App.showToast("Identity registered successfully.");
+                    this.isSignUpMode = false;
+                    Router.navigate('auth');
+                } else {
+                    const res = await ConsultLinkSDK.request('loginUser', { email, password });
+                    if(this.simulationInterval) clearInterval(this.simulationInterval);
+                    sessionStorage.setItem('cl_token', res.token);
+                    sessionStorage.setItem('cl_role', res.user.role);
+                    sessionStorage.setItem('cl_user', JSON.stringify(res.user));
+                    Router.navigate(`${res.user.role}-dashboard`);
                 }
             },
-
-            logout() {
-                sessionStorage.clear();
-                this.showToast("Signed out successfully.");
-                Router.navigate('landing');
-            },
-
-            switchTab(tabId) {
+            logout() { sessionStorage.clear(); Router.navigate('landing'); },
+            switchTab(id) {
                 document.querySelectorAll('.dashboard-tab').forEach(el => el.style.display = 'none');
-                document.querySelectorAll('.sidebar-menu a').forEach(el => el.classList.remove('active'));
-                
-                document.getElementById(`tab-${tabId}`).style.display = 'block';
-                document.getElementById(`menu-link-${tabId}`).classList.add('active');
+                document.getElementById(`tab-${id}`).style.display = 'block';
             },
-
-            async loadClientDashboardData() {
-                try {
-                    const user = JSON.parse(sessionStorage.getItem('consultlink_session_user'));
-                    document.getElementById('client-profile-name').innerText = user.fullName;
-                    
-                    const response = await ConsultLinkSDK.request('getClientRequests');
-                    const requests = response.requests;
-                    
-                    document.getElementById('m-client-active').innerText = requests.filter(r => r.status !== 'Completed').length;
-                    
-                    const tableBody = document.getElementById('client-requests-table');
-                    tableBody.innerHTML = '';
-                    
-                    if(requests.length === 0) {
-                        tableBody.innerHTML = `<tr><td colspan="5" class="text-center empty-state">You haven't requested any consultations yet. Click 'Book a Consultant' to get started!</td></tr>`;
-                        return;
-                    }
-
-                    requests.forEach(req => {
-                        const tr = document.createElement('tr');
-                        tr.innerHTML = `
-                            <td>${req.id.substring(0,8)}</td>
-                            <td><span class="badge">${req.category}</span></td>
-                            <td>${req.title}</td>
-                            <td><span class="status-lbl">${req.status === 'Open' ? 'Finding Match' : req.status}</span></td>
-                            <td>${req.status === 'Matched' ? `<button class="btn btn-sm btn-primary" onclick="App.processPayment('${req.id}')">Approve & Pay Invoice</button>` : '<span style="color:var(--text-secondary); font-size:0.85rem">No action required</span>'}</td>
-                        `;
-                        tableBody.appendChild(tr);
-                    });
-                } catch(err) {
-                    this.showToast("Failed to sync your dashboard history.", "error");
-                }
+            async loadClientData() {
+                const user = JSON.parse(sessionStorage.getItem('cl_user'));
+                document.getElementById('client-profile-name').innerText = user.fullName;
+                const res = await ConsultLinkSDK.request('getClientRequests');
+                const tbody = document.getElementById('client-requests-table');
+                tbody.innerHTML = '';
+                res.requests.forEach(r => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${r.id.substring(0,6)}</td>
+                        <td><span class="badge">${r.category} Experts</span></td>
+                        <td>${r.title}</td>
+                        <td><span class="status-lbl">${r.status}</span></td>
+                        <td>
+                            ${r.status === 'Matched' ? `<button class="btn btn-sm btn-primary" onclick="App.openPaymentModal('${r.id}')">Settle Invoicing</button>` : ''}
+                            ${r.status === 'Matched' || r.status === 'Pending' ? `<button class="btn btn-sm btn-danger" onclick="App.openEscalationModal('${r.id}')">Flag</button>` : ''}
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
             },
-
             async submitRequest(e) {
                 e.preventDefault();
-                const btn = document.getElementById('req-submit-btn');
-                btn.innerText = "Submitting...";
-                btn.disabled = true;
-
                 const category = document.getElementById('req-category').value;
                 const title = document.getElementById('req-title').value;
                 const description = document.getElementById('req-description').value;
-                const fileInput = document.getElementById('req-file');
-
-                let fileData = null;
-                if(fileInput.files.length > 0) {
-                    const file = fileInput.files[0];
-                    fileData = {
-                        base64: await this.convertFileToBase64(file),
-                        mimeType: file.type,
-                        name: file.name
-                    };
-                }
-
-                try {
-                    await ConsultLinkSDK.request('createRequest', { category, title, description, fileData });
-                    this.showToast("Your project request has been published to our expert network!");
-                    this.switchTab('client-overview');
-                    this.loadClientDashboardData();
-                } catch(err) {
-                    this.showToast(err.message, "error");
-                } finally {
-                    btn.innerText = "Find Matched Consultant";
-                    btn.disabled = false;
-                }
+                await ConsultLinkSDK.request('createRequest', { category, title, description });
+                App.showToast("Request submitted directly to specialist pool.");
+                App.switchTab('client-overview');
+                App.loadClientData();
             },
-
-            async processPayment(requestId) {
-                try {
-                    await ConsultLinkSDK.request('executePaymentSimulator', { requestId });
-                    this.showToast("Payment processed successfully.");
-                    this.loadClientDashboardData();
-                } catch(err) {
-                    this.showToast(err.message, "error");
-                }
+            openPaymentModal(reqId) {
+                document.getElementById('modal-layer').innerHTML = `
+                    <div class="modal-overlay">
+                        <div class="modal-card glass">
+                            <h3>Mobile Money Clearing Interface</h3>
+                            <p style="margin:1rem 0; font-size:0.9rem; color:var(--text-secondary);">Dial shortcode to clear invoice to system wallet. Input incoming SMS reference below.</p>
+                            <div style="background:rgba(255,255,255,0.03); padding:1rem; border-radius:8px; margin-bottom:1rem; font-size:0.85rem;">
+                                <strong>MTN Merchant Code:</strong> *115*4*1*MOMO_ID#<br>
+                                <strong>Airtel Till Code:</strong> *115*4*2*AIRTEL_ID#
+                            </div>
+                            <div class="form-group"><label>Transaction ID Reference</label><input type="text" id="momo-ref" placeholder="TXN984328423" required></div>
+                            <button class="btn btn-primary btn-block" onclick="App.submitPayment('${reqId}')">Verify Transaction Trace</button>
+                            <button class="btn btn-secondary btn-block" style="margin-top:0.5rem;" onclick="document.getElementById('modal-layer').innerHTML=''">Cancel</button>
+                        </div>
+                    </div>
+                `;
             },
-
-            async loadConsultantDashboardData() {
-                try {
-                    const user = JSON.parse(sessionStorage.getItem('consultlink_session_user'));
-                    document.getElementById('consultant-profile-name').innerText = user.fullName;
-                    
-                    const response = await ConsultLinkSDK.request('getConsultantQueue');
-                    const queue = response.queue;
-                    
-                    const tableBody = document.getElementById('consultant-queue-table');
-                    tableBody.innerHTML = '';
-                    
-                    if(queue.length === 0) {
-                        tableBody.innerHTML = `<tr><td colspan="4" class="text-center empty-state">No open project listings match your criteria right now. Check back soon!</td></tr>`;
-                        return;
-                    }
-
-                    queue.forEach(item => {
-                        const tr = document.createElement('tr');
-                        tr.innerHTML = `
-                            <td>${item.id.substring(0,8)}</td>
-                            <td>Anonymous Client</td>
-                            <td>${item.title}</td>
-                            <td><button class="btn btn-sm btn-primary" onclick="App.acceptJob('${item.id}')">Accept Offer</button></td>
-                        `;
-                        tableBody.appendChild(tr);
-                    });
-                } catch (err) {
-                    this.showToast("Failed to compile incoming requests.", "error");
-                }
+            async submitPayment(reqId) {
+                const ref = document.getElementById('momo-ref').value;
+                await ConsultLinkSDK.request('executePaymentSimulator', { requestId: reqId, reference: ref });
+                document.getElementById('modal-layer').innerHTML = '';
+                App.openRatingModal(reqId);
             },
-
-            async acceptJob(requestId) {
-                try {
-                    await ConsultLinkSDK.request('acceptConsultationRequest', { requestId });
-                    this.showToast("Proposal accepted. Client has been notified.");
-                    this.loadConsultantDashboardData();
-                } catch(err) {
-                    this.showToast(err.message, "error");
-                }
+            openRatingModal(reqId) {
+                document.getElementById('modal-layer').innerHTML = `
+                    <div class="modal-overlay">
+                        <div class="modal-card glass">
+                            <h3>Evaluate Specialist Performance</h3>
+                            <div class="form-group" style="margin-top:1rem;">
+                                <label>Domain Authority Score (1-5)</label>
+                                <select id="rate-score"><option value="5">5 Stars (Excellent)</option><option value="4">4 Stars</option><option value="3">3 Stars</option><option value="2">2 Stars</option><option value="1">1 Star (Deficient)</option></select>
+                            </div>
+                            <div class="form-group"><label>Review Logs</label><textarea id="rate-text" rows="3"></textarea></div>
+                            <button class="btn btn-primary btn-block" onclick="App.submitRating('${reqId}')">Commit Metrics Evaluation</button>
+                        </div>
+                    </div>
+                `;
             },
-
-            async updateConsultantStatus(status) {
-                try {
-                    await ConsultLinkSDK.request('setConsultantStatus', { status });
-                    this.showToast(`Your profile status is now set to: ${status}`);
-                } catch(err) {
-                    this.showToast(err.message, "error");
-                }
+            async submitRating(reqId) {
+                const score = parseInt(document.getElementById('rate-score').value);
+                const reviewText = document.getElementById('rate-text').value;
+                await ConsultLinkSDK.request('submitReview', { requestId: reqId, score, reviewText });
+                App.showToast("Evaluation committed to public network ledger.");
+                document.getElementById('modal-layer').innerHTML = '';
+                App.loadClientData();
             },
-
-            async loadAdminDashboardData() {
-                try {
-                    const response = await ConsultLinkSDK.request('getAdminConsoleData');
-                    const tableBody = document.getElementById('admin-consultants-table');
-                    tableBody.innerHTML = '';
-                    
-                    response.consultants.forEach(c => {
-                        const tr = document.createElement('tr');
-                        tr.innerHTML = `
-                            <td>${c.id.substring(0,8)}</td>
-                            <td>${c.specialty}</td>
-                            <td>K${c.ratePerHour}/hr</td>
-                            <td>${c.isApproved ? '<span class="status-lbl">Verified Active</span>' : `<button class="btn btn-sm btn-primary" onclick="App.approveConsultant('${c.id}')">Approve Expert</button>`}</td>
-                        `;
-                        tableBody.appendChild(tr);
-                    });
-                } catch(err) {
-                    this.showToast("Admin dashboard data sync interrupted.", "error");
-                }
+            openEscalationModal(reqId) {
+                document.getElementById('modal-layer').innerHTML = `
+                    <div class="modal-overlay">
+                        <div class="modal-card glass">
+                            <h3>File Corporate Conflict Flag</h3>
+                            <div class="form-group" style="margin-top:1rem;">
+                                <label>Dispute Categorization</label>
+                                <select id="disp-reason"><option value="no_show">Specialist Absent</option><option value="poor_quality">Substandard Performance</option><option value="technical">Technical Breach</option></select>
+                            </div>
+                            <div class="form-group"><label>Narrative Description</label><textarea id="disp-text" rows="4" required></textarea></div>
+                            <button class="btn btn-danger btn-block" onclick="App.submitDispute('${reqId}')">Initialize Escalation Sequence</button>
+                            <button class="btn btn-secondary btn-block" style="margin-top:0.5rem;" onclick="document.getElementById('modal-layer').innerHTML=''">Retract Flag</button>
+                        </div>
+                    </div>
+                `;
             },
-
-            async approveConsultant(consultantId) {
-                try {
-                    await ConsultLinkSDK.request('approveConsultantNode', { consultantId });
-                    this.showToast("Consultant profile has been verified.");
-                    this.loadAdminDashboardData();
-                } catch(err) {
-                    this.showToast(err.message, "error");
-                }
+            async submitDispute(reqId) {
+                const reason = document.getElementById('disp-reason').value;
+                const text = document.getElementById('disp-text').value;
+                await ConsultLinkSDK.request('lodgeDispute', { requestId: reqId, reason, text });
+                App.showToast("Escalation sequence successfully initialized.", "error");
+                document.getElementById('modal-layer').innerHTML = '';
+                App.loadClientData();
             },
-
-            convertFileToBase64(file) {
-                return new Promise((resolve, reject) => {
-                    const reader = new FileReader();
-                    reader.readAsDataURL(file);
-                    reader.onload = () => resolve(reader.result.split(',')[1]);
-                    reader.onerror = error => reject(error);
+            async loadConsultantData() {
+                const user = JSON.parse(sessionStorage.getItem('cl_user'));
+                document.getElementById('consultant-profile-name').innerText = user.fullName;
+                const res = await ConsultLinkSDK.request('getConsultantQueue');
+                document.getElementById('m-consultant-rating').innerText = `${parseFloat(res.rating || 5).toFixed(2)}★`;
+                const tbody = document.getElementById('consultant-queue-table');
+                tbody.innerHTML = '';
+                res.queue.forEach(item => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${item.id.substring(0,6)}</td><td><strong>${item.title}</strong><br><small style="color:var(--text-secondary);">${item.description}</small></td><td><button class="btn btn-sm btn-primary" onclick="App.acceptJob('${item.id}')">Bind Execution Frame</button></td>`;
+                    tbody.appendChild(tr);
                 });
-            }
+            },
+            async acceptJob(id) {
+                await ConsultLinkSDK.request('acceptConsultationRequest', { requestId: id });
+                App.showToast("Resource block locked to your operator profile.");
+                App.loadConsultantData();
+            },
+            async updateConsultantStatus(status) {
+                await ConsultLinkSDK.request('setConsultantStatus', { status });
+                App.showToast(`Presence frame locked -> ${status}`);
+            },
+            async loadAdminData() {
+                const res = await ConsultLinkSDK.request('getAdminConsoleData');
+                const tbodyC = document.getElementById('admin-consultants-table');
+                tbodyC.innerHTML = '';
+                res.consultants.forEach(c => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${c.id.substring(0,6)}</td><td><span class="badge">${c.specialty}</span></td><td>K${c.ratePerHour}/hr</td><td>${c.isApproved ? '<span style="color:var(--success);">Active Pool</span>' : `<button class="btn btn-sm btn-primary" onclick="App.approveAdmin('${c.id}')">Grant Access</button>`}</td>`;
+                    tbodyC.appendChild(tr);
+                });
+                const tbodyD = document.getElementById('admin-disputes-table');
+                tbodyD.innerHTML = '';
+                res.disputes.forEach(d => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${d.id.substring(0,6)}</td><td>${d.requestId.substring(0,6)}</td><td><strong>[${d.reason}]</strong> ${d.text}</td><td><button class="btn btn-sm btn-success" onclick="App.resolveAdmin('${d.id}','refund')">Refund</button> <button class="btn btn-sm btn-warning" onclick="App.resolveAdmin('${d.id}','payout')">Payout</button></td>`;
+                    tbodyD.appendChild(tr);
+                });
+            },
+            async approveAdmin(id) { await ConsultLinkSDK.request('approveConsultantNode', { consultantId: id }); App.loadAdminData(); },
+            async resolveAdmin(id, strategy) { await ConsultLinkSDK.request('resolveDisputeNode', { disputeId: id, resolution: strategy }); App.loadAdminData(); }
         };
 
-        document.addEventListener("DOMContentLoaded", () => {
-            Router.init();
-            App.init();
-        });
+        document.addEventListener("DOMContentLoaded", () => App.init());
     </script>
 </body>
 </html>
