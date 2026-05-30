@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ConsultLink // Enterprise SaaS Specialist Platform</title>
+    <title>ConsultLink // Professional On-Demand Experts</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -54,12 +54,11 @@
         .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.5px; }
         .logo span { color: var(--primary-glow); }
 
-        .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; margin: auto 0; }
+        .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 3rem; align-items: center; margin: auto 0; }
         @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 2rem; } .hero-left { margin: 0 auto; max-width: 600px; } }
 
         h1 { font-size: 3.2rem; font-weight: 800; line-height: 1.15; margin-bottom: 1.5rem; letter-spacing: -1.5px; }
         
-        /* The requested text body size reduction */
         .hero-subtitle {
             color: var(--text-secondary);
             font-size: 1.05rem; 
@@ -67,20 +66,19 @@
             line-height: 1.6;
         }
 
-        /* Simulated Live Console Dashboard UI */
+        /* Simulated Human Presence Dashboard */
         .simulated-console { padding: 1.5rem; border: 1px solid rgba(6, 182, 212, 0.2); box-shadow: 0 15px 35px rgba(0,0,0,0.4); text-align: left; }
         .console-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-color); }
         .console-title { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--accent-cyan); display: flex; align-items: center; gap: 0.5rem; }
         .console-status { font-size: 0.75rem; color: var(--success); display: flex; align-items: center; gap: 0.35rem; }
         .dot { width: 6px; height: 6px; background: var(--success); border-radius: 50%; display: inline-block; box-shadow: 0 0 8px var(--success); }
         
-        .expert-pool-list { display: flex; flex-direction: column; gap: 0.75rem; }
-        .pool-item { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; background: rgba(255,255,255,0.02); border-radius: 6px; border: 1px solid rgba(255,255,255,0.03); }
-        .pool-info { display: flex; align-items: center; gap: 0.75rem; }
-        .pool-name { font-size: 0.9rem; font-weight: 600; }
-        .pool-count { font-size: 0.8rem; background: rgba(6, 182, 212, 0.1); color: var(--accent-cyan); padding: 0.15rem 0.5rem; border-radius: 20px; font-weight: 700; }
-        .pool-action-btn { background: transparent; border: 1px solid rgba(139, 92, 246, 0.4); color: var(--primary-glow); padding: 0.3rem 0.6rem; font-size: 0.75rem; border-radius: 4px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
-        .pool-action-btn:hover { background: var(--primary-glow); color: white; }
+        .expert-pool-list { display: flex; flex-direction: column; gap: 0.75rem; min-height: 340px; }
+        .pool-item { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; background: rgba(255,255,255,0.02); border-radius: 6px; border: 1px solid rgba(255,255,255,0.03); transition: all 0.3s ease; }
+        .pool-info { display: flex; flex-direction: column; gap: 0.15rem; }
+        .pool-name { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); }
+        .pool-domain { font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
+        .pool-status-tag { font-size: 0.75rem; font-weight: 700; color: var(--accent-cyan); background: rgba(6, 182, 212, 0.1); padding: 0.2rem 0.5rem; border-radius: 4px; border: 1px solid rgba(6, 182, 212, 0.15); }
 
         .btn { font-family: var(--font-family); padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; border: none; font-size: 0.9rem; }
         .btn-primary { background: linear-gradient(135deg, var(--primary-glow), #7C3AED); color: white; box-shadow: 0 4px 20px rgba(139, 92, 246, 0.25); }
@@ -91,6 +89,10 @@
         .btn-warning { background: var(--warning); color: white; }
         .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
         .btn-block { width: 100%; display: block; }
+
+        /* Accessible Friendly Back Navigation Link */
+        .back-nav { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; font-weight: 500; margin-bottom: 1.5rem; cursor: pointer; transition: color 0.2s; }
+        .back-nav:hover { color: var(--accent-cyan); }
 
         .dashboard-layout { display: flex; min-height: 100vh; flex: 1; }
         .sidebar { width: 280px; background: #0D1222; border-right: 1px solid var(--border-color); padding: 2rem 1.5rem; display: flex; flex-direction: column; }
@@ -149,146 +151,119 @@
     <div id="modal-layer"></div>
     <div id="app-root" style="flex: 1; display: flex; flex-direction: column;"></div>
 
-    <!-- VIEW: LANDING PAGE WITH INTERACTIVE SIMULATED CONSOLE -->
     <template id="view-landing">
         <div class="landing-page">
             <header class="navbar">
                 <div class="logo">Consult<span>Link</span></div>
-                <div><button class="btn btn-primary" onclick="Router.navigate('auth')">Launch Console</button></div>
+                <div><button class="btn btn-primary" onclick="Router.navigate('auth')">Sign In</button></div>
             </header>
             
             <div class="hero-grid">
                 <div class="hero-left">
-                    <h1>On-Demand Expert Advisory <br><span class="text-gradient">Engineered for Precision.</span></h1>
-                    <p class="hero-subtitle">Connect with top-tier verified specialists in law, medicine, finance, IT, mechanics & agriculture. Schedule sessions, share files, and get answers and solutions to your problems securely in minutes.</p>
-                    <button class="btn btn-primary btn-lg" onclick="Router.navigate('auth')">Get Access Key</button>
+                    <h1>Expert Professional Advice <br><span class="text-gradient">Right When You Need It.</span></h1>
+                    <p class="hero-subtitle">Connect instantly with verified consultants across Law, Medicine, Finance, IT, Mechanics, and Agriculture. Discuss complex problems, safely share files, and receive actionable solutions in minutes.</p>
+                    <button class="btn btn-primary btn-lg" onclick="Router.navigate('auth')">Find an Expert</button>
                 </div>
                 
                 <div class="hero-right">
-                    <!-- The Simulated Interactive Console Panel showing specialist states -->
                     <div class="simulated-console glass">
                         <div class="console-header">
-                            <div class="console-title"><span style="color:var(--primary-glow);">//</span> Availability Feed Matrix</div>
-                            <div class="console-status"><span class="dot"></span> Nodes Broadcasting</div>
+                            <div class="console-title"><span style="color:var(--primary-glow);">//</span> Active Specialists Online Now</div>
+                            <div class="console-status"><span class="dot"></span> Live Activity Feed</div>
                         </div>
-                        <div class="expert-pool-list">
-                            <div class="pool-item">
-                                <div class="pool-info"><span class="pool-name">Legal Experts</span></div>
-                                <div style="display:flex; align-items:center; gap:1rem;"><span class="pool-count" id="count-legal">14 Online</span><button class="pool-action-btn" onclick="Router.navigate('auth')">Connect</button></div>
+                        <div class="expert-pool-list" id="simulated-human-feed">
                             </div>
-                            <div class="pool-item">
-                                <div class="pool-info"><span class="pool-name">Medical Experts</span></div>
-                                <div style="display:flex; align-items:center; gap:1rem;"><span class="pool-count" id="count-medical">9 Online</span><button class="pool-action-btn" onclick="Router.navigate('auth')">Connect</button></div>
-                            </div>
-                            <div class="pool-item">
-                                <div class="pool-info"><span class="pool-name">Financial Experts</span></div>
-                                <div style="display:flex; align-items:center; gap:1rem;"><span class="pool-count" id="count-financial">22 Online</span><button class="pool-action-btn" onclick="Router.navigate('auth')">Connect</button></div>
-                            </div>
-                            <div class="pool-item">
-                                <div class="pool-info"><span class="pool-name">IT Experts</span></div>
-                                <div style="display:flex; align-items:center; gap:1rem;"><span class="pool-count" id="count-it">31 Online</span><button class="pool-action-btn" onclick="Router.navigate('auth')">Connect</button></div>
-                            </div>
-                            <div class="pool-item">
-                                <div class="pool-info"><span class="pool-name">Mechanical Experts</span></div>
-                                <div style="display:flex; align-items:center; gap:1rem;"><span class="pool-count" id="count-mechanical">8 Online</span><button class="pool-action-btn" onclick="Router.navigate('auth')">Connect</button></div>
-                            </div>
-                            <div class="pool-item">
-                                <div class="pool-info"><span class="pool-name">Agricultural Experts</span></div>
-                                <div style="display:flex; align-items:center; gap:1rem;"><span class="pool-count" id="count-agricultural">12 Online</span><button class="pool-action-btn" onclick="Router.navigate('auth')">Connect</button></div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </template>
 
-    <!-- VIEW: AUTHENTICATION -->
     <template id="view-auth">
         <div class="auth-container">
             <div class="auth-card glass">
-                <h2 id="auth-title" style="margin-bottom:0.5rem;">Welcome to ConsultLink</h2>
-                <p id="auth-subtitle" style="margin-bottom: 1.5rem; font-size: 0.9rem; color: var(--text-secondary);">Sign in to access your workspace node.</p>
+                <div class="back-nav" onclick="Router.navigate('landing')">← Back to Homepage</div>
+                <h2 id="auth-title" style="margin-bottom:0.5rem;">Welcome Back</h2>
+                <p id="auth-subtitle" style="margin-bottom: 1.5rem; font-size: 0.9rem; color: var(--text-secondary);">Log into your account to manage your consultations.</p>
                 <form id="auth-form" onsubmit="App.handleAuth(event)">
-                    <div class="form-group" id="group-fullname" style="display: none;"><label>Legal Full Name</label><input type="text" id="auth-fullname" placeholder="Suwilanji Puta"></div>
-                    <div class="form-group"><label>Corporate Email</label><input type="email" id="auth-email" required placeholder="name@company.com"></div>
+                    <div class="form-group" id="group-fullname" style="display: none;"><label>Your Full Name</label><input type="text" id="auth-fullname" placeholder="e.g. Suwilanji Puta"></div>
+                    <div class="form-group"><label>Email Address</label><input type="email" id="auth-email" required placeholder="name@domain.com"></div>
                     <div class="form-group"><label>Password</label><input type="password" id="auth-password" required placeholder="••••••••"></div>
                     <div class="form-group" id="group-role" style="display: none;">
-                        <label>Account Node Role</label>
+                        <label>Account Type</label>
                         <select id="auth-role">
-                            <option value="client">Client Node</option>
-                            <option value="consultant">Consultant Node</option>
+                            <option value="client">I am looking for an expert</option>
+                            <option value="consultant">I am joining as a professional specialist</option>
                         </select>
                     </div>
                     <div class="form-group id-consultant-fields" id="group-specialty" style="display: none;">
-                        <label>Professional Domain Specialty</label>
+                        <label>Your Professional Field</label>
                         <select id="auth-specialty">
-                            <option value="legal">Legal Experts</option>
-                            <option value="medical">Medical Experts</option>
-                            <option value="financial">Financial Experts</option>
-                            <option value="it">IT Experts</option>
-                            <option value="mechanical">Mechanical Experts</option>
+                            <option value="legal">Legal & Law</option>
+                            <option value="medical">Medical & Healthcare</option>
+                            <option value="financial">Finance & Accounting</option>
+                            <option value="it">IT & Systems Development</option>
+                            <option value="mechanical">Mechanical & Technical Engineering</option>
                             <option value="agricultural">Agricultural Experts</option>
                         </select>
                     </div>
-                    <div class="form-group id-consultant-fields" id="group-rate" style="display: none;"><label>Hourly Rate (ZMW)</label><input type="number" id="auth-rate" value="1500"></div>
-                    <button type="submit" class="btn btn-primary btn-block" id="auth-submit-btn">Authenticate Session</button>
+                    <div class="form-group id-consultant-fields" id="group-rate" style="display: none;"><label>Hourly Consultation Rate (ZMW)</label><input type="number" id="auth-rate" value="1500"></div>
+                    <button type="submit" class="btn btn-primary btn-block" id="auth-submit-btn">Sign In</button>
                 </form>
-                <div class="auth-footer" style="margin-top:1.5rem; text-align:center;"><a href="#" id="auth-toggle-mode" onclick="App.toggleAuthMode(event)" style="color:var(--accent-cyan); text-decoration:none; font-size:0.85rem;">Need an access path? Create account</a></div>
+                <div class="auth-footer" style="margin-top:1.5rem; text-align:center;"><a href="#" id="auth-toggle-mode" onclick="App.toggleAuthMode(event)" style="color:var(--accent-cyan); text-decoration:none; font-size:0.85rem;">New to the platform? Create an account</a></div>
             </div>
         </div>
     </template>
 
-    <!-- VIEW: CLIENT ENVIRONMENT -->
     <template id="view-client-dashboard">
         <div class="dashboard-layout">
             <aside class="sidebar">
                 <div class="sidebar-brand">Consult<span>Link</span></div>
                 <nav class="sidebar-menu">
-                    <a href="#" id="menu-link-client-overview" class="active" onclick="App.switchTab('client-overview')">Console Matrix</a>
-                    <a href="#" id="menu-link-client-new-request" onclick="App.switchTab('client-new-request')">Submit Proposal</a>
+                    <a href="#" id="menu-link-client-overview" class="active" onclick="App.switchTab('client-overview')">My Consultations</a>
+                    <a href="#" id="menu-link-client-new-request" onclick="App.switchTab('client-new-request')">Request an Expert</a>
                 </nav>
                 <div class="sidebar-footer">
-                    <span id="client-profile-name" class="profile-name">Operator Node</span>
-                    <button class="btn btn-sm btn-danger" onclick="App.logout()">Terminate</button>
+                    <span id="client-profile-name" class="profile-name">User Account</span>
+                    <button class="btn btn-sm btn-danger" onclick="App.logout()">Log Out</button>
                 </div>
             </aside>
             <main class="main-content">
-                <header class="content-header"><h2>Client Operational Environment</h2><div class="system-status"><span class="indicator live"></span>Secure Node Link</div></header>
+                <header class="content-header"><h2>Client Dashboard</h2><div class="system-status"><span class="indicator live"></span>Secure Session Active</div></header>
                 
                 <div id="tab-client-overview" class="dashboard-tab">
                     <div class="metrics-grid">
                         <div class="metric-card glass"><h5>Active Sessions</h5><h2 id="m-client-active">0</h2></div>
-                        <div class="metric-card glass"><h5>System Trust Tier</h5><h2>Verified</h2></div>
+                        <div class="metric-card glass"><h5>Account Status</h5><h2>Verified</h2></div>
                     </div>
-                    <h3 class="section-title">Consultation Ledger Logs</h3>
+                    <h3 class="section-title">Your Consultation History</h3>
                     <div class="table-container glass">
                         <table class="table">
-                            <thead><tr><th>ID</th><th>Specialty Pool</th><th>Headline</th><th>Status</th><th>Actions</th></tr></thead>
-                            <tbody id="client-requests-table"><tr><td colspan="5" style="text-align:center; padding:2rem;">Awaiting database synchronization...</td></tr></tbody>
+                            <thead><tr><th>Reference</th><th>Category</th><th>Topic / Headline</th><th>Status</th><th>Available Actions</th></tr></thead>
+                            <tbody id="client-requests-table"><tr><td colspan="5" style="text-align:center; padding:2rem;">Connecting to your history files...</td></tr></tbody>
                         </table>
                     </div>
                 </div>
 
                 <div id="tab-client-new-request" class="dashboard-tab" style="display:none;">
                     <div class="card glass max-width-md">
-                        <h3 style="margin-bottom: 1.5rem;">Deploy Core Request Parameters</h3>
+                        <h3 style="margin-bottom: 1.5rem;">Create a New Consultation Request</h3>
                         <form id="request-form" onsubmit="App.submitRequest(event)">
                             <div class="form-group">
-                                <label>Target Domain Specialist</label>
+                                <label>What field of expertise do you need?</label>
                                 <select id="req-category">
-                                    <option value="legal">Legal Experts</option>
-                                    <option value="medical">Medical Experts</option>
-                                    <option value="financial">Financial Experts</option>
-                                    <option value="it">IT Experts</option>
-                                    <option value="mechanical">Mechanical Experts</option>
+                                    <option value="legal">Legal & Law</option>
+                                    <option value="medical">Medical & Healthcare</option>
+                                    <option value="financial">Finance & Accounting</option>
+                                    <option value="it">IT & Systems Development</option>
+                                    <option value="mechanical">Mechanical & Technical Engineering</option>
                                     <option value="agricultural">Agricultural Experts</option>
                                 </select>
                             </div>
-                            <div class="form-group"><label>Brief Title</label><input type="text" id="req-title" required placeholder="Describe task requirement..."></div>
-                            <div class="form-group"><label>Statement of Requirements / Context</label><textarea id="req-description" rows="5" required></textarea></div>
-                            <div class="form-group"><label>Payload Documentation attachment</label><input type="file" id="req-file"></div>
-                            <button type="submit" class="btn btn-primary">Initialize Matching Pipeline</button>
+                            <div class="form-group"><label>Short Summary Title</label><input type="text" id="req-title" required placeholder="Briefly state your requirement..."></div>
+                            <div class="form-group"><label>Detailed Description of your Request / Context</label><textarea id="req-description" rows="5" placeholder="Provide background so our experts can assist you perfectly..." required></textarea></div>
+                            <div class="form-group"><label>Supporting Document / Image (Optional)</label><input type="file" id="req-file"></div>
+                            <button type="submit" class="btn btn-primary">Submit to Expert Network</button>
                         </form>
                     </div>
                 </div>
@@ -296,48 +271,46 @@
         </div>
     </template>
 
-    <!-- VIEW: CONSULTANT WORKSTATION -->
     <template id="view-consultant-dashboard">
         <div class="dashboard-layout">
             <aside class="sidebar">
                 <div class="sidebar-brand">Consult<span>Link</span></div>
                 <div class="status-panel glass">
-                    <label>Broadcast Presence</label>
+                    <label>Availability Status</label>
                     <select id="consultant-status-toggle" onchange="App.updateConsultantStatus(this.value)">
-                        <option value="Available">Available (Broadcasting)</option>
-                        <option value="Busy">Busy (Locked)</option>
-                        <option value="Offline">Offline (Stealth)</option>
+                        <option value="Available">Available (Accepting Projects)</option>
+                        <option value="Busy">Busy (In Session)</option>
+                        <option value="Offline">Offline</option>
                     </select>
                 </div>
-                <nav class="sidebar-menu"><a href="#" class="active">Operator Dashboard</a></nav>
+                <nav class="sidebar-menu"><a href="#" class="active">Specialist Dashboard</a></nav>
                 <div class="sidebar-footer">
                     <span id="consultant-profile-name" class="profile-name">Consultant</span>
                     <button class="btn btn-sm btn-danger" onclick="App.logout()">Disconnect</button>
                 </div>
             </aside>
             <main class="main-content">
-                <header class="content-header"><h2>Specialist Execution Console</h2></header>
+                <header class="content-header"><h2>Specialist Workspace Console</h2></header>
                 <div class="metrics-grid">
-                    <div class="metric-card glass"><h5>Domain Authority Rating</h5><h2 id="m-consultant-rating">5.00★</h2></div>
+                    <div class="metric-card glass"><h5>Professional Performance Score</h5><h2 id="m-consultant-rating">5.00★</h2></div>
                 </div>
-                <h3 class="section-title">Incoming Demand Ingestion Streams</h3>
+                <h3 class="section-title">Open Customer Requests Matching Your Field</h3>
                 <div class="table-container glass">
                     <table class="table">
-                        <thead><tr><th>Request ID</th><th>Context Summary</th><th>Action Vectors</th></tr></thead>
-                        <tbody id="consultant-queue-table"><tr><td colspan="3" style="text-align:center; padding:2rem;">Scanning infrastructure grids...</td></tr></tbody>
+                        <thead><tr><th>Request ID</th><th>Project Details</th><th>Actions</th></tr></thead>
+                        <tbody id="consultant-queue-table"><tr><td colspan="3" style="text-align:center; padding:2rem;">Scanning open database requests...</td></tr></tbody>
                     </table>
                 </div>
             </main>
         </div>
     </template>
 
-    <!-- VIEW: PLATFORM CONTROL LAYER (ADMIN) -->
     <template id="view-admin-dashboard">
         <div class="dashboard-layout">
             <aside class="sidebar">
                 <div class="sidebar-brand">Consult<span>Admin</span></div>
                 <nav class="sidebar-menu"><a href="#" class="active">Governance Matrix</a></nav>
-                <div class="sidebar-footer"><button class="btn btn-sm btn-danger" onclick="App.logout()">Kill Web Shell</button></div>
+                <div class="sidebar-footer"><button class="btn btn-sm btn-danger" onclick="App.logout()">Exit Console</button></div>
             </aside>
             <main class="main-content">
                 <div style="margin-bottom: 3rem;">
@@ -362,10 +335,9 @@
         </div>
     </template>
 
-    <!-- BRAND FOOTPRINT CORNERSTONE -->
     <footer id="system-footer">
         <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
-            <p style="font-size: 0.85rem; color: rgba(243, 244, 246, 0.6); letter-spacing: 0.5px;">&copy; 2026 ConsultLink Engine Platform. All rights reserved.</p>
+            <p style="font-size: 0.85rem; color: rgba(243, 244, 246, 0.6); letter-spacing: 0.5px;">&copy; 2026 ConsultLink Platform. All rights reserved.</p>
             <p style="font-size: 0.8rem; color: rgba(243, 244, 246, 0.4);">Engineered & Maintained by <span style="font-weight: 600; background: linear-gradient(135deg, #06B6D4, #8B5CF6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 0.5px;">Vyeta Digital Solutions</span></p>
         </div>
     </footer>
@@ -401,7 +373,7 @@
                 document.getElementById('app-root').appendChild(template.content.cloneNode(true));
                 document.getElementById('system-footer').style.display = (view === 'landing' || view === 'auth') ? 'block' : 'none';
                 
-                if (view === 'landing') App.runLiveConsoleSimulation();
+                if (view === 'landing') App.runHumanConsoleSimulation();
                 if (view === 'client-dashboard') App.loadClientData();
                 if (view === 'consultant-dashboard') App.loadConsultantData();
                 if (view === 'admin-dashboard') App.loadAdminData();
@@ -421,33 +393,59 @@
                 container.appendChild(toast);
                 setTimeout(() => toast.remove(), 4000);
             },
-            runLiveConsoleSimulation() {
-                // Clear any existing simulation interval loop
+            runHumanConsoleSimulation() {
                 if (this.simulationInterval) clearInterval(this.simulationInterval);
                 
-                const pools = ['legal', 'medical', 'financial', 'it', 'mechanical', 'agricultural'];
+                const consultants = [
+                    { name: "Chileshe Mwaba", domain: "Legal Expert" },
+                    { name: "Dr. Naeem Patel", domain: "Medical Expert" },
+                    { name: "Mulenga Kafuni", domain: "Financial Expert" },
+                    { name: "Kondwani Phiri", domain: "IT Expert" },
+                    { name: "Sifuniso Banda", domain: "Mechanical Expert" },
+                    { name: "Bupe Chanda", domain: "Agricultural Expert" }
+                ];
+
+                const states = ["In Consultation", "Available Online", "In Active Session"];
+                const feedContainer = document.getElementById("simulated-human-feed");
                 
-                // Shift simulated numbers realistically every 2.5 seconds to mimic a high-traffic production pool
+                const renderFeed = () => {
+                    feedContainer.innerHTML = '';
+                    consultants.forEach((c, idx) => {
+                        const randomState = states[(Math.floor(Math.random() * states.length) + idx) % states.length];
+                        const item = document.createElement("div");
+                        item.className = "pool-item";
+                        item.innerHTML = `
+                            <div class="pool-info">
+                                <span class="pool-name">${c.name}</span>
+                                <span class="pool-domain">${c.domain}</span>
+                            </div>
+                            <span class="pool-status-tag" id="status-tag-${idx}">${randomState}</span>
+                        `;
+                        feedContainer.appendChild(item);
+                    });
+                };
+
+                renderFeed();
+
                 this.simulationInterval = setInterval(() => {
-                    const randomPool = pools[Math.floor(Math.random() * pools.length)];
-                    const el = document.getElementById(`count-${randomPool}`);
-                    if (el) {
-                        const current = parseInt(el.innerText);
-                        const fluctuation = Math.random() > 0.4 ? 1 : -1;
-                        const updated = Math.max(2, current + fluctuation);
-                        el.innerText = `${updated} Online`;
-                        el.style.color = 'var(--primary-glow)';
-                        setTimeout(() => el.style.color = 'var(--accent-cyan)', 300);
+                    const targetIdx = Math.floor(Math.random() * consultants.length);
+                    const tag = document.getElementById(`status-tag-${targetIdx}`);
+                    if(tag) {
+                        const nextState = states[Math.floor(Math.random() * states.length)];
+                        tag.innerText = nextState;
+                        tag.style.borderColor = 'var(--primary-glow)';
+                        setTimeout(() => tag.style.borderColor = 'rgba(6, 182, 212, 0.15)', 400);
                     }
-                }, 2500);
+                }, 3000);
             },
             toggleAuthMode(e) {
                 e.preventDefault();
                 this.isSignUpMode = !this.isSignUpMode;
-                document.getElementById('auth-title').innerText = this.isSignUpMode ? 'Create Structural Node Profile' : 'Welcome to ConsultLink';
+                document.getElementById('auth-title').innerText = this.isSignUpMode ? 'Create Account' : 'Welcome Back';
+                document.getElementById('auth-subtitle').innerText = this.isSignUpMode ? 'Register to consult with specialists or register your services.' : 'Log into your account to manage your consultations.';
                 document.getElementById('group-fullname').style.display = this.isSignUpMode ? 'block' : 'none';
                 document.getElementById('group-role').style.display = this.isSignUpMode ? 'block' : 'none';
-                document.getElementById('auth-submit-btn').innerText = this.isSignUpMode ? 'Provision Node' : 'Authenticate Session';
+                document.getElementById('auth-submit-btn').innerText = this.isSignUpMode ? 'Register Account' : 'Sign In';
                 if(this.isSignUpMode) {
                     document.getElementById('auth-role').addEventListener('change', (ev) => {
                         const display = ev.target.value === 'consultant' ? 'block' : 'none';
@@ -468,7 +466,7 @@
                         payload.ratePerHour = parseFloat(document.getElementById('auth-rate').value);
                     }
                     await ConsultLinkSDK.request('registerUser', payload);
-                    App.showToast("Identity registered successfully.");
+                    App.showToast("Account created successfully.");
                     this.isSignUpMode = false;
                     Router.navigate('auth');
                 } else {
@@ -495,12 +493,12 @@
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                         <td>${r.id.substring(0,6)}</td>
-                        <td><span class="badge">${r.category} Experts</span></td>
+                        <td><span class="badge">${r.category}</span></td>
                         <td>${r.title}</td>
                         <td><span class="status-lbl">${r.status}</span></td>
                         <td>
-                            ${r.status === 'Matched' ? `<button class="btn btn-sm btn-primary" onclick="App.openPaymentModal('${r.id}')">Settle Invoicing</button>` : ''}
-                            ${r.status === 'Matched' || r.status === 'Pending' ? `<button class="btn btn-sm btn-danger" onclick="App.openEscalationModal('${r.id}')">Flag</button>` : ''}
+                            ${r.status === 'Matched' ? `<button class="btn btn-sm btn-primary" onclick="App.openPaymentModal('${r.id}')">Make Payment</button>` : ''}
+                            ${r.status === 'Matched' || r.status === 'Pending' ? `<button class="btn btn-sm btn-danger" onclick="App.openEscalationModal('${r.id}')">Report Issue</button>` : ''}
                         </td>
                     `;
                     tbody.appendChild(tr);
@@ -512,7 +510,7 @@
                 const title = document.getElementById('req-title').value;
                 const description = document.getElementById('req-description').value;
                 await ConsultLinkSDK.request('createRequest', { category, title, description });
-                App.showToast("Request submitted directly to specialist pool.");
+                App.showToast("Your request has been published to the network.");
                 App.switchTab('client-overview');
                 App.loadClientData();
             },
@@ -520,14 +518,14 @@
                 document.getElementById('modal-layer').innerHTML = `
                     <div class="modal-overlay">
                         <div class="modal-card glass">
-                            <h3>Mobile Money Clearing Interface</h3>
-                            <p style="margin:1rem 0; font-size:0.9rem; color:var(--text-secondary);">Dial shortcode to clear invoice to system wallet. Input incoming SMS reference below.</p>
+                            <h3>Mobile Money Secure Checkout</h3>
+                            <p style="margin:1rem 0; font-size:0.9rem; color:var(--text-secondary);">Please initiate your transaction via your provider and input your confirmation Reference ID below.</p>
                             <div style="background:rgba(255,255,255,0.03); padding:1rem; border-radius:8px; margin-bottom:1rem; font-size:0.85rem;">
-                                <strong>MTN Merchant Code:</strong> *115*4*1*MOMO_ID#<br>
-                                <strong>Airtel Till Code:</strong> *115*4*2*AIRTEL_ID#
+                                <strong>MTN Mobile Money Code:</strong> *115*4*1*MOMO_ID#<br>
+                                <strong>Airtel Money Till Code:</strong> *115*4*2*AIRTEL_ID#
                             </div>
-                            <div class="form-group"><label>Transaction ID Reference</label><input type="text" id="momo-ref" placeholder="TXN984328423" required></div>
-                            <button class="btn btn-primary btn-block" onclick="App.submitPayment('${reqId}')">Verify Transaction Trace</button>
+                            <div class="form-group"><label>Transaction Reference ID</label><input type="text" id="momo-ref" placeholder="e.g. TXN984328423" required></div>
+                            <button class="btn btn-primary btn-block" onclick="App.submitPayment('${reqId}')">Verify & Confirm Payment</button>
                             <button class="btn btn-secondary btn-block" style="margin-top:0.5rem;" onclick="document.getElementById('modal-layer').innerHTML=''">Cancel</button>
                         </div>
                     </div>
@@ -543,13 +541,13 @@
                 document.getElementById('modal-layer').innerHTML = `
                     <div class="modal-overlay">
                         <div class="modal-card glass">
-                            <h3>Evaluate Specialist Performance</h3>
+                            <h3>Rate Your Specialist</h3>
                             <div class="form-group" style="margin-top:1rem;">
-                                <label>Domain Authority Score (1-5)</label>
-                                <select id="rate-score"><option value="5">5 Stars (Excellent)</option><option value="4">4 Stars</option><option value="3">3 Stars</option><option value="2">2 Stars</option><option value="1">1 Star (Deficient)</option></select>
+                                <label>How would you rate their service? (1-5 Stars)</label>
+                                <select id="rate-score"><option value="5">5 Stars (Excellent)</option><option value="4">4 Stars</option><option value="3">3 Stars</option><option value="2">2 Stars</option><option value="1">1 Star (Poor)</option></select>
                             </div>
-                            <div class="form-group"><label>Review Logs</label><textarea id="rate-text" rows="3"></textarea></div>
-                            <button class="btn btn-primary btn-block" onclick="App.submitRating('${reqId}')">Commit Metrics Evaluation</button>
+                            <div class="form-group"><label>Leave a Review</label><textarea id="rate-text" rows="3" placeholder="Write a short comment about your experience..."></textarea></div>
+                            <button class="btn btn-primary btn-block" onclick="App.submitRating('${reqId}')">Submit Feedback</button>
                         </div>
                     </div>
                 `;
@@ -558,7 +556,7 @@
                 const score = parseInt(document.getElementById('rate-score').value);
                 const reviewText = document.getElementById('rate-text').value;
                 await ConsultLinkSDK.request('submitReview', { requestId: reqId, score, reviewText });
-                App.showToast("Evaluation committed to public network ledger.");
+                App.showToast("Thank you for your rating!");
                 document.getElementById('modal-layer').innerHTML = '';
                 App.loadClientData();
             },
@@ -566,14 +564,14 @@
                 document.getElementById('modal-layer').innerHTML = `
                     <div class="modal-overlay">
                         <div class="modal-card glass">
-                            <h3>File Corporate Conflict Flag</h3>
+                            <h3>Report an Issue</h3>
                             <div class="form-group" style="margin-top:1rem;">
-                                <label>Dispute Categorization</label>
-                                <select id="disp-reason"><option value="no_show">Specialist Absent</option><option value="poor_quality">Substandard Performance</option><option value="technical">Technical Breach</option></select>
+                                <label>What went wrong?</label>
+                                <select id="disp-reason"><option value="no_show">Specialist did not attend</option><option value="poor_quality">Substandard service quality</option><option value="technical">Technical issue during call</option></select>
                             </div>
-                            <div class="form-group"><label>Narrative Description</label><textarea id="disp-text" rows="4" required></textarea></div>
-                            <button class="btn btn-danger btn-block" onclick="App.submitDispute('${reqId}')">Initialize Escalation Sequence</button>
-                            <button class="btn btn-secondary btn-block" style="margin-top:0.5rem;" onclick="document.getElementById('modal-layer').innerHTML=''">Retract Flag</button>
+                            <div class="form-group"><label>Please provide more details</label><textarea id="disp-text" rows="4" required placeholder="Describe the issue so support can look into it..."></textarea></div>
+                            <button class="btn btn-danger btn-block" onclick="App.submitDispute('${reqId}')">Submit Issue Report</button>
+                            <button class="btn btn-secondary btn-block" style="margin-top:0.5rem;" onclick="document.getElementById('modal-layer').innerHTML=''">Cancel</button>
                         </div>
                     </div>
                 `;
@@ -582,7 +580,7 @@
                 const reason = document.getElementById('disp-reason').value;
                 const text = document.getElementById('disp-text').value;
                 await ConsultLinkSDK.request('lodgeDispute', { requestId: reqId, reason, text });
-                App.showToast("Escalation sequence successfully initialized.", "error");
+                App.showToast("Your report has been submitted to customer support.", "error");
                 document.getElementById('modal-layer').innerHTML = '';
                 App.loadClientData();
             },
@@ -595,18 +593,18 @@
                 tbody.innerHTML = '';
                 res.queue.forEach(item => {
                     const tr = document.createElement('tr');
-                    tr.innerHTML = `<td>${item.id.substring(0,6)}</td><td><strong>${item.title}</strong><br><small style="color:var(--text-secondary);">${item.description}</small></td><td><button class="btn btn-sm btn-primary" onclick="App.acceptJob('${item.id}')">Bind Execution Frame</button></td>`;
+                    tr.innerHTML = `<td>${item.id.substring(0,6)}</td><td><strong>${item.title}</strong><br><small style="color:var(--text-secondary);">${item.description}</small></td><td><button class="btn btn-sm btn-primary" onclick="App.acceptJob('${item.id}')">Accept Consultation</button></td>`;
                     tbody.appendChild(tr);
                 });
             },
             async acceptJob(id) {
                 await ConsultLinkSDK.request('acceptConsultationRequest', { requestId: id });
-                App.showToast("Resource block locked to your operator profile.");
+                App.showToast("Consultation assigned to your profile.");
                 App.loadConsultantData();
             },
             async updateConsultantStatus(status) {
                 await ConsultLinkSDK.request('setConsultantStatus', { status });
-                App.showToast(`Presence frame locked -> ${status}`);
+                App.showToast(`Your status has been updated to: ${status}`);
             },
             async loadAdminData() {
                 const res = await ConsultLinkSDK.request('getAdminConsoleData');
@@ -614,14 +612,14 @@
                 tbodyC.innerHTML = '';
                 res.consultants.forEach(c => {
                     const tr = document.createElement('tr');
-                    tr.innerHTML = `<td>${c.id.substring(0,6)}</td><td><span class="badge">${c.specialty}</span></td><td>K${c.ratePerHour}/hr</td><td>${c.isApproved ? '<span style="color:var(--success);">Active Pool</span>' : `<button class="btn btn-sm btn-primary" onclick="App.approveAdmin('${c.id}')">Grant Access</button>`}</td>`;
+                    tr.innerHTML = `<td>${c.id.substring(0,6)}</td><td><span class="badge">${c.specialty}</span></td><td>K${c.ratePerHour}/hr</td><td>${c.isApproved ? '<span style="color:var(--success);">Approved</span>' : `<button class="btn btn-sm btn-primary" onclick="App.approveAdmin('${c.id}')">Approve Account</button>`}</td>`;
                     tbodyC.appendChild(tr);
                 });
                 const tbodyD = document.getElementById('admin-disputes-table');
                 tbodyD.innerHTML = '';
                 res.disputes.forEach(d => {
                     const tr = document.createElement('tr');
-                    tr.innerHTML = `<td>${d.id.substring(0,6)}</td><td>${d.requestId.substring(0,6)}</td><td><strong>[${d.reason}]</strong> ${d.text}</td><td><button class="btn btn-sm btn-success" onclick="App.resolveAdmin('${d.id}','refund')">Refund</button> <button class="btn btn-sm btn-warning" onclick="App.resolveAdmin('${d.id}','payout')">Payout</button></td>`;
+                    tr.innerHTML = `<td>${d.id.substring(0,6)}</td><td>${d.requestId.substring(0,6)}</td><td><strong>[${d.reason}]</strong> ${d.text}</td><td><button class="btn btn-sm btn-success" onclick="App.resolveAdmin('${d.id}','refund')">Refund User</button> <button class="btn btn-sm btn-warning" onclick="App.resolveAdmin('${d.id}','payout')">Pay Consultant</button></td>`;
                     tbodyD.appendChild(tr);
                 });
             },
