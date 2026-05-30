@@ -90,7 +90,6 @@
         .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
         .btn-block { width: 100%; display: block; }
 
-        /* Accessible Friendly Back Navigation Link */
         .back-nav { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; font-weight: 500; margin-bottom: 1.5rem; cursor: pointer; transition: color 0.2s; }
         .back-nav:hover { color: var(--accent-cyan); }
 
@@ -171,8 +170,7 @@
                             <div class="console-title"><span style="color:var(--primary-glow);">//</span> Active Specialists Online Now</div>
                             <div class="console-status"><span class="dot"></span> Live Activity Feed</div>
                         </div>
-                        <div class="expert-pool-list" id="simulated-human-feed">
-                            </div>
+                        <div class="expert-pool-list" id="simulated-human-feed"></div>
                     </div>
                 </div>
             </div>
@@ -347,30 +345,29 @@
             endpoint: "https://script.google.com/macros/s/AKfycbxUdDlUzsxngPRZ-K1j7KHS117ApHB0dIDKuCeC5cQ5OAG_KLLVik9zm2aDHLBf2dEg/exec",
 
             async request(action, payload = {}) {
-  const token = sessionStorage.getItem('cl_token');
-  
-  try {
-    const response = await fetch(this.endpoint, {
-      method: 'POST',
-      // Crucial: Use text/plain to cleanly bypass rigid browser CORS restrictions
-      headers: {
-        'Content-Type': 'text/plain;charset=utf-8'
-      },
-      body: JSON.stringify({
-        action: action,
-        token: token,
-        payload: payload
-      })
-    });
+                const token = sessionStorage.getItem('cl_token');
+                try {
+                    const response = await fetch(this.endpoint, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'text/plain;charset=utf-8'
+                        },
+                        body: JSON.stringify({
+                            action: action,
+                            token: token,
+                            payload: payload
+                        })
+                    });
 
-    if (!response.ok) throw new Error('Network response failure.');
-    return await response.json();
-    
-  } catch (error) {
-    console.error("SDK Error Details:", error);
-    return { success: false, message: "Connection lost or server response failed." };
-  }
-
+                    if (!response.ok) throw new Error('Network response failure.');
+                    return await response.json();
+                    
+                } catch (error) {
+                    console.error("SDK Error Details:", error);
+                    return { success: false, message: "Connection lost or server response failed." };
+                }
+            }
+        };
 
         const Router = {
             navigate(view) {
@@ -416,6 +413,7 @@
                 const feedContainer = document.getElementById("simulated-human-feed");
                 
                 const renderFeed = () => {
+                    if (!feedContainer) return;
                     feedContainer.innerHTML = '';
                     consultants.forEach((c, idx) => {
                         const randomState = states[(Math.floor(Math.random() * states.length) + idx) % states.length];
@@ -472,17 +470,25 @@
                         payload.specialty = document.getElementById('auth-specialty').value;
                         payload.ratePerHour = parseFloat(document.getElementById('auth-rate').value);
                     }
-                    await ConsultLinkSDK.request('registerUser', payload);
-                    App.showToast("Account created successfully.");
-                    this.isSignUpMode = false;
-                    Router.navigate('auth');
+                    const res = await ConsultLinkSDK.request('registerUser', payload);
+                    if (res && res.success) {
+                        App.showToast("Account created successfully.");
+                        this.isSignUpMode = false;
+                        Router.navigate('auth');
+                    } else {
+                        App.showToast(res.message || "Registration failed.", "error");
+                    }
                 } else {
                     const res = await ConsultLinkSDK.request('loginUser', { email, password });
-                    if(this.simulationInterval) clearInterval(this.simulationInterval);
-                    sessionStorage.setItem('cl_token', res.token);
-                    sessionStorage.setItem('cl_role', res.user.role);
-                    sessionStorage.setItem('cl_user', JSON.stringify(res.user));
-                    Router.navigate(`${res.user.role}-dashboard`);
+                    if (res && res.success) {
+                        if(this.simulationInterval) clearInterval(this.simulationInterval);
+                        sessionStorage.setItem('cl_token', res.token);
+                        sessionStorage.setItem('cl_role', res.user.role);
+                        sessionStorage.setItem('cl_user', JSON.stringify(res.user));
+                        Router.navigate(`${res.user.role}-dashboard`);
+                    } else {
+                        App.showToast(res.message || "Invalid credentials.", "error");
+                    }
                 }
             },
             logout() { sessionStorage.clear(); Router.navigate('landing'); },
@@ -495,21 +501,26 @@
                 document.getElementById('client-profile-name').innerText = user.fullName;
                 const res = await ConsultLinkSDK.request('getClientRequests');
                 const tbody = document.getElementById('client-requests-table');
+                if (!tbody) return;
                 tbody.innerHTML = '';
-                res.requests.forEach(r => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>${r.id.substring(0,6)}</td>
-                        <td><span class="badge">${r.category}</span></td>
-                        <td>${r.title}</td>
-                        <td><span class="status-lbl">${r.status}</span></td>
-                        <td>
-                            ${r.status === 'Matched' ? `<button class="btn btn-sm btn-primary" onclick="App.openPaymentModal('${r.id}')">Make Payment</button>` : ''}
-                            ${r.status === 'Matched' || r.status === 'Pending' ? `<button class="btn btn-sm btn-danger" onclick="App.openEscalationModal('${r.id}')">Report Issue</button>` : ''}
-                        </td>
-                    `;
-                    tbody.appendChild(tr);
-                });
+                if (res && res.requests && res.requests.length > 0) {
+                    res.requests.forEach(r => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${r.id.substring(0,6)}</td>
+                            <td><span class="badge">${r.category}</span></td>
+                            <td>${r.title}</td>
+                            <td><span class="status-lbl">${r.status}</span></td>
+                            <td>
+                                ${r.status === 'Matched' ? `<button class="btn btn-sm btn-primary" onclick="App.openPaymentModal('${r.id}')">Make Payment</button>` : ''}
+                                ${r.status === 'Matched' || r.status === 'Pending' ? `<button class="btn btn-sm btn-danger" onclick="App.openEscalationModal('${r.id}')">Report Issue</button>` : ''}
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                } else {
+                    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:2rem;">No consultation records found.</td></tr>`;
+                }
             },
             async submitRequest(e) {
                 e.preventDefault();
@@ -597,12 +608,17 @@
                 const res = await ConsultLinkSDK.request('getConsultantQueue');
                 document.getElementById('m-consultant-rating').innerText = `${parseFloat(res.rating || 5).toFixed(2)}★`;
                 const tbody = document.getElementById('consultant-queue-table');
+                if (!tbody) return;
                 tbody.innerHTML = '';
-                res.queue.forEach(item => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `<td>${item.id.substring(0,6)}</td><td><strong>${item.title}</strong><br><small style="color:var(--text-secondary);">${item.description}</small></td><td><button class="btn btn-sm btn-primary" onclick="App.acceptJob('${item.id}')">Accept Consultation</button></td>`;
-                    tbody.appendChild(tr);
-                });
+                if (res && res.queue && res.queue.length > 0) {
+                    res.queue.forEach(item => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `<td>${item.id.substring(0,6)}</td><td><strong>${item.title}</strong><br><small style="color:var(--text-secondary);">${item.description}</small></td><td><button class="btn btn-sm btn-primary" onclick="App.acceptJob('${item.id}')">Accept Consultation</button></td>`;
+                        tbody.appendChild(tr);
+                    });
+                } else {
+                    tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding:2rem;">No active requests in your workspace category right now.</td></tr>`;
+                }
             },
             async acceptJob(id) {
                 await ConsultLinkSDK.request('acceptConsultationRequest', { requestId: id });
@@ -616,19 +632,27 @@
             async loadAdminData() {
                 const res = await ConsultLinkSDK.request('getAdminConsoleData');
                 const tbodyC = document.getElementById('admin-consultants-table');
-                tbodyC.innerHTML = '';
-                res.consultants.forEach(c => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `<td>${c.id.substring(0,6)}</td><td><span class="badge">${c.specialty}</span></td><td>K${c.ratePerHour}/hr</td><td>${c.isApproved ? '<span style="color:var(--success);">Approved</span>' : `<button class="btn btn-sm btn-primary" onclick="App.approveAdmin('${c.id}')">Approve Account</button>`}</td>`;
-                    tbodyC.appendChild(tr);
-                });
+                if (tbodyC) {
+                    tbodyC.innerHTML = '';
+                    if (res && res.consultants) {
+                        res.consultants.forEach(c => {
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `<td>${c.id.substring(0,6)}</td><td><span class="badge">${c.specialty}</span></td><td>K${c.ratePerHour}/hr</td><td>${c.isApproved ? '<span style="color:var(--success);">Approved</span>' : `<button class="btn btn-sm btn-primary" onclick="App.approveAdmin('${c.id}')">Approve Account</button>`}</td>`;
+                            tbodyC.appendChild(tr);
+                        });
+                    }
+                }
                 const tbodyD = document.getElementById('admin-disputes-table');
-                tbodyD.innerHTML = '';
-                res.disputes.forEach(d => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `<td>${d.id.substring(0,6)}</td><td>${d.requestId.substring(0,6)}</td><td><strong>[${d.reason}]</strong> ${d.text}</td><td><button class="btn btn-sm btn-success" onclick="App.resolveAdmin('${d.id}','refund')">Refund User</button> <button class="btn btn-sm btn-warning" onclick="App.resolveAdmin('${d.id}','payout')">Pay Consultant</button></td>`;
-                    tbodyD.appendChild(tr);
-                });
+                if (tbodyD) {
+                    tbodyD.innerHTML = '';
+                    if (res && res.disputes) {
+                        res.disputes.forEach(d => {
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `<td>${d.id.substring(0,6)}</td><td>${d.requestId.substring(0,6)}</td><td><strong>[${d.reason}]</strong> ${d.text}</td><td><button class="btn btn-sm btn-success" onclick="App.resolveAdmin('${d.id}','refund')">Refund User</button> <button class="btn btn-sm btn-warning" onclick="App.resolveAdmin('${d.id}','payout')">Pay Consultant</button></td>`;
+                            tbodyD.appendChild(tr);
+                        });
+                    }
+                }
             },
             async approveAdmin(id) { await ConsultLinkSDK.request('approveConsultantNode', { consultantId: id }); App.loadAdminData(); },
             async resolveAdmin(id, strategy) { await ConsultLinkSDK.request('resolveDisputeNode', { disputeId: id, resolution: strategy }); App.loadAdminData(); }
