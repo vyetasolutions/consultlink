@@ -347,20 +347,30 @@
             endpoint: "https://script.google.com/macros/s/AKfycbxUdDlUzsxngPRZ-K1j7KHS117ApHB0dIDKuCeC5cQ5OAG_KLLVik9zm2aDHLBf2dEg/exec",
 
             async request(action, payload = {}) {
-                const token = sessionStorage.getItem('cl_token');
-                try {
-                    const response = await fetch(this.endpoint, {
-                        method: 'POST',
-                        mode: 'cors',
-                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                        body: JSON.stringify({ action, token, payload })
-                    });
-                    const data = await response.json();
-                    if (!data.success) throw new Error(data.message);
-                    return data;
-                } catch (error) {
-                    App.showToast(error.message, 'error');
-                    throw error;
+  const token = sessionStorage.getItem('cl_token');
+  
+  try {
+    const response = await fetch(this.endpoint, {
+      method: 'POST',
+      // Crucial: Use text/plain to cleanly bypass rigid browser CORS restrictions
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8'
+      },
+      body: JSON.stringify({
+        action: action,
+        token: token,
+        payload: payload
+      })
+    });
+
+    if (!response.ok) throw new Error('Network response failure.');
+    return await response.json();
+    
+  } catch (error) {
+    console.error("SDK Error Details:", error);
+    return { success: false, message: "Connection lost or server response failed." };
+  }
+}
                 }
             }
         };
