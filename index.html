@@ -62,11 +62,12 @@
             width: 100%;
         }
 
+        /* FIXED NAVBAR ALIGNMENT */
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 5rem;
+            margin-bottom: 4rem;
             padding: 1rem 0;
         }
 
@@ -77,15 +78,23 @@
             cursor: pointer;
             text-decoration: none;
             color: var(--text-primary);
+            line-height: 1;
         }
         .logo span { color: var(--primary-glow); }
+
+        /* FIXED NAV ACTIONS ALIGNMENT */
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
 
         .hero-section {
             text-align: center;
             max-width: 800px;
-            margin: 0 auto;
+            margin: 0 auto 3rem;
             position: relative;
-            padding: 2rem 0;
+            padding-top: 1rem;
         }
 
         .hero-glow {
@@ -111,7 +120,7 @@
         .hero-subtitle {
             color: var(--text-secondary);
             font-size: 1.2rem;
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
             line-height: 1.6;
         }
 
@@ -129,6 +138,7 @@
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
+            line-height: 1;
         }
         .btn-primary {
             background: linear-gradient(135deg, var(--primary-glow), #7C3AED);
@@ -148,6 +158,90 @@
         .btn-danger { background: var(--danger); color: white; }
         .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
         .btn-block { width: 100%; display: flex; }
+
+        /* CLEVER MATCH ENGINE CONSOLE STYLES */
+        .console-container {
+            max-width: 850px;
+            margin: 0 auto 4rem;
+            padding: 1.5rem;
+        }
+        .console-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .console-tabs {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .console-tab {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-family: var(--font-family);
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.15s ease;
+        }
+        .console-tab.active {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+        .expert-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+        }
+        .expert-mini-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.25rem;
+            text-align: left;
+            position: relative;
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 8px var(--success);
+            margin-right: 0.4rem;
+        }
+        .card-badge {
+            float: right;
+            background: rgba(6, 182, 212, 0.15);
+            color: var(--accent-cyan);
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .feed-stream {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            max-height: 200px;
+            overflow: hidden;
+        }
+        .feed-item {
+            padding: 0.75rem 1rem;
+            background: rgba(255,255,255,0.02);
+            border-left: 3px solid var(--primary-glow);
+            border-radius: 0 6px 6px 0;
+            font-size: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+        }
 
         /* Complex Dashboard App Shell */
         .dashboard-layout {
@@ -446,9 +540,67 @@
                 <h1>Instant Access to Verified <br><span class="text-gradient">Professional Advice.</span></h1>
                 <p class="hero-subtitle">Connect with top-tier specialists in law, medicine, finance, and engineering. Schedule sessions, share files, and get answers securely in minutes.</p>
                 <div class="cta-group">
-                    <button class="btn btn-primary btn-lg" onclick="Router.navigate('auth')">Open Dashboard</button>
+                    <button class="btn btn-primary btn-lg" onclick="Router.navigate('auth')">Book an Expert Now</button>
                 </div>
             </main>
+
+            <section class="console-container glass">
+                <div class="console-header">
+                    <div style="display:flex; align-items:center; gap:0.5rem;">
+                        <span class="indicator live"></span>
+                        <span style="font-size:0.85rem; font-weight:700; letter-spacing:0.5px; text-transform:uppercase;">Live Matching Network</span>
+                    </div>
+                    <div class="console-tabs">
+                        <button class="console-tab active" id="btn-tab-experts" onclick="App.toggleConsoleTab('experts')">Available Experts Now</button>
+                        <button class="console-tab" id="btn-tab-feed" onclick="App.toggleConsoleTab('feed')">Recent Placements</button>
+                    </div>
+                </div>
+
+                <div id="console-content-experts" class="expert-card-grid">
+                    <div class="expert-mini-card">
+                        <span class="card-badge">Legal</span>
+                        <h4 style="margin-bottom:0.25rem;">Adv. Mwansa K.</h4>
+                        <p style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:1rem;">Corporate & IP Frameworks</p>
+                        <div style="display:flex; justify-content:between; align-items:center; width:100%">
+                            <span style="font-size:0.85rem; font-weight:600;"><span class="status-dot"></span>Online</span>
+                            <button class="btn btn-primary btn-sm" style="margin-left:auto;" onclick="Router.navigate('auth')">Request Call</button>
+                        </div>
+                    </div>
+                    <div class="expert-mini-card">
+                        <span class="card-badge">Financial</span>
+                        <h4 style="margin-bottom:0.25rem;">Chileshe M., CFA</h4>
+                        <p style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:1rem;">Tax Advisory & Compliance</p>
+                        <div style="display:flex; justify-content:between; align-items:center; width:100%">
+                            <span style="font-size:0.85rem; font-weight:600;"><span class="status-dot"></span>Online</span>
+                            <button class="btn btn-primary btn-sm" style="margin-left:auto;" onclick="Router.navigate('auth')">Request Call</button>
+                        </div>
+                    </div>
+                    <div class="expert-mini-card">
+                        <span class="card-badge">Engineering</span>
+                        <h4 style="margin-bottom:0.25rem;">Eng. Suwilanji P.</h4>
+                        <p style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:1rem;">Cloud Architecture & Dev</p>
+                        <div style="display:flex; justify-content:between; align-items:center; width:100%">
+                            <span style="font-size:0.85rem; font-weight:600;"><span class="status-dot"></span>Online</span>
+                            <button class="btn btn-primary btn-sm" style="margin-left:auto;" onclick="Router.navigate('auth')">Request Call</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="console-content-feed" class="feed-stream" style="display:none;">
+                    <div class="feed-item">
+                        <span>Corporate Legal expert assigned to FinTech regulatory review request.</span>
+                        <span style="color:var(--accent-cyan); font-weight:600;">Matched 3 mins ago</span>
+                    </div>
+                    <div class="feed-item">
+                        <span>Systems Engineering architect verified secure payload mapping layout.</span>
+                        <span style="color:var(--accent-cyan); font-weight:600;">Matched 14 mins ago</span>
+                    </div>
+                    <div class="feed-item">
+                        <span>Quantitative Financial strategist assigned to enterprise debt structure.</span>
+                        <span style="color:var(--accent-cyan); font-weight:600;">Matched 28 mins ago</span>
+                    </div>
+                </div>
+            </section>
         </div>
     </template>
 
@@ -655,7 +807,6 @@
 
     <script>
         const ConsultLinkSDK = {
-            // REPLACEMENT REQUIRED: Put your macro deployment URL here
             endpoint: "https://script.google.com/macros/s/AKfycbwYOUR_DEPLOYMENT_ID/exec",
 
             async request(action, payload = {}) {
@@ -721,6 +872,14 @@
                 toast.innerText = message;
                 container.appendChild(toast);
                 setTimeout(() => toast.remove(), 4000);
+            },
+
+            toggleConsoleTab(tabName) {
+                document.getElementById('console-content-experts').style.display = tabName === 'experts' ? 'grid' : 'none';
+                document.getElementById('console-content-feed').style.display = tabName === 'feed' ? 'flex' : 'none';
+                
+                document.getElementById('btn-tab-experts').classList.toggle('active', tabName === 'experts');
+                document.getElementById('btn-tab-feed').classList.toggle('active', tabName === 'feed');
             },
 
             toggleAuthMode(e) {
