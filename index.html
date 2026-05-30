@@ -55,8 +55,7 @@
         .logo span { color: var(--primary-glow); }
 
         .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 3rem; align-items: center; margin: auto 0; }
-        @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 2rem; } .hero-left { margin: 0 auto; max-width: 600px; } }
-
+        
         h1 { font-size: 3.2rem; font-weight: 800; line-height: 1.15; margin-bottom: 1.5rem; letter-spacing: -1.5px; }
         
         .hero-subtitle {
@@ -66,7 +65,6 @@
             line-height: 1.6;
         }
 
-        /* Simulated Human Presence Dashboard */
         .simulated-console { padding: 1.5rem; border: 1px solid rgba(6, 182, 212, 0.2); box-shadow: 0 15px 35px rgba(0,0,0,0.4); text-align: left; }
         .console-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-color); }
         .console-title { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--accent-cyan); display: flex; align-items: center; gap: 0.5rem; }
@@ -80,7 +78,7 @@
         .pool-domain { font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
         .pool-status-tag { font-size: 0.75rem; font-weight: 700; color: var(--accent-cyan); background: rgba(6, 182, 212, 0.1); padding: 0.2rem 0.5rem; border-radius: 4px; border: 1px solid rgba(6, 182, 212, 0.15); }
 
-        .btn { font-family: var(--font-family); padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; border: none; font-size: 0.9rem; }
+        .btn { font-family: var(--font-family); padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; border: none; font-size: 0.9rem; text-align: center; }
         .btn-primary { background: linear-gradient(135deg, var(--primary-glow), #7C3AED); color: white; box-shadow: 0 4px 20px rgba(139, 92, 246, 0.25); }
         .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(139, 92, 246, 0.35); }
         .btn-secondary { background: transparent; color: var(--text-primary); border: 1px solid var(--border-color); }
@@ -93,8 +91,9 @@
         .back-nav { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; font-weight: 500; margin-bottom: 1.5rem; cursor: pointer; transition: color 0.2s; }
         .back-nav:hover { color: var(--accent-cyan); }
 
-        .dashboard-layout { display: flex; min-height: 100vh; flex: 1; }
-        .sidebar { width: 280px; background: #0D1222; border-right: 1px solid var(--border-color); padding: 2rem 1.5rem; display: flex; flex-direction: column; }
+        /* Dashboard Structural Layout & Responsive Sidebar Logic */
+        .dashboard-layout { display: flex; min-height: 100vh; flex: 1; position: relative; }
+        .sidebar { width: 280px; background: #0D1222; border-right: 1px solid var(--border-color); padding: 2rem 1.5rem; display: flex; flex-direction: column; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 10000; }
         .sidebar-brand { font-size: 1.3rem; font-weight: 700; margin-bottom: 2.5rem; }
         .sidebar-brand span { color: var(--accent-cyan); }
         .sidebar-menu { display: flex; flex-direction: column; gap: 0.5rem; flex-grow: 1; }
@@ -103,9 +102,12 @@
         .sidebar-footer { padding-top: 1.5rem; border-top: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 0.75rem; }
         .profile-name { font-size: 0.85rem; font-weight: 600; color: var(--text-primary); }
 
-        .main-content { flex-grow: 1; padding: 3rem; overflow-y: auto; }
-        .content-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; }
-        .system-status { font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; }
+        .mobile-header-bar { display: none; width: 100%; background: #0D1222; border-bottom: 1px solid var(--border-color); padding: 1rem 1.5rem; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 9999; }
+        .mobile-toggle-btn { background: transparent; border: none; color: var(--text-primary); font-size: 1.5rem; cursor: pointer; display: flex; align-items: center; }
+
+        .main-content { flex-grow: 1; padding: 3rem; overflow-y: auto; width: 100%; }
+        .content-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; gap: 1rem; }
+        .system-status { font-size: 0.85rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; white-space: nowrap; }
         .indicator.live { width: 8px; height: 8px; background: var(--success); border-radius: 50%; box-shadow: 0 0 10px var(--success); }
 
         .status-panel { padding: 1rem; margin-bottom: 1.5rem; }
@@ -117,9 +119,10 @@
         .metric-card h2 { font-size: 2rem; font-weight: 700; }
 
         .section-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 1.5rem; }
-        .max-width-md { max-width: 600px; padding: 2.5rem; }
+        .max-width-md { max-width: 600px; width: 100%; }
+        .card.max-width-md { padding: 2.5rem; }
 
-        .table-container { width: 100%; overflow-x: auto; }
+        .table-container { width: 100%; overflow-x: hidden; }
         .table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
         .table th { padding: 1rem 1.5rem; color: var(--text-secondary); font-weight: 600; border-bottom: 1px solid var(--border-color); }
         .table td { padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--border-color); color: var(--text-primary); }
@@ -128,26 +131,71 @@
 
         .form-group { margin-bottom: 1.25rem; }
         .form-group label { display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 0.5rem; color: var(--text-secondary); }
-        input, select, textarea { width: 100%; padding: 0.75rem 1rem; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-family: var(--font-family); outline: none; }
+        input, select, textarea { width: 100%; padding: 0.75rem 1rem; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-family: var(--font-family); outline: none; font-size: 0.95rem; }
         input:focus, select:focus, textarea:focus { border-color: var(--primary-glow); }
 
-        .auth-container { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 1rem; }
+        .auth-container { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 1.5rem; }
         .auth-card { width: 100%; max-width: 440px; padding: 2.5rem; }
 
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 20000; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 20000; padding: 1rem; }
         .modal-card { width: 100%; max-width: 460px; padding: 2.5rem; }
 
-        .toast-container { position: fixed; bottom: 2rem; right: 2rem; display: flex; flex-direction: column; gap: 0.75rem; z-index: 30000; }
+        .toast-container { position: fixed; bottom: 2rem; right: 2rem; display: flex; flex-direction: column; gap: 0.75rem; z-index: 30000; max-width: calc(100vw - 4rem); }
         .toast { padding: 1rem 1.5rem; border-radius: 8px; color: white; font-weight: 600; font-size: 0.9rem; box-shadow: 0 10px 30px rgba(0,0,0,0.5); animation: slideIn 0.3s forwards; }
         @keyframes slideIn { from { transform: translateX(120%); } to { transform: translateX(0); } }
 
+        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 9998; backdrop-filter: blur(4px); }
+
         footer { width: 100%; padding: 2rem 1rem; border-top: 1px solid rgba(255, 255, 255, 0.05); background: rgba(13, 18, 34, 0.4); backdrop-filter: blur(8px); text-align: center; }
+
+        /* Media Queries optimizing Layouts specifically for Smartphones and Tablets */
+        @media (max-width: 900px) { 
+            .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 2.5rem; } 
+            .hero-left { margin: 0 auto; max-width: 600px; } 
+            h1 { font-size: 2.4rem; }
+        }
+
+        @media (max-width: 768px) {
+            .navbar { margin-bottom: 2rem; }
+            .landing-page { padding: 1.25rem; }
+            .main-content { padding: 1.5rem; }
+            .content-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+            
+            /* Responsive Navigation Conversions */
+            .mobile-header-bar { display: flex; }
+            .sidebar-overlay.active { display: block; }
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                transform: translateX(-100%);
+            }
+            .sidebar.active { transform: translateX(0); }
+
+            /* Transforms complex nested multi-column tables cleanly into stacked scannable cards on mobile viewpoints */
+            .table-container { border: none; background: transparent; }
+            .table, .table thead, .table tbody, .table th, .table td, .table tr { display: block; width: 100%; }
+            .table thead { display: none; }
+            .table tr { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; margin-bottom: 1rem; padding: 1.25rem; backdrop-filter: blur(16px); }
+            .table td { text-align: left; padding: 0.5rem 0; border: none; display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+            .table td::before { content: attr(data-label); font-weight: 600; color: var(--text-secondary); font-size: 0.8rem; text-transform: uppercase; }
+            .table td button { width: 100%; margin-top: 0.25rem; }
+            .table td:last-child { display: flex; flex-direction: column; align-items: stretch; width: 100%; margin-top: 0.5rem; padding-top: 0.75rem; border-top: 1px solid var(--border-color); }
+            .table td:last-child::before { display: none; }
+
+            .auth-container { padding: 1rem; }
+            .auth-card, .card.max-width-md, .modal-card { padding: 1.5rem; border-radius: 12px; }
+            .metrics-grid { grid-template-columns: 1fr; gap: 1rem; margin-bottom: 2rem; }
+            .toast-container { bottom: 1rem; right: 1rem; left: 1rem; }
+        }
     </style>
 </head>
 <body>
 
     <div id="toast-container" class="toast-container"></div>
     <div id="modal-layer"></div>
+    <div id="sidebar-overlay-node" class="sidebar-overlay" onclick="App.toggleMobileSidebar(false)"></div>
     <div id="app-root" style="flex: 1; display: flex; flex-direction: column;"></div>
 
     <template id="view-landing">
@@ -214,8 +262,12 @@
     </template>
 
     <template id="view-client-dashboard">
+        <div class="mobile-header-bar">
+            <div class="logo">Consult<span>Link</span></div>
+            <button class="mobile-toggle-btn" onclick="App.toggleMobileSidebar(true)">☰</button>
+        </div>
         <div class="dashboard-layout">
-            <aside class="sidebar">
+            <aside class="sidebar" id="dashboard-sidebar-node">
                 <div class="sidebar-brand">Consult<span>Link</span></div>
                 <nav class="sidebar-menu">
                     <a href="#" id="menu-link-client-overview" class="active" onclick="App.switchTab('client-overview')">My Consultations</a>
@@ -235,7 +287,7 @@
                         <div class="metric-card glass"><h5>Account Status</h5><h2>Verified</h2></div>
                     </div>
                     <h3 class="section-title">Your Consultation History</h3>
-                    <div class="table-container glass">
+                    <div class="table-container">
                         <table class="table">
                             <thead><tr><th>Reference</th><th>Category</th><th>Topic / Headline</th><th>Status</th><th>Available Actions</th></tr></thead>
                             <tbody id="client-requests-table"><tr><td colspan="5" style="text-align:center; padding:2rem;">Connecting to your history files...</td></tr></tbody>
@@ -270,8 +322,12 @@
     </template>
 
     <template id="view-consultant-dashboard">
+        <div class="mobile-header-bar">
+            <div class="logo">Consult<span>Link</span></div>
+            <button class="mobile-toggle-btn" onclick="App.toggleMobileSidebar(true)">☰</button>
+        </div>
         <div class="dashboard-layout">
-            <aside class="sidebar">
+            <aside class="sidebar" id="dashboard-sidebar-node">
                 <div class="sidebar-brand">Consult<span>Link</span></div>
                 <div class="status-panel glass">
                     <label>Availability Status</label>
@@ -293,7 +349,7 @@
                     <div class="metric-card glass"><h5>Professional Performance Score</h5><h2 id="m-consultant-rating">5.00★</h2></div>
                 </div>
                 <h3 class="section-title">Open Customer Requests Matching Your Field</h3>
-                <div class="table-container glass">
+                <div class="table-container">
                     <table class="table">
                         <thead><tr><th>Request ID</th><th>Project Details</th><th>Actions</th></tr></thead>
                         <tbody id="consultant-queue-table"><tr><td colspan="3" style="text-align:center; padding:2rem;">Scanning open database requests...</td></tr></tbody>
@@ -304,8 +360,12 @@
     </template>
 
     <template id="view-admin-dashboard">
+        <div class="mobile-header-bar">
+            <div class="logo">Consult<span>Admin</span></div>
+            <button class="mobile-toggle-btn" onclick="App.toggleMobileSidebar(true)">☰</button>
+        </div>
         <div class="dashboard-layout">
-            <aside class="sidebar">
+            <aside class="sidebar" id="dashboard-sidebar-node">
                 <div class="sidebar-brand">Consult<span>Admin</span></div>
                 <nav class="sidebar-menu"><a href="#" class="active">Governance Matrix</a></nav>
                 <div class="sidebar-footer"><button class="btn btn-sm btn-danger" onclick="App.logout()">Exit Console</button></div>
@@ -313,7 +373,7 @@
             <main class="main-content">
                 <div style="margin-bottom: 3rem;">
                     <h3 class="section-title">Consultant Verification Pipeline</h3>
-                    <div class="table-container glass">
+                    <div class="table-container">
                         <table class="table">
                             <thead><tr><th>Consultant ID</th><th>Domain</th><th>Rate / Hr</th><th>Clearance</th></tr></thead>
                             <tbody id="admin-consultants-table"></tbody>
@@ -322,7 +382,7 @@
                 </div>
                 <div>
                     <h3 class="section-title">System Disputes & Escalation Queues</h3>
-                    <div class="table-container glass">
+                    <div class="table-container">
                         <table class="table">
                             <thead><tr><th>Dispute ID</th><th>Target Request</th><th>Narrative Context</th><th>Resolution Engine</th></tr></thead>
                             <tbody id="admin-disputes-table"></tbody>
@@ -377,6 +437,9 @@
                 document.getElementById('app-root').appendChild(template.content.cloneNode(true));
                 document.getElementById('system-footer').style.display = (view === 'landing' || view === 'auth') ? 'block' : 'none';
                 
+                // Reset mobile sidebar UI parameters on change of views
+                App.toggleMobileSidebar(false);
+
                 if (view === 'landing') App.runHumanConsoleSimulation();
                 if (view === 'client-dashboard') App.loadClientData();
                 if (view === 'consultant-dashboard') App.loadConsultantData();
@@ -390,12 +453,26 @@
             init() { Router.navigate('landing'); },
             showToast(msg, type = 'success') {
                 const container = document.getElementById('toast-container');
+                if(!container) return;
                 const toast = document.createElement('div');
                 toast.className = 'toast glass';
                 toast.style.borderLeft = `4px solid ${type === 'success' ? 'var(--success)' : 'var(--danger)'}`;
                 toast.innerText = msg;
                 container.appendChild(toast);
                 setTimeout(() => toast.remove(), 4000);
+            },
+            toggleMobileSidebar(open) {
+                const sidebar = document.getElementById('dashboard-sidebar-node');
+                const overlay = document.getElementById('sidebar-overlay-node');
+                if(sidebar && overlay) {
+                    if(open) {
+                        sidebar.classList.add('active');
+                        overlay.classList.add('active');
+                    } else {
+                        sidebar.classList.remove('active');
+                        overlay.classList.remove('active');
+                    }
+                }
             },
             runHumanConsoleSimulation() {
                 if (this.simulationInterval) clearInterval(this.simulationInterval);
@@ -447,10 +524,14 @@
                 e.preventDefault();
                 this.isSignUpMode = !this.isSignUpMode;
                 document.getElementById('auth-title').innerText = this.isSignUpMode ? 'Create Account' : 'Welcome Back';
-                document.getElementById('auth-subtitle').innerText = this.isSignUpMode ? 'Register to consult with specialists or register your services.' : 'Log into your account to manage your consultations.';
+                document.getElementById('auth-subtitle').innerText = this.isSignUpMode ? 'Register to consult with specialists or offer your skills. Each email can strictly have only one account profile role type.' : 'Log into your account to manage your consultations.';
                 document.getElementById('group-fullname').style.display = this.isSignUpMode ? 'block' : 'none';
                 document.getElementById('group-role').style.display = this.isSignUpMode ? 'block' : 'none';
                 document.getElementById('auth-submit-btn').innerText = this.isSignUpMode ? 'Register Account' : 'Sign In';
+                
+                // Clear out context selections on switch
+                document.querySelectorAll('.id-consultant-fields').forEach(el => el.style.display = 'none');
+                
                 if(this.isSignUpMode) {
                     document.getElementById('auth-role').addEventListener('change', (ev) => {
                         const display = ev.target.value === 'consultant' ? 'block' : 'none';
@@ -472,11 +553,11 @@
                     }
                     const res = await ConsultLinkSDK.request('registerUser', payload);
                     if (res && res.success) {
-                        App.showToast("Account created successfully.");
+                        App.showToast("Account created successfully! Verification notification sequence triggered.");
                         this.isSignUpMode = false;
                         Router.navigate('auth');
                     } else {
-                        App.showToast(res.message || "Registration failed.", "error");
+                        App.showToast(res.message || "Registration rejected. Email might already possess a verified role assignment inside the engine.", "error");
                     }
                 } else {
                     const res = await ConsultLinkSDK.request('loginUser', { email, password });
@@ -495,6 +576,13 @@
             switchTab(id) {
                 document.querySelectorAll('.dashboard-tab').forEach(el => el.style.display = 'none');
                 document.getElementById(`tab-${id}`).style.display = 'block';
+                
+                // Track down visual active toggle state inside left side navigation block tabs
+                document.querySelectorAll('.sidebar-menu a').forEach(el => el.classList.remove('active'));
+                const targetedLink = document.getElementById(`menu-link-${id}`);
+                if (targetedLink) targetedLink.classList.add('active');
+                
+                App.toggleMobileSidebar(false);
             },
             async loadClientData() {
                 const user = JSON.parse(sessionStorage.getItem('cl_user'));
@@ -507,10 +595,10 @@
                     res.requests.forEach(r => {
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
-                            <td>${r.id.substring(0,6)}</td>
-                            <td><span class="badge">${r.category}</span></td>
-                            <td>${r.title}</td>
-                            <td><span class="status-lbl">${r.status}</span></td>
+                            <td data-label="Reference">${r.id.substring(0,6)}</td>
+                            <td data-label="Category"><span class="badge">${r.category}</span></td>
+                            <td data-label="Topic / Headline">${r.title}</td>
+                            <td data-label="Status"><span class="status-lbl">${r.status}</span></td>
                             <td>
                                 ${r.status === 'Matched' ? `<button class="btn btn-sm btn-primary" onclick="App.openPaymentModal('${r.id}')">Make Payment</button>` : ''}
                                 ${r.status === 'Matched' || r.status === 'Pending' ? `<button class="btn btn-sm btn-danger" onclick="App.openEscalationModal('${r.id}')">Report Issue</button>` : ''}
@@ -613,7 +701,7 @@
                 if (res && res.queue && res.queue.length > 0) {
                     res.queue.forEach(item => {
                         const tr = document.createElement('tr');
-                        tr.innerHTML = `<td>${item.id.substring(0,6)}</td><td><strong>${item.title}</strong><br><small style="color:var(--text-secondary);">${item.description}</small></td><td><button class="btn btn-sm btn-primary" onclick="App.acceptJob('${item.id}')">Accept Consultation</button></td>`;
+                        tr.innerHTML = `<td data-label="Request ID">${item.id.substring(0,6)}</td><td data-label="Project Details"><strong>${item.title}</strong><br><small style="color:var(--text-secondary);">${item.description}</small></td><td><button class="btn btn-sm btn-primary" onclick="App.acceptJob('${item.id}')">Accept Consultation</button></td>`;
                         tbody.appendChild(tr);
                     });
                 } else {
@@ -637,7 +725,7 @@
                     if (res && res.consultants) {
                         res.consultants.forEach(c => {
                             const tr = document.createElement('tr');
-                            tr.innerHTML = `<td>${c.id.substring(0,6)}</td><td><span class="badge">${c.specialty}</span></td><td>K${c.ratePerHour}/hr</td><td>${c.isApproved ? '<span style="color:var(--success);">Approved</span>' : `<button class="btn btn-sm btn-primary" onclick="App.approveAdmin('${c.id}')">Approve Account</button>`}</td>`;
+                            tr.innerHTML = `<td data-label="Consultant ID">${c.id.substring(0,6)}</td><td data-label="Domain"><span class="badge">${c.specialty}</span></td><td data-label="Rate / Hr">K${c.ratePerHour}/hr</td><td>${c.isApproved ? '<span style="color:var(--success);">Approved</span>' : `<button class="btn btn-sm btn-primary" onclick="App.approveAdmin('${c.id}')">Approve Account</button>`}</td>`;
                             tbodyC.appendChild(tr);
                         });
                     }
@@ -648,7 +736,7 @@
                     if (res && res.disputes) {
                         res.disputes.forEach(d => {
                             const tr = document.createElement('tr');
-                            tr.innerHTML = `<td>${d.id.substring(0,6)}</td><td>${d.requestId.substring(0,6)}</td><td><strong>[${d.reason}]</strong> ${d.text}</td><td><button class="btn btn-sm btn-success" onclick="App.resolveAdmin('${d.id}','refund')">Refund User</button> <button class="btn btn-sm btn-warning" onclick="App.resolveAdmin('${d.id}','payout')">Pay Consultant</button></td>`;
+                            tr.innerHTML = `<td data-label="Dispute ID">${d.id.substring(0,6)}</td><td data-label="Target Request">${d.requestId.substring(0,6)}</td><td data-label="Narrative Context"><strong>[${d.reason}]</strong> ${d.text}</td><td><button class="btn btn-sm btn-success" onclick="App.resolveAdmin('${d.id}','refund')">Refund User</button> <button class="btn btn-sm btn-warning" onclick="App.resolveAdmin('${d.id}','payout')">Pay Consultant</button></td>`;
                             tbodyD.appendChild(tr);
                         });
                     }
